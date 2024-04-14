@@ -1,2 +1,7 @@
-Myztic/x64/*
-Myztic/.vs/*
+Myztic/x64/* 
+Myztic/.vs/* 
+MyzticTest/x64/* 
+MyzticTest/.vs/* 
+Myztic/Myztic.vcxproj.user
+MyzticTest/MyzticTest.vcxproj.user
+.vs/* 

@@ -1,0 +1,1 @@
+you must compile glad.c in your code if you want to not get glad compiler errors
