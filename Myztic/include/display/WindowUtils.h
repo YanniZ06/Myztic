@@ -1,6 +1,9 @@
 #pragma once
-#include <stdio.h>
-#include "include/Application.h"
+
+#include "Application.h"
+#include "Scene.h"
+
+#include <optional>
 
 typedef int fpsSize;
 
@@ -9,9 +12,9 @@ friend class Application;
 
 public:
 	// Creates a new Fps Handler
-	Fps(fpsSize maxDesired);
+	Fps(fpsSize max);
 	// Destroys the Fps Handler
-	~Fps();
+	//~Fps();
 
 
 	//Gets the max fps cap
@@ -30,4 +33,12 @@ protected:
 	float frameTime;
 };
 
-// todo: WindowParams?
+// todo: return to typedef struct
+struct WindowParams {
+	const char* name;
+	Scene* init_scene;
+
+	std::optional<int> x, y, w, h;
+	std::optional<SDL_WindowFlags> flags;
+	std::optional<fpsSize> fps;
+};

@@ -1,9 +1,14 @@
 #include "pch.h"
-#include "include/display/WindowUtils.h"
+
+#include "display/WindowUtils.h"
 
 // Fps
 
-Fps::Fps(fpsSize maxDesired) {}
+Fps::Fps(fpsSize max) {
+	frameTime = 1 / max;
+	_used = max;
+	this->max = max;
+}
 
 fpsSize Fps::getMax() { 
 	return max; 
@@ -22,4 +27,3 @@ fpsSize Fps::used() {
 float Fps::getFrameTime() {
 	return frameTime;
 }
-

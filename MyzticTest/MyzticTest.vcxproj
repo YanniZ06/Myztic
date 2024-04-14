@@ -80,12 +80,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Myztic\;$(ProjectDir)..\Myztic\glad\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Myztic\libs\SDL2\include;$(ProjectDir)..\Myztic\include\;$(ProjectDir)..\Myztic\glad\;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Myztic\;$(ProjectDir)..\Myztic\glad\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Myztic\libs\SDL2\include;$(ProjectDir)..\Myztic\include\;$(ProjectDir)..\Myztic\glad\;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -129,8 +129,8 @@
       <AdditionalDependencies>$(ProjectDir)..\Myztic\x64\$(ConfigurationName)\Myztic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy $(SolutionDir)..\Myztic\SDL2.dll $(OutDir) /y /b
-copy $(SolutionDir)..\Myztic\SDL2.dll $(SolutionDir) /y /b</Command>
+      <Command>copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(OutDir)" /y /b
+copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(SolutionDir)" /y /b</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,8 +150,8 @@ copy $(SolutionDir)..\Myztic\SDL2.dll $(SolutionDir) /y /b</Command>
       <AdditionalDependencies>$(ProjectDir)..\Myztic\x64\$(ConfigurationName)\Myztic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy $(SolutionDir)..\Myztic\SDL2.dll $(OutDir) /y /b
-copy $(SolutionDir)..\Myztic\SDL2.dll $(SolutionDir) /y /b</Command>
+      <Command>copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(OutDir)" /y /b
+copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(SolutionDir)" /y /b</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
