@@ -45,7 +45,7 @@
     <ClInclude Include="include\Myztic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\display\WindowUtils.h">
+    <ClInclude Include="include\display\Fps.h">
       <Filter>Header Files\display</Filter>
     </ClInclude>
     <ClInclude Include="include\display\Window.h">

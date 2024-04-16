@@ -1,7 +1,6 @@
 #include "pch.h" 
 
 #include "Scene.h"
-#include "display/Window.h"
 
 Scene::Scene() {} // todo: populate fields
 Scene::~Scene() {}

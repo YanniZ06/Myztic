@@ -176,7 +176,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\display\Window.h" />
-    <ClInclude Include="include\display\WindowUtils.h" />
+    <ClInclude Include="include\display\Fps.h" />
     <ClInclude Include="include\Myztic.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="pch.h" />

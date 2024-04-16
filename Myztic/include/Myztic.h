@@ -1,4 +1,5 @@
 #pragma once
+
 #include <windows.h>
 #include <map>
 
@@ -17,8 +18,3 @@ static int __cdecl printf2(const char* format, ...)
 
     return ret;
 }
-
-class Myztic {
-public:
-	static void fnMyztic();
-};
