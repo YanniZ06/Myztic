@@ -128,6 +128,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(ProjectDir)..\Myztic\x64\$(ConfigurationName)\Myztic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
     </Link>
     <PreBuildEvent>
       <Command>copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(OutDir)" /y /b

@@ -51,5 +51,5 @@ Window::~Window() {
 }
 
 const Scene* Window::getLoadedScene() {
-	return const_cast<const Scene*>(scene);
+	return scene;
 }
