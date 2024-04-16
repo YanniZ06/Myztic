@@ -1,9 +1,13 @@
 #include <iostream>
 #include <Myztic.h>
+#include <graphics/VBO.h>
 #include <Application.h>
 #include <SDL.h>
 
-int WinMain()
+int WinMain(HINSTANCE hInstance,
+    HINSTANCE hPrevInstance,
+    LPSTR     lpCmdLine,
+    int       nShowCmd)
 {
 	SDL_version ver;
 	SDL_GetVersion(&ver);

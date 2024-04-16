@@ -7,14 +7,14 @@
 #include <windows.h>
 #include <string>
 
-Window* Window::create(struct WindowParams params) {
+Window* Window::create(WindowParams params) {
 	std::shared_ptr<Window> window = std::make_shared<Window>(params);
 	Application::windows[window->id] = window;
 
 	return window.get();
 }
 
-Window::Window(struct WindowParams params) {
+Window::Window(WindowParams params) {
 	name = params.name;
 	scene = params.init_scene;
 

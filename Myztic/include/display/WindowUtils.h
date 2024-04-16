@@ -13,6 +13,8 @@ friend class Application;
 public:
 	// Creates a new Fps Handler
 	Fps(fpsSize max);
+	//default constructor
+	Fps();
 	// Destroys the Fps Handler
 	//~Fps();
 

@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\display">
+      <UniqueIdentifier>{7ba689c2-d052-4051-8ad1-05c0fb06cb5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\display">
+      <UniqueIdentifier>{173c404f-1396-43b1-9fd2-5699286cc6c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics">
+      <UniqueIdentifier>{1d9bca22-9f5a-4fbb-b40c-36ff1eb2dbb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\backend">
+      <UniqueIdentifier>{e277fd98-7ddb-4247-a6f3-e2ba808f8738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics">
+      <UniqueIdentifier>{9f2cb1f1-acdc-4e92-bfd0-ba1617f019df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\backend">
+      <UniqueIdentifier>{458282ac-13e0-4839-863a-2b1cb34cb698}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -24,13 +42,22 @@
     <ClInclude Include="include\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\display\Window.h">
+    <ClInclude Include="include\Myztic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\display\WindowUtils.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\display</Filter>
+    </ClInclude>
+    <ClInclude Include="include\display\Window.h">
+      <Filter>Header Files\display</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\VBO.h">
+      <Filter>Header Files\graphics\backend</Filter>
     </ClInclude>
     <ClInclude Include="include\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ErrorHandler.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,13 +68,16 @@
     <ClCompile Include="cpp\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\display\Fps.cpp">
+    <ClCompile Include="cpp\graphics\VBO.cpp">
+      <Filter>Source Files\graphics\backend</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp\display\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\Scene.cpp">
+    <ClCompile Include="cpp\display\Fps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

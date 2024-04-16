@@ -9,7 +9,7 @@ private:
 	int x, y, w, h;
 
 public:
-	static Window* create(struct WindowParams params);
+	static Window* create(WindowParams params);
 	~Window();
 
 	// Fps settings for this window
@@ -25,6 +25,6 @@ public:
 	// Returns the scene currently loaded to this Window
 	const Scene* getLoadedScene();
 protected:
-	Window(struct WindowParams params);
+	Window(WindowParams params);
 	Scene* scene;
 };
