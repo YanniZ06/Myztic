@@ -1,5 +1,6 @@
 #pragma once
-#include "glad.h"
+
+#include <glad.h>
 
 class VBO {
 public:

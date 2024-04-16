@@ -1,12 +1,12 @@
 #pragma once
 
-#include "SDL.h"
+#include <SDL.h>
 
-#include "display/Fps.h"
+#include <display/Fps.h>
 
 class Scene;
 
-typedef struct WindowParams {
+struct WindowParams {
 	const char* name;
 	Scene* init_scene;
 

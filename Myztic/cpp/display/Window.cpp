@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "display/Window.h"
-#include "Application.h"
+#include <display/Window.h>
+#include <Application.h>
 
 // Logging
 #include <windows.h>

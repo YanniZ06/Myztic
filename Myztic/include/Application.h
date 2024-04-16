@@ -3,7 +3,7 @@
 #include <map>
 #include <memory>
 
-#include "display/Window.h"
+#include <display/Window.h>
 
 // The core of Myztic. Contains all sorts of useful fields and initializes the engine.
 class Application {

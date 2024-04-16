@@ -1,6 +1,6 @@
 #pragma once
 
-#include "display/Window.h"
+#include <display/Window.h>
 
 // The base for any scene. Meant to be inherited from.
 class Scene {

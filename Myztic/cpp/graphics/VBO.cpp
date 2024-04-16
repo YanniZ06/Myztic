@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "graphics/VBO.h"
-#include "ErrorHandler.hpp"
+#include <graphics/VBO.h>
+#include <ErrorHandler.hpp>
 
 VBO::VBO(GLuint vbo) : vbo(vbo) {}
 

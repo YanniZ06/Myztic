@@ -1,11 +1,11 @@
 #include "pch.h"
 #include "framework.h"
 
-#include "Application.h"
-#include "Scene.h"
+#include <Application.h>
+#include <Scene.h>
 
-#include "SDL.h"
-#include "glad/glad.h"
+#include <SDL.h>
+#include <glad.h>
 
 #include <string>
 #include <iostream>
