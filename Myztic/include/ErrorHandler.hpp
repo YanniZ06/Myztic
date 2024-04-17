@@ -1,23 +1,36 @@
 #pragma once
 
-#include <Myztic.h>
-#include <glad/glad.h>
+#include <glad.h>
+#include <exception>
 #include <string>
 
-#define CHECK_GL() GLint result = glGetError(); \
-	if (!result) return NULL; \
-	while (result) { \
-		const char* errorType = NULL;\
-		switch(result) {\
-		case GL_INVALID_ENUM: errorType = "GL INVALID ENUM"; break;\
-		case GL_INVALID_VALUE: errorType = "GL INVALID VALUE"; break;\
-		case GL_INVALID_OPERATION: errorType = "GL INVALID OPERATION"; break;\
-		case GL_INVALID_FRAMEBUFFER_OPERATION: errorType = "GL INVALID FRAMEBUFFER OPERATION"; break;\
-		case GL_OUT_OF_MEMORY: errorType = "GL OUT OF MEMORY"; break;\
-		default: errorType = "UNKNOWN ERROR."; break;\
-		};\
-		printf("Got a GL error on line: %i from file: %s\nError type: %s\n", __LINE__, __FILE__, errorType);\
-		\
-		result = glGetError();\
-	}; \
-	throw "GL Errors traced, throwing to stop application"; \
+static void CheckOpenGLError(const char* stmt, const char* fname, int line)
+{
+    GLenum err = glGetError();
+    if (err != GL_NO_ERROR)
+    {
+        printf("OpenGL error %08x, at %s:%i - for %s\n", err, fname, line, stmt);
+        abort();
+    }
+}
+
+#ifdef _DEBUG
+#define CHECK_GL(stmt) do { \
+            stmt; \
+            CheckOpenGLError(#stmt, __FILE__, __LINE__); \
+        } while (0)
+#else
+#define CHECK_GL(stmt) stmt
+#endif
+
+class GLException : std::exception {
+public:
+    GLException(const char* msg) { m_msg = std::string(msg); };
+
+    virtual const char* what() const throw ()
+    {
+        return m_msg.c_str();
+    }
+
+    std::string m_msg;
+};

@@ -2,7 +2,6 @@
 #include "framework.h"
 
 #include <Application.h>
-#include <Myztic.h>
 #include <Scene.h>
 
 #include <SDL.h>
@@ -10,6 +9,7 @@
 
 #include <string>
 #include <iostream>
+#include <ErrorHandler.hpp>
 
 #define SDL_MAIN_HANDLED
 
@@ -42,8 +42,13 @@ void Application::initMyztic() {
 			it != Application::windows.end(); ++it)
 	{
 		// printf("%s ", it->first, it->second);
-		std::cout << it->first << " " << it->second << "\n";
+		//std::cout << it->first << " " << it->second << "\n";
+		//you cannot printf the fucking shared pointer yanni
+		printf("window index: %u\n", it->first);
+			
 	}
 
-	glViewport(0, 0, 680, 480);
+	CHECK_GL(glViewport(0, 0, 680, 480));
 }
+
+//void newWindow();

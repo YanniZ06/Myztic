@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\display">
-      <UniqueIdentifier>{7ba689c2-d052-4051-8ad1-05c0fb06cb5f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\display">
       <UniqueIdentifier>{173c404f-1396-43b1-9fd2-5699286cc6c6}</UniqueIdentifier>
     </Filter>
@@ -40,9 +37,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Myztic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\display\Fps.h">
