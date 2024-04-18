@@ -19,7 +19,7 @@ public:
 	//Gets the max fps cap
 	fpsSize getMax();
 	// Sets the max fps cap
-	void setMax(fpsSize max);
+	inline void setMax(fpsSize max);
 	// MS between each frame at max framerate
 	float getFrameTime();
 	// The fps actually used

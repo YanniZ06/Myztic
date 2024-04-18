@@ -38,6 +38,12 @@ int WinMain(HINSTANCE hInstance,
 
     Application::initMyztic();
 
+	Window* myzWin = Application::windows[1].get();
+	std::cout << myzWin->name() << "\n";
+	myzWin->setName("Myztic Main Window");
+
+	Application::log_windows_cmd();
+
 	std::array<VBO, 10> vbos = VBO::makeNum<10>();
 	VBO vbo = VBO::make();
 	vbo.bind();

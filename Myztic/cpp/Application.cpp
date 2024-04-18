@@ -29,26 +29,24 @@ void Application::initMyztic() {
 	// Segunda Windowa (excellente espanol)
 	WindowParams paramsB = { "Myztic Engine Test 2", new Scene(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
 	Window* windowB = Window::create(paramsB);
-	SDL_Window* SHWNDL = windowB->handle;
-	int posX, posY;
-	SDL_GetWindowPosition(SHWNDL, &posX, &posY);
-	SDL_SetWindowPosition(SHWNDL, posX - 250, posY);
+	windowB->setX(windowB->x() - 250);
 
 	SDL_GL_MakeCurrent(window->handle, window->context);
 
 	gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 
-	for (std::map<unsigned char, std::shared_ptr<Window>>::const_iterator it = Application::windows.begin();
-			it != Application::windows.end(); ++it)
-	{
-		// printf("%s ", it->first, it->second);
-		//std::cout << it->first << " " << it->second << "\n";
-		//you cannot printf the fucking shared pointer yanni
-		printf("window index: %u\n", it->first);
-			
-	}
+	log_windows_cmd();
 
 	CHECK_GL(glViewport(0, 0, 680, 480));
+}
+
+void Application::log_windows_cmd() {
+	std::cout << "Application::windows =>\n";
+	for (std::map<unsigned char, std::shared_ptr<Window>>::const_iterator it = Application::windows.begin();
+		it != Application::windows.end(); ++it)
+	{
+		std::cout << (int)it->first << " -> " << (std::string)*it->second.get() << "\n";
+	}
 }
 
 //void newWindow();

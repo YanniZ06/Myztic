@@ -13,4 +13,6 @@ public:
 
     // Initialize Myztic Engine
     static void initMyztic();
+    // Logs the window map to the command line
+    static void log_windows_cmd();
 };
