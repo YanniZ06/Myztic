@@ -29,13 +29,12 @@ void Application::initMyztic() {
 	// Segunda Windowa (excellente espanol)
 	WindowParams paramsB = { "Myztic Engine Test 2", new Scene(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
 	Window* windowB = Window::create(paramsB);
-	windowB->setX(windowB->x() - 250);
+	log_windows_cmd();
+	windowB->setX(windowB->x() + 250);
 
 	SDL_GL_MakeCurrent(window->handle, window->context);
 
 	gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
-
-	log_windows_cmd();
 
 	CHECK_GL(glViewport(0, 0, 680, 480));
 }

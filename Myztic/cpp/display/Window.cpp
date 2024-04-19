@@ -54,10 +54,6 @@ Scene* Window::getLoadedScene() {
 	return scene;
 }
 
-void Window::setPosition(int x, int y) {
-	_x = x; _y = y;
-	SDL_SetWindowPosition(handle, x, y);
-}
 
 void Window::centerPosition(bool x, bool y) {
 	int tx = _x; int ty = _y;
@@ -66,56 +62,6 @@ void Window::centerPosition(bool x, bool y) {
 
 	SDL_SetWindowPosition(handle, tx, ty);
 	SDL_GetWindowPosition(handle, &_x, &_y);
-}
-
-void Window::setSize(int w, int h) {
-	_w = w; _h = h;
-	SDL_SetWindowSize(handle, w, h);
-}
-
-std::string Window::name() {
-	return _name;
-}
-
-void Window::setName(std::string v) {
-	_name = v;
-	SDL_SetWindowTitle(handle, v.c_str());
-}
-
-int Window::x() {
-	return _x;
-}
-
-void Window::setX(int v) {
-	_x = v;
-	SDL_SetWindowPosition(handle, v, _y);
-}
-
-int Window::y() {
-	return _y;
-}
-
-void Window::setY(int v) {
-	_y = v;
-	SDL_SetWindowPosition(handle, _x, v);
-}
-
-int Window::w() {
-	return _w;
-}
-
-void Window::setW(int v) {
-	_w = v;
-	SDL_SetWindowSize(handle, v, _h);
-}
-
-int Window::h() {
-	return _h;
-}
-
-void Window::setH(int v) {
-	_h = v;
-	SDL_SetWindowSize(handle, _w, v);
 }
 
 Window::operator std::string() {
