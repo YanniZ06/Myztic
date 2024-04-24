@@ -7,18 +7,31 @@
 static void CheckOpenGLError(const char* stmt, const char* fname, int line)
 {
     GLenum err = glGetError();
-    if (err != GL_NO_ERROR)
+    bool dirty = false;
+    while (err != GL_NO_ERROR)
     {
-        printf("OpenGL error %08x, at %s:%i - for %s\n", err, fname, line, stmt);
-        abort();
+        const char* errorType = NULL; 
+        switch (err) {
+            case GL_INVALID_ENUM: errorType = "GL INVALID ENUM"; break; 
+            case GL_INVALID_VALUE: errorType = "GL INVALID VALUE"; break; 
+            case GL_INVALID_OPERATION: errorType = "GL INVALID OPERATION"; break; 
+            case GL_INVALID_FRAMEBUFFER_OPERATION: errorType = "GL INVALID FRAMEBUFFER OPERATION"; break; 
+            case GL_OUT_OF_MEMORY: errorType = "GL OUT OF MEMORY"; break; 
+            default: errorType = "UNKNOWN ERROR."; break; 
+        }; 
+
+        printf("OpenGL error %s, at %s:%i - for %s\n", errorType, fname, line, stmt);
+        dirty = true;
     }
+
+    if (dirty)
+        abort();
 }
 
 #ifdef _DEBUG
-#define CHECK_GL(stmt) do { \
+#define CHECK_GL(stmt) \
             stmt; \
-            CheckOpenGLError(#stmt, __FILE__, __LINE__); \
-        } while (0)
+            CheckOpenGLError(#stmt, __FILE__, __LINE__);
 #else
 #define CHECK_GL(stmt) stmt
 #endif

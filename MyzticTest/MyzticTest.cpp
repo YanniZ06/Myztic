@@ -3,8 +3,8 @@
 #include <Windows.h>
 #include <stdio.h>
 #include <io.h>
-#include <graphics/VBO.h>
 #include <Application.h>
+#include <graphics/Texture2D.hpp>
 #include <SDL.h>
 
 int WinMain(HINSTANCE hInstance,
@@ -21,9 +21,9 @@ int WinMain(HINSTANCE hInstance,
 
 	AttachConsole(GetCurrentProcessId());
 	hr = GetLastError();
-	if (FAILED(hr)) 
+	if (FAILED(hr))
 		return -1;
-	
+
 	//redirect console prints
 	FILE* outputHandle;
 	freopen_s(&outputHandle, "conout$", "w", stdout);
@@ -33,29 +33,16 @@ int WinMain(HINSTANCE hInstance,
 
 	SDL_version ver;
 	SDL_GetVersion(&ver);
-	
+
 	printf("Version: %u.%u Patch: %u\n", ver.major, ver.minor, ver.patch);
 
-    Application::initMyztic();
+	Application::initMyztic();
 
 	Window* myzWin = Application::windows[1].get();
 	std::cout << myzWin->name() << "\n";
 	myzWin->setName("Myztic Main Window");
 
 	Application::log_windows_cmd();
-
-	std::array<VBO, 10> vbos = VBO::makeNum<10>();
-	VBO vbo = VBO::make();
-	vbo.bind();
-	vbo.unbind();
-	vbo.destroy();
-	vbos[0].bind();
-	vbos[0].destroy();
-
-	//for (int i = 0; i < 10; i++) {
-	//	VBO vbo = vbos[i];
-	//	printf("%i\n", vbo.vbo);
-	//}
 
 	SDL_Event e;
 	bool needToQuit = false;
