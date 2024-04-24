@@ -16,6 +16,7 @@ Window* Window::create(WindowParams params) {
 Window::Window(WindowParams params) {
 	_name = params.name;
 	scene = params.init_scene;
+	shouldClose = false;
 
 	if (!params.x) _x = SDL_WINDOWPOS_CENTERED;
 	else _x = params.x.value();
@@ -40,6 +41,8 @@ Window::Window(WindowParams params) {
 	context = SDL_GL_CreateContext(handle);
 	id = SDL_GetWindowID(handle);
 	SDL_GetWindowPosition(handle, &_x, &_y);
+
+	thread = std::thread(Application::start_winloop, this);
 }
 
 Window::~Window() {
