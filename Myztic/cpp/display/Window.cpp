@@ -43,6 +43,7 @@ Window::Window(WindowParams params) {
 	SDL_GetWindowPosition(handle, &_x, &_y);
 
 	thread = std::thread(Application::start_winloop, this);
+	
 }
 
 Window::~Window() {

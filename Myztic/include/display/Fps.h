@@ -1,6 +1,7 @@
 #pragma once
 
 #include <optional>
+#include <SDL_stdinc.h>
 
 typedef int fpsSize;
 
@@ -21,7 +22,7 @@ public:
 	// Sets the max fps cap
 	inline void setMax(fpsSize max);
 	// MS between each frame at max framerate
-	float getFrameTime();
+	double getFrameTime();
 	// The fps actually used
 	fpsSize used();
 	
@@ -29,5 +30,5 @@ protected:
 	fpsSize _used;
 	fpsSize max;
 
-	float frameTime;
+	double frameTime;
 };

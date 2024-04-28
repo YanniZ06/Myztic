@@ -10,15 +10,17 @@
 #include <Timer.h>
 #include <ErrorHandler.hpp>
 
-#include <mutex>
-
 #define SDL_MAIN_HANDLED
 
 std::map<unsigned char, std::shared_ptr<Window>> Application::windows;
-// std::thread mainThread;
+std::thread mainThread;
 bool Application::shouldClose = false;
 
 void Application::initMyztic() {
+	mainThread = std::thread(_initMyztic);
+}
+
+void Application::_initMyztic() {
 	double myzStart = Timer::stamp();
 	SDL_SetMainReady();
 
@@ -55,7 +57,7 @@ void Application::app_loop() {
 			if (e.type == SDL_QUIT) shouldClose = true;
 		}
 
-		SDL_Delay(1);
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 }
 

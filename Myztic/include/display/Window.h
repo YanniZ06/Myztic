@@ -82,7 +82,10 @@ public:
 		SDL_SetWindowSize(handle, _w, v);
 	}
 
+	// Acts as a signal for the window and thread to close
 	bool shouldClose;
+	// Acts as a signal for the window to update and render however many frames it needs to
+	bool inRenderPhase;
 
 	// Fps settings for this window
 	Fps fps;

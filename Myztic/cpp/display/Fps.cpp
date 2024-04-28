@@ -5,7 +5,7 @@
 // Fps
 
 Fps::Fps(fpsSize max) {
-	frameTime = 1 / float(max);
+	frameTime = 1 / (float)max;
 	_used = max;
 	this->max = max;
 }
@@ -17,13 +17,13 @@ fpsSize Fps::getMax() {
 void Fps::setMax(fpsSize max) {
 	this->max = max;
 	_used = max;
-	frameTime = 1 / float(max);
+	frameTime = 1 / (float)max;
 }
 
 fpsSize Fps::used() {
-	return _used;
+	return _used; // This value is populated by the Application
 }
 
-float Fps::getFrameTime() {
+double Fps::getFrameTime() {
 	return frameTime;
 }
