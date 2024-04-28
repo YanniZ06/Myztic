@@ -72,6 +72,9 @@
     <ClInclude Include="include\graphics\Texture2D.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -94,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="cpp\graphics\Shader.cpp">
       <Filter>Source Files\graphics\backend</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Timer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

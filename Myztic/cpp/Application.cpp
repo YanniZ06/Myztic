@@ -7,8 +7,7 @@
 #include <SDL.h>
 #include <glad.h>
 
-#include <string>
-#include <iostream>
+#include <Timer.h>
 #include <ErrorHandler.hpp>
 
 #include <mutex>
@@ -20,6 +19,7 @@ std::map<unsigned char, std::shared_ptr<Window>> Application::windows;
 bool Application::shouldClose = false;
 
 void Application::initMyztic() {
+	double myzStart = Timer::stamp();
 	SDL_SetMainReady();
 
 	// mainThread = std::thread(std::this_thread::get_id());
@@ -42,11 +42,15 @@ void Application::initMyztic() {
 	gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 
 	CHECK_GL(glViewport(0, 0, 680, 480));
+
+	Timer::debugMeasure(myzStart, "Myztic Initialization");
+	//app_loop();
 }
 
 void Application::app_loop() {
+	SDL_Event e;
+
 	while (!shouldClose) {
-		SDL_Event e;
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT) shouldClose = true;
 		}
@@ -57,6 +61,9 @@ void Application::app_loop() {
 
 void Application::start_winloop(Window* win) {
 	// TODO: Mutex, wait for next event rotation thingamajig lols hahahahahaha amoignus
+	// Update: maybe queues can make it all happen at the same time, by assigning events to when they would / shouldve happened in frame???
+	// Like, 3 frames arent rendered yet, but you press a key that youd need to press in frame 2 while frame 1 hasnt finished, so it gets the time of your input, and assigns
+	// the event to correct frame instead of forcing that frame to be waited on which also makes sure there are (close to) 0 ignored inputs!! 
 	window_loop(win);
 }
 
@@ -73,8 +80,7 @@ void Application::window_loop(Window* win) {
 
 void Application::log_windows_cmd() {
 	std::cout << "Application::windows =>\n";
-	for (std::map<unsigned char, std::shared_ptr<Window>>::const_iterator it = Application::windows.begin();
-		it != Application::windows.end(); ++it)
+	for (std::map<unsigned char, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it)
 	{
 		std::cout << (int)it->first << " -> " << (std::string)*it->second.get() << "\n";
 	}
