@@ -6,6 +6,7 @@
 #include <Application.h>
 #include <graphics/Texture2D.hpp>
 #include <SDL.h>
+#include <Scene.h>
 
 #include <thread>
 #include <semaphore>
@@ -42,6 +43,16 @@ void tMainTest() {
 }
 */
 
+class TestScene : Scene {
+	virtual void load(Window* callerWindow) {
+		Window* myzWin = Application::windows[1].get();
+		std::cout << myzWin->name() << "\n";
+		myzWin->setName("Myztic Main Window");
+
+		Application::log_windows_cmd();
+	}
+};
+
 int WinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPSTR     lpCmdLine,
@@ -71,13 +82,8 @@ int WinMain(HINSTANCE hInstance,
 
 	printf("Version: %u.%u Patch: %u\n", ver.major, ver.minor, ver.patch);
 
-	Application::initMyztic();
-
-	Window* myzWin = Application::windows[1].get();
-	std::cout << myzWin->name() << "\n";
-	myzWin->setName("Myztic Main Window");
-
-	Application::log_windows_cmd();
+	TestScene* scene = new TestScene();
+	Application::initMyztic((Scene*) scene);
 
 	// tMainTest();
 

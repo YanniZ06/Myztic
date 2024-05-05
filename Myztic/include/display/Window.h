@@ -1,10 +1,15 @@
 #pragma once
 
 #include <SDL.h>
+#include <SDL_stdinc.h>
 
-#include <display/Fps.h>
+#include <map>
+#include <memory>
+#include <optional>
 #include <thread>
 #include <string>
+
+#include <display/Fps.h>
 
 class Scene;
 
@@ -21,6 +26,8 @@ class Window {
 private:
 	std::string _name;
 	int _x, _y, _w, _h;
+
+	std::map<unsigned int, std::shared_ptr<Scene>> loadedScenes;
 
 public:
 	// Not meant to be called. Use Window::create instead
@@ -99,8 +106,28 @@ public:
 	// The thread for this window
 	std::thread thread;
 
-	// Returns the scene currently loaded to this Window
-	Scene* getLoadedScene();
+	// Returns the scene currently displayed on this Window
+	// Scene* getActiveScene();
+	
+	// Returns a map with all the scenes currently loaded to this window
+	inline std::shared_ptr<Scene>* getLoadedScenes() {
+		std::shared_ptr<Scene>* scenes = (std::shared_ptr<Scene>*) malloc(sizeof(std::shared_ptr<Scene>) * loadedScenes.size());
+
+		for (std::map<unsigned int, std::shared_ptr<Scene>>::const_iterator it = loadedScenes.begin(); it != loadedScenes.end(); ++it)
+		{
+			*scenes = it->second;
+			scenes++;
+		}
+		scenes -= loadedScenes.size();
+		return scenes;
+	}
+
+	void loadScene(Scene* scene);
+
+	void unloadScene(Scene* scene);
+
+	// Switches the active scene
+	void switchScene(Scene* scene);
 
 	// Sets the whole position of the window in one call.
 	inline void setPosition(int x, int y) {

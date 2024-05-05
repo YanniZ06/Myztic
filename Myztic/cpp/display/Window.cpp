@@ -1,7 +1,8 @@
 #include "pch.h"
 
-#include <display/Window.h>
+// #include <display/Window.h>
 #include <Application.h>
+#include <Scene.h>
 
 // Logging
 #include <windows.h>
@@ -54,10 +55,25 @@ Window::~Window() {
 	// delete name;
 }
 
-Scene* Window::getLoadedScene() {
-	return scene;
+void Window::switchScene(Scene* scene)
+{
+	if (this->scene) this->scene->unload(this);
+	scene->load(this);
+	this->scene = scene;
 }
 
+void Window::loadScene(Scene* scene) {
+	std::shared_ptr<Scene> ss = std::shared_ptr<Scene>(scene);
+	loadedScenes[scene->id] = ss;
+}
+
+void Window::unloadScene(Scene* scene) {
+	if (loadedScenes.find(scene->id) == loadedScenes.end()) return;
+	loadedScenes.erase(scene->id);
+	//loadedScenes.erase(temp);
+
+	// free(temp.get());
+}
 
 void Window::centerPosition(bool x, bool y) {
 	int tx = _x; int ty = _y;

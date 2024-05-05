@@ -1,8 +1,5 @@
 #pragma once
 
-#include <optional>
-#include <SDL_stdinc.h>
-
 typedef int fpsSize;
 
 class Fps {

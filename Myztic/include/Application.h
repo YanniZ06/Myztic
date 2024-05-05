@@ -15,7 +15,7 @@ class Application {
     friend class Window;
 private: 
     static void app_loop();
-    static void _initMyztic();
+    static void _initMyztic(Scene* initScene);
 public:
     // Current windows, mapped to their ID
     static std::map<unsigned char, std::shared_ptr<Window>> windows;
@@ -32,7 +32,7 @@ public:
 
 
     // Initializes Myztic Engine
-    static void initMyztic();
+    static void initMyztic(Scene* initScene);
     // Logs the window map to the command line
     static void log_windows_cmd();
 

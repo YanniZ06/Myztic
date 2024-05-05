@@ -129,7 +129,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)libs\SDL2\include;%(AdditionalIncludeDirectories);$(SolutionDir)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -172,6 +172,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\display\WinThread.h" />
     <ClInclude Include="include\ErrorHandler.hpp" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="include\Application.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\stb_image.h" />
+    <ClInclude Include="include\Util.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="include\graphics\VBO.hpp" />
     <ClInclude Include="include\graphics\VAO.hpp" />
@@ -194,6 +196,7 @@
     <ClCompile Include="cpp\display\Window.cpp" />
     <ClCompile Include="cpp\Scene.cpp" />
     <ClCompile Include="cpp\Timer.cpp" />
+    <ClCompile Include="cpp\Util.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

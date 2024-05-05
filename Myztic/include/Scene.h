@@ -6,8 +6,12 @@
 class Scene {
 public:
 	Scene();
-	~Scene();
+	// Scene(const Scene& s) = default;
+	Scene(Scene const&) = default; // do i need you
 
+	//~Scene();
+
+	unsigned int id;
 	// todo: member fields
 
 	// Called when this scene is loaded to a Window

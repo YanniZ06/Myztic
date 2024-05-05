@@ -1,9 +1,12 @@
 #include "pch.h" 
 
 #include <Scene.h>
+#include <Util.h>
 
-Scene::Scene() {} // todo: populate fields
-Scene::~Scene() {}
+Scene::Scene() {
+	id = IDGenerator::instance()->next();
+}
+// Scene::~Scene() {}
 
 void Scene::load(Window* callerWindow) {}
 void Scene::unload(Window* callerWindow) {}

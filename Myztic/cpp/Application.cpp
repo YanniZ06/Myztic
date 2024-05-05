@@ -13,14 +13,14 @@
 #define SDL_MAIN_HANDLED
 
 std::map<unsigned char, std::shared_ptr<Window>> Application::windows;
-std::thread mainThread;
+std::thread Application::mainThread;
 bool Application::shouldClose = false;
 
-void Application::initMyztic() {
-	mainThread = std::thread(_initMyztic);
+void Application::initMyztic(Scene* initScene) {
+	mainThread = std::thread(_initMyztic, initScene);
 }
 
-void Application::_initMyztic() {
+void Application::_initMyztic(Scene* initScene) {
 	double myzStart = Timer::stamp();
 	SDL_SetMainReady();
 
@@ -30,7 +30,7 @@ void Application::_initMyztic() {
 		throw "Error initializing SDL subsystems : " + std::string(SDL_GetError());
 	}
 
-	WindowParams params = { "Myztic Engine Test", new Scene(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
+	WindowParams params = { "Myztic Engine Test", initScene, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
 	Window* window = Window::create(params);
 
 	// Segunda Windowa (excellente espanol)
