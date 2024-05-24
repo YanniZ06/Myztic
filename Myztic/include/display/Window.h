@@ -111,23 +111,24 @@ public:
 	
 	// Returns a map with all the scenes currently loaded to this window
 	inline std::shared_ptr<Scene>* getLoadedScenes() {
-		std::shared_ptr<Scene>* scenes = (std::shared_ptr<Scene>*) malloc(sizeof(std::shared_ptr<Scene>) * loadedScenes.size());
+		const int s = loadedScenes.size();
+		std::shared_ptr<Scene>* scenes = new std::shared_ptr<Scene>[s];
 
-		for (std::map<unsigned int, std::shared_ptr<Scene>>::const_iterator it = loadedScenes.begin(); it != loadedScenes.end(); ++it)
-		{
-			*scenes = it->second;
-			scenes++;
+		std::map<unsigned int, std::shared_ptr<Scene>>::const_iterator it = loadedScenes.begin();
+		for (int i = 0; i < s; i++) {
+			scenes[i] = it++->second;
 		}
-		scenes -= loadedScenes.size();
 		return scenes;
 	}
 
-	void loadScene(Scene* scene);
+	// Loads this scenes contents to this Window, returns false if the scene is already loaded to a Window
+	bool loadScene(Scene* scene);
 
-	void unloadScene(Scene* scene);
+	// Unloads this scenes contents from this Window, returns false if the scene is not loaded to this Window
+	bool unloadScene(Scene* scene);
 
-	// Switches the active scene
-	void switchScene(Scene* scene);
+	// Switches this windows' active scene to the input scene, returns false if the input scene is not loaded to this window
+	bool switchScene(Scene* scene);
 
 	// Sets the whole position of the window in one call.
 	inline void setPosition(int x, int y) {

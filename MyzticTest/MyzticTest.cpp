@@ -45,6 +45,9 @@ void tMainTest() {
 
 class TestScene : Scene {
 	virtual void load(Window* callerWindow) {
+		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
+	}
+	virtual void enter() {
 		Window* myzWin = Application::windows[1].get();
 		std::cout << myzWin->name() << "\n";
 		myzWin->setName("Myztic Main Window");
@@ -84,7 +87,6 @@ int WinMain(HINSTANCE hInstance,
 
 	TestScene* scene = new TestScene();
 	Application::initMyztic((Scene*) scene);
-
 	// tMainTest();
 
 	SDL_Event e;

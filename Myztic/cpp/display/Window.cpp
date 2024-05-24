@@ -11,12 +11,15 @@ Window* Window::create(WindowParams params) {
 	std::shared_ptr<Window> window = std::make_shared<Window>(params);
 	Application::windows[window->id] = window;
 
+	window->loadScene(params.init_scene);
+	window->switchScene(params.init_scene);
+
 	return window.get();
 }
 
 Window::Window(WindowParams params) {
 	_name = params.name;
-	scene = params.init_scene;
+	scene = nullptr;
 	shouldClose = false;
 
 	if (!params.x) _x = SDL_WINDOWPOS_CENTERED;
@@ -55,24 +58,33 @@ Window::~Window() {
 	// delete name;
 }
 
-void Window::switchScene(Scene* scene)
+bool Window::switchScene(Scene* scene)
 {
-	if (this->scene) this->scene->unload(this);
-	scene->load(this);
+	if (this->scene) this->scene->finish();
+	if (scene->loadedWin != this) return false;
+
+	scene->enter();
 	this->scene = scene;
+	return true;
 }
 
-void Window::loadScene(Scene* scene) {
+bool Window::loadScene(Scene* scene) {
+	if (scene->loadedWin) return false;
+
+	scene->loadedWin = this;
+	scene->load(this);
 	std::shared_ptr<Scene> ss = std::shared_ptr<Scene>(scene);
 	loadedScenes[scene->id] = ss;
+	return true;
 }
 
-void Window::unloadScene(Scene* scene) {
-	if (loadedScenes.find(scene->id) == loadedScenes.end()) return;
-	loadedScenes.erase(scene->id);
-	//loadedScenes.erase(temp);
+bool Window::unloadScene(Scene* scene) {
+	if (loadedScenes.find(scene->id) == loadedScenes.end()) return false;
 
-	// free(temp.get());
+	scene->unload(this);
+	scene->loadedWin = nullptr;
+	loadedScenes.erase(scene->id);
+	return true;
 }
 
 void Window::centerPosition(bool x, bool y) {
