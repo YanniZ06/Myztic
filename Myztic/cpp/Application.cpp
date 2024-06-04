@@ -33,12 +33,6 @@ void Application::_initMyztic(Scene* initScene) {
 	WindowParams params = { "Myztic Engine Test", initScene, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
 	Window* window = Window::create(params);
 
-	// Segunda Windowa (excellente espanol)
-	WindowParams paramsB = { "Myztic Engine Test 2", new Scene(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
-	Window* windowB = Window::create(paramsB);
-	log_windows_cmd();
-	windowB->setX(windowB->x() + 250);
-
 	SDL_GL_MakeCurrent(window->handle, window->context);
 
 	gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);

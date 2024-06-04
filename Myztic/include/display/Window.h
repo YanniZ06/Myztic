@@ -110,12 +110,12 @@ public:
 	// Scene* getActiveScene();
 	
 	// Returns a map with all the scenes currently loaded to this window
-	inline std::shared_ptr<Scene>* getLoadedScenes() {
-		const int s = loadedScenes.size();
-		std::shared_ptr<Scene>* scenes = new std::shared_ptr<Scene>[s];
+	inline std::shared_ptr<Scene>* getLoadedScenes(int* size) {
+		*size = loadedScenes.size();
+		std::shared_ptr<Scene>* scenes = new std::shared_ptr<Scene>[*size];
 
 		std::map<unsigned int, std::shared_ptr<Scene>>::const_iterator it = loadedScenes.begin();
-		for (int i = 0; i < s; i++) {
+		for (int i = 0; i < *size; i++) {
 			scenes[i] = it++->second;
 		}
 		return scenes;

@@ -24,6 +24,6 @@ public:
 	// Called when this scene is overriden and becomes inactive
 	virtual void finish();
 
-	// Called per-frame when this scene is loaded to a Window
+	// Called per-frame while this scene is loaded to a Window
 	virtual void update(float dt);
 };

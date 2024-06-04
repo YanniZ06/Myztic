@@ -6,6 +6,7 @@
 
 // Logging
 #include <windows.h>
+#include <iostream>
 
 Window* Window::create(WindowParams params) {
 	std::shared_ptr<Window> window = std::make_shared<Window>(params);
@@ -79,7 +80,7 @@ bool Window::loadScene(Scene* scene) {
 }
 
 bool Window::unloadScene(Scene* scene) {
-	if (loadedScenes.find(scene->id) == loadedScenes.end()) return false;
+	if (scene->loadedWin != this) return false;
 
 	scene->unload(this);
 	scene->loadedWin = nullptr;

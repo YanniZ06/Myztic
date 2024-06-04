@@ -42,8 +42,37 @@ void tMainTest() {
 	std::cout << "Finished Main Thread\n";
 }
 */
+class SceneB : Scene {
+	virtual void load(Window* callerWindow) {
+		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
+	}
+
+	virtual void unload(Window* callerWindow) {
+		std::cout << "Unloaded from Window: " << (std::string)*callerWindow << "\n";
+	}
+
+	virtual void enter() {
+		std::cout << "SceneB entered\n";
+		// Application::log_windows_cmd();
+	}
+	virtual void finish() {
+		std::cout << "SceneB finished\n";
+	}
+};
 
 class TestScene : Scene {
+	void logLoaded() {
+		int size = 0;
+		std::shared_ptr<Scene>* loadedScenes = this->loadedWin->getLoadedScenes(&size);
+		std::cout << "Window::getLoadedScenes =>\n";
+
+		int i = 0;
+		while (i < size) {
+			std::cout << "Scene Number "<< i <<":" << loadedScenes[i++].get()->id << "\n";
+		}
+		std::cout << "Finished\n";
+	}
+
 	virtual void load(Window* callerWindow) {
 		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
 	}
@@ -52,7 +81,24 @@ class TestScene : Scene {
 		std::cout << myzWin->name() << "\n";
 		myzWin->setName("Myztic Main Window");
 
+		logLoaded();
 		Application::log_windows_cmd();
+
+		// Segunda Windowa (excellente espanol)
+		WindowParams paramsB = { "Myztic Engine Test 2", new Scene(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
+		Window* windowB = Window::create(paramsB);
+		Application::log_windows_cmd();
+		windowB->setX(windowB->x() + 250);
+
+		SceneB* nScene = new SceneB();
+
+		std::cout << Application::windows[2].get()->loadScene((Scene*)nScene) << "\n";
+		std::cout << this->loadedWin->loadScene((Scene*)nScene) << "\n";
+		logLoaded();
+
+		std::cout << Application::windows[2].get()->unloadScene((Scene*)nScene) << "\n";
+		std::cout << this->loadedWin->loadScene((Scene*)nScene) << "\n";
+		logLoaded();
 	}
 };
 
