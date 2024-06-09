@@ -9,7 +9,7 @@ public:
 	// Scene(const Scene& s) = default;
 	Scene(Scene const&) = default; // do i need you
 
-	//~Scene();
+	~Scene();
 
 	unsigned int id;
 	Window* loadedWin;

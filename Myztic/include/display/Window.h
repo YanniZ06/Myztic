@@ -27,7 +27,7 @@ private:
 	std::string _name;
 	int _x, _y, _w, _h;
 
-	std::map<unsigned int, std::shared_ptr<Scene>> loadedScenes;
+	std::map<unsigned int, Scene*> loadedScenes;
 
 public:
 	// Not meant to be called. Use Window::create instead
@@ -110,14 +110,15 @@ public:
 	// Scene* getActiveScene();
 	
 	// Returns a map with all the scenes currently loaded to this window
-	inline std::shared_ptr<Scene>* getLoadedScenes(int* size) {
+	inline Scene** getLoadedScenes(int* size) {
 		*size = loadedScenes.size();
-		std::shared_ptr<Scene>* scenes = new std::shared_ptr<Scene>[*size];
+		Scene** scenes = new Scene*[*size];
 
-		std::map<unsigned int, std::shared_ptr<Scene>>::const_iterator it = loadedScenes.begin();
+		std::map<unsigned int, Scene*>::const_iterator it = loadedScenes.begin();
 		for (int i = 0; i < *size; i++) {
 			scenes[i] = it++->second;
 		}
+
 		return scenes;
 	}
 

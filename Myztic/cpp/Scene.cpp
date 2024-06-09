@@ -7,7 +7,7 @@ Scene::Scene() {
 	id = IDGenerator::instance()->next();
 	loadedWin = nullptr;
 }
-// Scene::~Scene() {}
+Scene::~Scene() {}
 void Scene::load(Window* callerWindow) {}
 void Scene::unload(Window* callerWindow) {}
 void Scene::enter() {}

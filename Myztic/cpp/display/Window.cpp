@@ -74,8 +74,8 @@ bool Window::loadScene(Scene* scene) {
 
 	scene->loadedWin = this;
 	scene->load(this);
-	std::shared_ptr<Scene> ss = std::shared_ptr<Scene>(scene);
-	loadedScenes[scene->id] = ss;
+	//std::shared_ptr<Scene> ss = std::shared_ptr<Scene>(scene);
+	loadedScenes[scene->id] = scene;
 	return true;
 }
 

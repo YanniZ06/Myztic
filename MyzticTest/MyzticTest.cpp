@@ -63,12 +63,12 @@ class SceneB : Scene {
 class TestScene : Scene {
 	void logLoaded() {
 		int size = 0;
-		std::shared_ptr<Scene>* loadedScenes = this->loadedWin->getLoadedScenes(&size);
+		Scene** loadedScenes = this->loadedWin->getLoadedScenes(&size);
 		std::cout << "Window::getLoadedScenes =>\n";
 
 		int i = 0;
 		while (i < size) {
-			std::cout << "Scene Number "<< i <<":" << loadedScenes[i++].get()->id << "\n";
+			std::cout << "Scene Number "<< i <<":" << loadedScenes[i++]->id << "\n";
 		}
 		std::cout << "Finished\n";
 	}
@@ -133,6 +133,7 @@ int WinMain(HINSTANCE hInstance,
 
 	TestScene* scene = new TestScene();
 	Application::initMyztic((Scene*) scene);
+	
 	// tMainTest();
 
 	SDL_Event e;
