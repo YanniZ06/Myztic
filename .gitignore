@@ -4,4 +4,5 @@ MyzticTest/x64/*
 MyzticTest/.vs/* 
 Myztic/Myztic.vcxproj.user
 MyzticTest/MyzticTest.vcxproj.user
+Documentation/gen/*
 .vs/* 

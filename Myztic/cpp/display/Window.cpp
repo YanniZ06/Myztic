@@ -35,10 +35,6 @@ Window::Window(WindowParams params) {
 	if (!params.h) _h = 480;
 	else _h = params.h.value();
 
-	fpsSize frames = 60;
-	if (params.fps) frames = params.fps.value();
-	fps = Fps(frames);
-
 	handle = SDL_CreateWindow(_name.c_str(), _x, _y, _w, _h, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	if (!handle) {
 		printf("Failed to create window\n");
@@ -47,7 +43,7 @@ Window::Window(WindowParams params) {
 	id = SDL_GetWindowID(handle);
 	SDL_GetWindowPosition(handle, &_x, &_y);
 
-	thread = std::thread(Application::start_winloop, this);
+	thread = WinThread(this);
 	
 }
 

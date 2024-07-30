@@ -45,6 +45,7 @@ void tMainTest() {
 class SceneB : Scene {
 	virtual void load(Window* callerWindow) {
 		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
+		std::cout << "ID: " << std::to_string(id) << "\n";
 	}
 
 	virtual void unload(Window* callerWindow) {
@@ -85,7 +86,7 @@ class TestScene : Scene {
 		Application::log_windows_cmd();
 
 		// Segunda Windowa (excellente espanol)
-		WindowParams paramsB = { "Myztic Engine Test 2", new Scene(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
+		WindowParams paramsB = { "Myztic Engine Test 2", (Scene*)new SceneB(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
 		Window* windowB = Window::create(paramsB);
 		Application::log_windows_cmd();
 		windowB->setX(windowB->x() + 250);
@@ -132,7 +133,8 @@ int WinMain(HINSTANCE hInstance,
 	printf("Version: %u.%u Patch: %u\n", ver.major, ver.minor, ver.patch);
 
 	TestScene* scene = new TestScene();
-	Application::initMyztic((Scene*) scene);
+	WindowParams p = { "Myztic Engine Test", (Scene*)scene, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
+	Application::initMyztic(p, 60);
 	
 	// tMainTest();
 

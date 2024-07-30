@@ -15,13 +15,20 @@ public:
 
 
 	//Gets the max fps cap
-	fpsSize getMax();
+	inline fpsSize getMax() {
+		return max;
+	}
 	// Sets the max fps cap
-	inline void setMax(fpsSize max);
+	void setMax(fpsSize max);
+	
 	// MS between each frame at max framerate
-	double getFrameTime();
-	// The fps actually used
-	fpsSize used();
+	inline double getFrameTime() {
+		return frameTime;
+	}
+	// The fps the app actually runs at currently
+	inline fpsSize used() {
+		return _used; // This value is populated by the Application
+	}
 	
 protected:
 	fpsSize _used;

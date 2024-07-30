@@ -9,7 +9,7 @@
 #include <thread>
 #include <string>
 
-#include <display/Fps.h>
+#include <display/WinThread.h>
 
 class Scene;
 
@@ -19,10 +19,10 @@ struct WindowParams {
 
 	std::optional<int> x, y, w, h;
 	std::optional<SDL_WindowFlags> flags;
-	std::optional<fpsSize> fps;
 };
 
 class Window {
+	friend class Application;
 private:
 	std::string _name;
 	int _x, _y, _w, _h;
@@ -93,9 +93,6 @@ public:
 	bool shouldClose;
 	// Acts as a signal for the window to update and render however many frames it needs to
 	bool inRenderPhase;
-
-	// Fps settings for this window
-	Fps fps;
 	
 	// SDL Window ID
 	int id;
@@ -104,18 +101,20 @@ public:
 	// SDL OpenGl Context associated with this Window
 	SDL_GLContext context;
 	// The thread for this window
-	std::thread thread;
+	WinThread thread;
 
 	// Returns the scene currently displayed on this Window
 	// Scene* getActiveScene();
 	
+	// Todo: test this at some point jesus christ
 	// Returns a map with all the scenes currently loaded to this window
-	inline Scene** getLoadedScenes(int* size) {
-		*size = loadedScenes.size();
-		Scene** scenes = new Scene*[*size];
+	// outSize: Amount of loaded scenes
+	inline Scene** getLoadedScenes(int* outSize) {
+		*outSize = loadedScenes.size();
+		Scene** scenes = new Scene*[*outSize];
 
 		std::map<unsigned int, Scene*>::const_iterator it = loadedScenes.begin();
-		for (int i = 0; i < *size; i++) {
+		for (int i = 0; i < *outSize; i++) {
 			scenes[i] = it++->second;
 		}
 

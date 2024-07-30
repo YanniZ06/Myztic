@@ -194,6 +194,7 @@
     <ClCompile Include="cpp\Application.cpp" />
     <ClCompile Include="cpp\display\Fps.cpp" />
     <ClCompile Include="cpp\display\Window.cpp" />
+    <ClCompile Include="cpp\display\WinThread.cpp" />
     <ClCompile Include="cpp\Scene.cpp" />
     <ClCompile Include="cpp\Timer.cpp" />
     <ClCompile Include="cpp\Util.cpp" />

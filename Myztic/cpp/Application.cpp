@@ -12,26 +12,30 @@
 
 #define SDL_MAIN_HANDLED
 
+// Statics
 std::map<unsigned char, std::shared_ptr<Window>> Application::windows;
 std::thread Application::mainThread;
+std::binary_semaphore* resourceManager;
+std::binary_semaphore* waiter;
+unsigned char Application::readyWinThreads = 0;
+unsigned char Application::registeredWinThreads = 0;
+Fps Application::fps;
 bool Application::shouldClose = false;
 
-void Application::initMyztic(Scene* initScene) {
-	mainThread = std::thread(_initMyztic, initScene);
+void Application::initMyztic(WindowParams initWindowParams, fpsSize fps) {
+	mainThread = std::thread(_initMyztic, initWindowParams, fps);
 }
 
-void Application::_initMyztic(Scene* initScene) {
+void Application::_initMyztic(WindowParams p, fpsSize fps) {
 	double myzStart = Timer::stamp();
 	SDL_SetMainReady();
-
-	// mainThread = std::thread(std::this_thread::get_id());
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC) != 0) {
 		throw "Error initializing SDL subsystems : " + std::string(SDL_GetError());
 	}
 
-	WindowParams params = { "Myztic Engine Test", initScene, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
-	Window* window = Window::create(params);
+	Window* window = Window::create(p);
+	Application::fps = Fps(fps);
 
 	SDL_GL_MakeCurrent(window->handle, window->context);
 
@@ -39,37 +43,57 @@ void Application::_initMyztic(Scene* initScene) {
 
 	CHECK_GL(glViewport(0, 0, 680, 480));
 
+	waiter = new std::binary_semaphore(0);
+	resourceManager = new std::binary_semaphore(0);
+
 	Timer::debugMeasure(myzStart, "Myztic Initialization");
-	//app_loop();
+	app_loop();
 }
 
 void Application::app_loop() {
 	SDL_Event e;
 
 	while (!shouldClose) {
+		// Step 1: Check for and handle all sorts of SDL events, such as inputs or window actions
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT) shouldClose = true;
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		// Step ?: Handle draw requests
+		 
+		 
+		// Step 2: Start & continue all winloops -> create drawing requests for the next frame and handle physics
+		for (std::map<unsigned char, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it) {
+			it->second.get()->thread.signal->release();
+		}
+
+		if(readyWinThreads < registeredWinThreads) waiter->acquire();
+		readyWinThreads = 0;
+		// Finally, wait the rest of the frame or continue right away
+		SDL_Delay(1);
 	}
 }
 
+// Update: maybe queues can make it all happen at the same time, by assigning events to when they would / shouldve happened in frame???
+// Like, 3 frames arent rendered yet, but you press a key that youd need to press in frame 2 while frame 1 hasnt finished, so it gets the time of your input, and assigns
+// the event to correct frame instead of forcing that frame to be waited on which also makes sure there are (close to) 0 ignored inputs!! 
+
 void Application::start_winloop(Window* win) {
-	// TODO: Mutex, wait for next event rotation thingamajig lols hahahahahaha amoignus
-	// Update: maybe queues can make it all happen at the same time, by assigning events to when they would / shouldve happened in frame???
-	// Like, 3 frames arent rendered yet, but you press a key that youd need to press in frame 2 while frame 1 hasnt finished, so it gets the time of your input, and assigns
-	// the event to correct frame instead of forcing that frame to be waited on which also makes sure there are (close to) 0 ignored inputs!! 
+	win->thread.signal->acquire();
+
+	registeredWinThreads++;
 	window_loop(win);
 }
 
-// Todo: Run soely physics and drawing logic in here, (preloading is done on ANOTHER thread if we do the context preloading thing)
-// Event handling should be done on the main thread
+// Todo: Run soely physics and drawing REQUESTS to the drawing (currently main) thread in here | Unlikely -> preloading is done on ANOTHER thread if we do the context preloading thing
 void Application::window_loop(Window* win) {
-	//while (!win->shouldClose) {
+	while (!win->shouldClose) {
+		win->scene->update(fps.getFrameTime()); // Put elapsed time in here, for now it gives you the max framerate elapsed
 
-		SDL_Delay(2000); // just wait 2 seconds lol
-	//}
+		readyWinThreads++;
+		if (readyWinThreads == registeredWinThreads) waiter->release();
+		win->thread.signal->acquire(); // Block execution until thread is released by main thread
+	}
 }
 
 // Logging and shit
