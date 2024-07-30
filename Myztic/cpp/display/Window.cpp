@@ -94,6 +94,7 @@ void Window::centerPosition(bool x, bool y) {
 }
 
 Window::operator std::string() {
-	std::string winString = "Window " +  std::to_string(id)  + "[\"" + _name + "\"] : " + std::to_string(w()) + "x " + std::to_string(h()) + " at position(" + std::to_string(x()) + " | " + std::to_string(y()) + ") running on " + std::to_string(fps.getMax()) + " max fps";
+	//doing Application::fps here for now, every window is gonna have it's own independent FPS instance later
+	std::string winString = "Window " +  std::to_string(id)  + "[\"" + _name + "\"] : " + std::to_string(w()) + "x " + std::to_string(h()) + " at position(" + std::to_string(x()) + " | " + std::to_string(y()) + ") running on " + std::to_string(Application::fps.getMax()) + " max fps";
 	return winString;
 }

@@ -21,6 +21,8 @@ unsigned char Application::readyWinThreads = 0;
 unsigned char Application::registeredWinThreads = 0;
 Fps Application::fps;
 bool Application::shouldClose = false;
+std::binary_semaphore* Application::waiter;
+std::binary_semaphore* Application::resourceManager;
 
 void Application::initMyztic(WindowParams initWindowParams, fpsSize fps) {
 	mainThread = std::thread(_initMyztic, initWindowParams, fps);
@@ -49,14 +51,20 @@ void Application::_initMyztic(WindowParams p, fpsSize fps) {
 	Timer::debugMeasure(myzStart, "Myztic Initialization");
 	app_loop();
 }
+int decrementTimes = 0;
 
 void Application::app_loop() {
 	SDL_Event e;
-
+	//? this actually isnt right, i cant move window or do any window operation on neither (NOTE: That was because waiter functionality-
+	//? hasn't actually been implemented yet, although when I comment out lines 73, 74, i can move windows, i can't exit which just means-
+	//? that Step 2 isn't happening correctly or for some reason, event's aren't being handled?)
+	
 	while (!shouldClose) {
 		// Step 1: Check for and handle all sorts of SDL events, such as inputs or window actions
 		while (SDL_PollEvent(&e)) {
-			if (e.type == SDL_QUIT) shouldClose = true;
+			if (e.type == SDL_QUIT) {
+				shouldClose = true; 
+			}
 		}
 
 		// Step ?: Handle draw requests
@@ -67,7 +75,12 @@ void Application::app_loop() {
 			it->second.get()->thread.signal->release();
 		}
 
-		if(readyWinThreads < registeredWinThreads) waiter->acquire();
+		if (readyWinThreads < registeredWinThreads) { 
+			waiter->acquire(); 
+			decrementTimes++;
+			std::cout << "waiter acquired, decremented: " + std::to_string(decrementTimes) << "\n";
+		}
+		
 		readyWinThreads = 0;
 		// Finally, wait the rest of the frame or continue right away
 		SDL_Delay(1);
@@ -84,14 +97,21 @@ void Application::start_winloop(Window* win) {
 	registeredWinThreads++;
 	window_loop(win);
 }
+int incrementTimes = 0;
 
 // Todo: Run soely physics and drawing REQUESTS to the drawing (currently main) thread in here | Unlikely -> preloading is done on ANOTHER thread if we do the context preloading thing
 void Application::window_loop(Window* win) {
 	while (!win->shouldClose) {
+		SDL_Delay(1);
 		win->scene->update(fps.getFrameTime()); // Put elapsed time in here, for now it gives you the max framerate elapsed
 
 		readyWinThreads++;
-		if (readyWinThreads == registeredWinThreads) waiter->release();
+		//? waiter is never released
+		if (readyWinThreads == registeredWinThreads) {
+			waiter->release(); 
+			incrementTimes++;
+			std::cout << "waiter released, incremented: " + std::to_string(incrementTimes) << "\n";
+		}
 		win->thread.signal->acquire(); // Block execution until thread is released by main thread
 	}
 }
