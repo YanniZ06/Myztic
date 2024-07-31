@@ -20,9 +20,9 @@ class Application {
     friend class WinThread;
 private: 
     /// Amount of WinThreads that are done with their update loop
-    static unsigned char readyWinThreads;
+    static std::atomic<uint8_t> readyWinThreads;
     /// Different to the windows map size, this is only updated when a window has been fed into the loop 
-    static unsigned char registeredWinThreads;
+    static uint8_t registeredWinThreads;
 
     static void app_loop();
     static void _initMyztic(WindowParams p, fpsSize fps);
@@ -36,7 +36,7 @@ public:
     /// The main myztic thread
     static std::thread mainThread;
     /// Dictates whether the main thread resources are currently available or being read/modified by one of the threads
-    static ResourceManager resourceManager;
+    static ResourceManager* resourceManager;
     /// Tells the main loop thread to wait on the other window threads
     static std::binary_semaphore* waiter;
 
@@ -50,6 +50,8 @@ public:
      * 
      * \param initWindowParams Parameters for the main window, check the WindowParams type for more info.
      * \param fps The max FPS the application should run at, can be configured afterwards.
+     * \throw MYZTIC_INIT_SDL_ERROR along with error information if one of the following SDL subsystems could not be initialized:
+     * \n `SDL_INIT_VIDEO`, `SDL_INIT_EVENTS`, `SDL_INIT_GAMECONTROLLER`, `SDL_INIT_JOYSTICK` or `SDL_INIT_HAPTIC`
      */
     static void initMyztic(WindowParams initWindowParams, fpsSize fps);
     // Logs the window map to the command line

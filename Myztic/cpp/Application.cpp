@@ -17,12 +17,12 @@ std::map<unsigned char, std::shared_ptr<Window>> Application::windows;
 std::thread Application::mainThread;
 std::binary_semaphore* resourceManager;
 std::binary_semaphore* waiter;
-unsigned char Application::readyWinThreads = 0;
-unsigned char Application::registeredWinThreads = 0;
+std::atomic<uint8_t> Application::readyWinThreads = 0;
+uint8_t Application::registeredWinThreads = 0;
 Fps Application::fps;
 bool Application::shouldClose = false;
 std::binary_semaphore* Application::waiter;
-ResourceManager Application::resourceManager;
+ResourceManager* Application::resourceManager;
 
 void Application::initMyztic(WindowParams initWindowParams, fpsSize fps) {
 	mainThread = std::thread(_initMyztic, initWindowParams, fps);
@@ -33,7 +33,7 @@ void Application::_initMyztic(WindowParams p, fpsSize fps) {
 	SDL_SetMainReady();
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC) != 0) {
-		throw "Error initializing SDL subsystems : " + std::string(SDL_GetError());
+		throw "(MYZTIC_INIT_SDL_ERROR) Error initializing SDL subsystems : " + std::string(SDL_GetError());
 	}
 
 	Window* window = Window::create(p);
@@ -46,12 +46,12 @@ void Application::_initMyztic(WindowParams p, fpsSize fps) {
 	CHECK_GL(glViewport(0, 0, 680, 480));
 
 	waiter = new std::binary_semaphore(0);
-	resourceManager = ResourceManager();
+	resourceManager = new ResourceManager();
 
 	Timer::debugMeasure(myzStart, "Myztic Initialization");
 	app_loop();
 }
-int decrementTimes = 0;
+//? std::atomic<int> decrementTimes = 0;
 
 void Application::app_loop() {
 	SDL_Event e;
@@ -60,29 +60,32 @@ void Application::app_loop() {
 	//? that Step 2 isn't happening correctly or for some reason, event's aren't being handled?)
 	
 	while (!shouldClose) {
+		//! std::cout << "(63) AppLoop Instance \n";
 		// Step 1: Check for and handle all sorts of SDL events, such as inputs or window actions
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT) {
 				shouldClose = true; 
 			}
 		}
-
-		// Step ?: Handle draw requests
-		 
+		
 		 
 		// Step 2: Start & continue all winloops -> create drawing requests for the next frame and handle physics
 		for (std::map<unsigned char, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it) {
 			it->second.get()->thread.signal->release();
 		}
+		SDL_Delay(1); //? ARTIFICAL LENGTH FOR TESTING
+		// Step ?: Handle draw requests (maybe manage to handle the last frames draw requests while this frame recommends a new one so this thread isnt wasted just sleeping?
 
-		if (readyWinThreads < registeredWinThreads) { 
+		if (readyWinThreads.load() < registeredWinThreads) { 
+			/*
 			decrementTimes++;
 			std::cout << "waiter acquired, decremented: " + std::to_string(decrementTimes) << "\n";
-			
+			//*/
+
 			waiter->acquire(); 
 		}
 		
-		readyWinThreads = 0;
+		readyWinThreads.store(0, std::memory_order_relaxed);
 		// Finally, wait the rest of the frame or continue right away
 		SDL_Delay(1);
 	}
@@ -93,24 +96,29 @@ void Application::app_loop() {
 // the event to correct frame instead of forcing that frame to be waited on which also makes sure there are (close to) 0 ignored inputs!! 
 
 void Application::start_winloop(Window* win) {
+	//! std::cout << "Requested WindowLoop On " + win->name() << "\n";
 	win->thread.signal->acquire();
 
 	registeredWinThreads++;
+	//! std::cout << "Started WindowLooping On " + win->name() << "\n";
 	window_loop(win);
 }
-int incrementTimes = 0;
+
+//? std::atomic<int> incrementTimes = 0;
 
 // Todo: Run soely physics and drawing REQUESTS to the drawing (currently main) thread in here | Unlikely -> preloading is done on ANOTHER thread if we do the context preloading thing
 void Application::window_loop(Window* win) {
 	while (!win->shouldClose) {
-		SDL_Delay(1);
+		//! std::cout << "(109) WindowLoop On " + win->name() << "\n";
+		SDL_Delay((win->id + 1) * 2);
 		win->scene->update(fps.getFrameTime()); // Put elapsed time in here, for now it gives you the max framerate elapsed
 
 		readyWinThreads++;
-		//? waiter is never released
-		if (readyWinThreads == registeredWinThreads) {
+		if (readyWinThreads.load() == registeredWinThreads) {
+			/*
 			incrementTimes++;
 			std::cout << "waiter released, incremented: " + std::to_string(incrementTimes) << "\n";
+			//*/
 
 			waiter->release(); 
 		}

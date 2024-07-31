@@ -49,13 +49,13 @@ class TestScene : Scene {
 	virtual void enter() {
 		Window* myzWin = Application::windows[1].get();
 		std::cout << myzWin->name() << "\n";
-		myzWin->setName("Myztic Main Window");
+		myzWin->setName("WINDOW 1");
 
 		logLoaded();
 		Application::log_windows_cmd();
 
 		// Segunda Windowa (excellente espanol)
-		WindowParams paramsB = { "Myztic Engine Test 2", (Scene*)new SceneB(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
+		WindowParams paramsB = { "WINDOW 2", (Scene*)new SceneB(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
 		Window* windowB = Window::create(paramsB);
 		Application::log_windows_cmd();
 		windowB->setX(windowB->x() + 250);
@@ -69,6 +69,10 @@ class TestScene : Scene {
 		//std::cout << Application::windows[2].get()->unloadScene((Scene*)nScene) << "\n";
 		//std::cout << this->loadedWin->loadScene((Scene*)nScene) << "\n";
 		//logLoaded();
+	}
+
+	virtual void update(float dt) {
+		
 	}
 };
 
