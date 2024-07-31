@@ -22,7 +22,7 @@ unsigned char Application::registeredWinThreads = 0;
 Fps Application::fps;
 bool Application::shouldClose = false;
 std::binary_semaphore* Application::waiter;
-std::binary_semaphore* Application::resourceManager;
+ResourceManager Application::resourceManager;
 
 void Application::initMyztic(WindowParams initWindowParams, fpsSize fps) {
 	mainThread = std::thread(_initMyztic, initWindowParams, fps);
@@ -46,7 +46,7 @@ void Application::_initMyztic(WindowParams p, fpsSize fps) {
 	CHECK_GL(glViewport(0, 0, 680, 480));
 
 	waiter = new std::binary_semaphore(0);
-	resourceManager = new std::binary_semaphore(0);
+	resourceManager = ResourceManager();
 
 	Timer::debugMeasure(myzStart, "Myztic Initialization");
 	app_loop();
@@ -76,9 +76,10 @@ void Application::app_loop() {
 		}
 
 		if (readyWinThreads < registeredWinThreads) { 
-			waiter->acquire(); 
 			decrementTimes++;
 			std::cout << "waiter acquired, decremented: " + std::to_string(decrementTimes) << "\n";
+			
+			waiter->acquire(); 
 		}
 		
 		readyWinThreads = 0;
@@ -108,9 +109,10 @@ void Application::window_loop(Window* win) {
 		readyWinThreads++;
 		//? waiter is never released
 		if (readyWinThreads == registeredWinThreads) {
-			waiter->release(); 
 			incrementTimes++;
 			std::cout << "waiter released, incremented: " + std::to_string(incrementTimes) << "\n";
+
+			waiter->release(); 
 		}
 		win->thread.signal->acquire(); // Block execution until thread is released by main thread
 	}
