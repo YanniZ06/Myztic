@@ -55,10 +55,7 @@ void Application::_initMyztic(WindowParams p, fpsSize fps) {
 
 void Application::app_loop() {
 	SDL_Event e;
-	//? this actually isnt right, i cant move window or do any window operation on neither (NOTE: That was because waiter functionality-
-	//? hasn't actually been implemented yet, although when I comment out lines 73, 74, i can move windows, i can't exit which just means-
-	//? that Step 2 isn't happening correctly or for some reason, event's aren't being handled?)
-	
+
 	while (!shouldClose) {
 		//! std::cout << "(63) AppLoop Instance \n";
 		// Step 1: Check for and handle all sorts of SDL events, such as inputs or window actions

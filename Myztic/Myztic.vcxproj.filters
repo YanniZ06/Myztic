@@ -45,7 +45,7 @@
     <ClInclude Include="include\display\Window.h">
       <Filter>Header Files\display</Filter>
     </ClInclude>
-    <ClInclude Include="include\graphics\VBO.hpp">
+    <ClInclude Include="include\graphics\backend\VBO.hpp">
       <Filter>Header Files\graphics\backend</Filter>
     </ClInclude>
     <ClInclude Include="include\Scene.h">
@@ -54,22 +54,22 @@
     <ClInclude Include="include\ErrorHandler.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\graphics\VAO.hpp">
+    <ClInclude Include="include\graphics\backend\VAO.hpp">
       <Filter>Header Files\graphics\backend</Filter>
     </ClInclude>
-    <ClInclude Include="include\graphics\ShaderInputLayout.h">
+    <ClInclude Include="include\graphics\backend\ShaderInputLayout.h">
       <Filter>Header Files\graphics\backend</Filter>
     </ClInclude>
-    <ClInclude Include="include\graphics\Shader.h">
+    <ClInclude Include="include\graphics\backend\Shader.h">
       <Filter>Header Files\graphics\backend</Filter>
     </ClInclude>
-    <ClInclude Include="include\graphics\EBO.hpp">
+    <ClInclude Include="include\graphics\backend\EBO.hpp">
       <Filter>Header Files\graphics\backend</Filter>
     </ClInclude>
     <ClInclude Include="include\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\graphics\Texture2D.hpp">
+    <ClInclude Include="include\graphics\backend\Texture2D.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Timer.h">
@@ -79,6 +79,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -98,10 +101,10 @@
     <ClCompile Include="cpp\display\Fps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\graphics\ShaderInputLayout.cpp">
+    <ClCompile Include="cpp\graphics\backend\ShaderInputLayout.cpp">
       <Filter>Source Files\graphics\backend</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\graphics\Shader.cpp">
+    <ClCompile Include="cpp\graphics\backend\Shader.cpp">
       <Filter>Source Files\graphics\backend</Filter>
     </ClCompile>
     <ClCompile Include="cpp\Timer.cpp">

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include <Windows.h>
-#include <graphics/ShaderInputLayout.h>
+#include <graphics/backend/ShaderInputLayout.h>
 
 InputProperty ShaderInputLayout::POSITION = { Position, 3, GL_FLOAT, -9 };
 InputProperty ShaderInputLayout::COLOR = { Color, 3, GL_FLOAT, -9 };

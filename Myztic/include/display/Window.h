@@ -121,10 +121,10 @@ public:
 		return scenes;
 	}
 
-	// Loads this scenes contents to this Window, returns false if the scene is already loaded to a Window
+	/// Loads this scenes contents to this Window, returns false if the scene is already loaded to a Window
 	bool loadScene(Scene* scene);
 
-	// Unloads this scenes contents from this Window, returns false if the scene is not loaded to this Window
+	/// Unloads this scenes contents from this Window, returns false if the scene is not loaded to this Window
 	bool unloadScene(Scene* scene);
 
 	// Switches this windows' active scene to the input scene, returns false if the input scene is not loaded to this window

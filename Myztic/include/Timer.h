@@ -8,9 +8,13 @@
 
 class Timer {
 public:
-	// Takes in a given ms-stamp and prints the difference between that and the current time in ms to the console
-	// Optionally, you can name the operation in the opName parameter
-	// For an equivalent in seconds use debugMeasure_sec
+	/**
+	 * Takes in a given millisecond stamp and prints the difference between that and the current time in ms to the console.
+	 * 
+	 * \param timeStamp Stamp taken at an earlier time to measure with
+	 * \param opName Optionally used to name the measurement for a clearer console log
+	 * \see debugMeasure_sec
+	 */
 	inline static void debugMeasure(double timeStamp, const char* opName) {
 		#ifdef DEBUG_MEASURES
 		if (!opName) opName = "Unnamed";
@@ -21,7 +25,13 @@ public:
 		return;
 	}
 
-	// Behaves like debugMeasure but prints out a difference in seconds
+	/**
+	 * Takes in a given stamp in seconds and prints the difference between that and the current time in seconds to the console.
+	 * 
+	 * \param timeStamp Stamp taken at an earlier time to measure with
+	 * \param opName Optionally used to name the measurement for a clearer console log
+	 * \see debugMeasure
+	 */
 	inline static void debugMeasure_sec(double timeStamp, const char* opName) {
 		#ifdef DEBUG_MEASURES
 		if (!opName) opName = "Unnamed";

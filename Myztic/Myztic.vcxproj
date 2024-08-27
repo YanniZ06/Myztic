@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -178,17 +178,19 @@
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\display\Window.h" />
     <ClInclude Include="include\display\Fps.h" />
-    <ClInclude Include="include\graphics\EBO.hpp" />
-    <ClInclude Include="include\graphics\Texture2D.hpp" />
+    <ClInclude Include="include\graphics\backend\EBO.hpp" />
+    <ClInclude Include="include\graphics\Drawable.h" />
+    <ClInclude Include="include\graphics\Renderer.h" />
+    <ClInclude Include="include\graphics\backend\Texture2D.hpp" />
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="include\Util.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="include\graphics\VBO.hpp" />
-    <ClInclude Include="include\graphics\VAO.hpp" />
-    <ClInclude Include="include\graphics\ShaderInputLayout.h" />
-    <ClInclude Include="include\graphics\Shader.h" />
+    <ClInclude Include="include\graphics\backend\VBO.hpp" />
+    <ClInclude Include="include\graphics\backend\VAO.hpp" />
+    <ClInclude Include="include\graphics\backend\ShaderInputLayout.h" />
+    <ClInclude Include="include\graphics\backend\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp\Application.cpp" />
@@ -204,8 +206,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="cpp\graphics\ShaderInputLayout.cpp" />
-    <ClCompile Include="cpp\graphics\Shader.cpp" />
+    <ClCompile Include="cpp\graphics\backend\ShaderInputLayout.cpp" />
+    <ClCompile Include="cpp\graphics\backend\Shader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

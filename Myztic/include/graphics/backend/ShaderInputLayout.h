@@ -1,6 +1,6 @@
 #pragma once
 
-#include <graphics/VAO.hpp>
+#include <graphics/backend/VAO.hpp>
 #include <vector>
 
 enum InputPropertyType {
