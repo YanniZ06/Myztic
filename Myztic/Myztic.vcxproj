@@ -78,11 +78,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)glm;$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)glm;$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -197,6 +197,7 @@
     <ClCompile Include="cpp\display\Fps.cpp" />
     <ClCompile Include="cpp\display\Window.cpp" />
     <ClCompile Include="cpp\display\WinThread.cpp" />
+    <ClCompile Include="cpp\graphics\Renderer.cpp" />
     <ClCompile Include="cpp\Scene.cpp" />
     <ClCompile Include="cpp\Timer.cpp" />
     <ClCompile Include="cpp\Util.cpp" />
