@@ -1,21 +1,89 @@
 #pragma once
 
 #include <map>
+#include <vector>
 #include <graphics/Drawable.h>
+#include <glm/glm.hpp>
+#include <type_traits>
 
 // todo: create different types of render requests, make them work more like enums yadda yadda, find out if we even need a request stack
 // maybe we can just evaluate all we need from the drawable at the end of the update loop inside the rendering thread, instead of sending requests and then reading them
 // at about the same time?? sending requests  doesnt seem extremely smart unless we send them directly without a drawable object related (aka tell renderer to draw a line etc,)
-struct RenderRequest {
-	Drawable* drawObj;
+
+/**
+ * Represents a type of request to the renderer.
+ *
+ * Prefixes are as follow:
+ * **D_** is used for drawing requests, such as drawing a triangle.
+ */
+enum RenderRequestType {
+	D_LINE, D_TRI, D_QUAD,
+	D_RAY
 };
-struct RenderRequestStack {
-	/// 
-	RenderRequest* stack;
-	/// The amnount of requests currently in this stack.
-	long size;
-};
-class Renderer {
+
+class RenderRequestBase {
 public:
-	static std::map<Window*, RenderRequestStack> pendingRequests;
+	RenderRequestBase() = default;
+	inline RenderRequestType type() { return _type; }
+	inline RenderRequestBase base() { return *this;  }
+protected:
+	RenderRequestType _type;
+};
+
+/**
+ * A basic request to draw a line from 2 points. 
+ * Also handles 3D line (ray) drawing depending on if vec2 or vec3 is passed in.
+ */
+template<class VecCount>
+class DLineRequest : public RenderRequestBase {
+public:
+	VecCount p1, p2;
+
+	DLineRequest(VecCount p1, VecCount p2) {
+		this->p1 = p1;
+		this->p2 = p2;
+
+		if constexpr (std::is_same<VecCount, glm::vec2>()) _type = D_LINE;
+		else _type = D_RAY;
+	}
+};
+
+
+/*struct RenderRequestStack {
+	/// 
+	std::vector<RenderRequestBase> stack;
+	/// The amount of requests currently in this stack.
+	// long size;
+};*/
+
+class Renderer {
+	friend class Application;
+public:
+	static std::map<Window*, std::vector<RenderRequestBase>> pendingRequests;
+
+	/**
+	 * Requests the renderer to draw a basic 2D line from 2 points.
+	 * 
+	 * \param p1 Point A
+	 * \param p2 Point B
+	 * \param drawTarget The window the renderer should draw on.
+	 * \see drawRay
+	 */
+	static void drawLine(glm::vec2 p1, glm::vec2 p2, Window* drawTarget);
+
+	/**
+	 * Requests the renderer to draw a basic 3D line from 2 points.
+	 * 
+	 * \param p1 Point A
+	 * \param p2 Point B
+	 * \param drawTarget The window the renderer should draw on.
+	 * \see drawLine
+	 */
+	static void drawRay(glm::vec3 p1, glm::vec3 p2, Window* drawTarget);
+protected:
+	/**
+	* Handles rendering and presenting a frame to the screen.
+	*
+	*/
+	static void startRender();
 };

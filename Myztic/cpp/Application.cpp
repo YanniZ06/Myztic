@@ -2,6 +2,7 @@
 #include "framework.h"
 
 #include <Application.h>
+#include <graphics/Renderer.h>
 #include <Scene.h>
 
 #include <SDL.h>
@@ -71,6 +72,8 @@ void Application::app_loop() {
 			it->second.get()->thread.signal->release();
 		}
 		SDL_Delay(1); //? ARTIFICAL LENGTH FOR TESTING
+
+		Renderer::startRender();
 		// Step ?: Handle draw requests (maybe manage to handle the last frames draw requests while this frame recommends a new one so this thread isnt wasted just sleeping?
 
 		if (readyWinThreads.load() < registeredWinThreads) { 
@@ -107,7 +110,7 @@ void Application::start_winloop(Window* win) {
 void Application::window_loop(Window* win) {
 	while (!win->shouldClose) {
 		//! std::cout << "(109) WindowLoop On " + win->name() << "\n";
-		SDL_Delay((win->id + 1) * 2);
+		SDL_Delay((win->id() + 1) * 2);
 		win->scene->update(fps.getFrameTime()); // Put elapsed time in here, for now it gives you the max framerate elapsed
 
 		readyWinThreads++;

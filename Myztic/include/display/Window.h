@@ -26,6 +26,8 @@ class Window {
 private:
 	std::string _name;
 	int _x, _y, _w, _h;
+	int _id;
+	bool _focused;
 
 	std::map<unsigned int, Scene*> loadedScenes;
 
@@ -89,13 +91,20 @@ public:
 		SDL_SetWindowSize(handle, _w, v);
 	}
 
+	inline bool focused() { return _focused; }
+
+	/// Dictates whether frames for this window should be rendered if the window is not in focus. True by default.
+	bool renderOutOfFocus;
+
 	// Acts as a signal for the window and thread to close
-	bool shouldClose;
+	bool shouldClose; //? Make getter/protected
 	// Acts as a signal for the window to update and render however many frames it needs to
-	bool inRenderPhase;
+	bool inRenderPhase; //? Deprecated
 	
 	// SDL Window ID
-	int id;
+	inline int id() { return _id; }
+
+	// todo: make getters!!!!!!!!!! we need some more structure over here
 	// SDL Window Handle
 	SDL_Window* handle;
 	// SDL OpenGl Context associated with this Window

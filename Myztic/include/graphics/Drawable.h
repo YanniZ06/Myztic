@@ -11,12 +11,6 @@ public:
 	Drawable(Window* drawerWin);
 	Drawable() = default;
 
-	/**
-	 * Queues a draw call for this drawable to the renderer.
-	 * 
-	 */
-	void queueDraw();
-
 	/// The vertex buffer object used for OpenGL draw calls.
 	VBO vbo;
 	/// The shader input layout used to define shader attributes for OpenGL.
@@ -26,4 +20,9 @@ public:
 protected:
 	/// The window that is being drawn to
 	Window* drawTarget;
+	/**
+	 * Renders this drawable. Debateable if useful???
+	 * 
+	 */
+	// void draw();
 };

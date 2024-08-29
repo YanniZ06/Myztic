@@ -10,7 +10,7 @@
 
 Window* Window::create(WindowParams params) {
 	std::shared_ptr<Window> window = std::make_shared<Window>(params);
-	Application::windows[window->id] = window;
+	Application::windows[window->id()] = window;
 
 	window->loadScene(params.init_scene);
 	window->switchScene(params.init_scene);
@@ -40,8 +40,11 @@ Window::Window(WindowParams params) {
 		printf("Failed to create window\n");
 	}
 	context = SDL_GL_CreateContext(handle);
-	id = SDL_GetWindowID(handle);
+	_id = SDL_GetWindowID(handle);
 	SDL_GetWindowPosition(handle, &_x, &_y);
+
+	_focused = (SDL_GetWindowFlags(handle) & SDL_WINDOW_INPUT_FOCUS) != 0;
+	renderOutOfFocus = true;
 
 	thread = WinThread(this);
 	
@@ -95,6 +98,6 @@ void Window::centerPosition(bool x, bool y) {
 
 Window::operator std::string() {
 	//doing Application::fps here for now, every window is gonna have it's own independent FPS instance later
-	std::string winString = "Window " +  std::to_string(id)  + "[\"" + _name + "\"] : " + std::to_string(w()) + "x " + std::to_string(h()) + " at position(" + std::to_string(x()) + " | " + std::to_string(y()) + ") running on " + std::to_string(Application::fps.getMax()) + " max fps";
+	std::string winString = "Window " +  std::to_string(id())  + "[\"" + _name + "\"] : " + std::to_string(w()) + "x " + std::to_string(h()) + " at position(" + std::to_string(x()) + " | " + std::to_string(y()) + ") running on " + std::to_string(Application::fps.getMax()) + " max fps";
 	return winString;
 }
