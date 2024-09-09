@@ -2,10 +2,10 @@
 #include <Windows.h>
 #include <graphics/backend/ShaderInputLayout.h>
 
-InputProperty ShaderInputLayout::POSITION = { Position, 3, GL_FLOAT, -9 };
-InputProperty ShaderInputLayout::COLOR = { Color, 3, GL_FLOAT, -9 };
-InputProperty ShaderInputLayout::TEXCOORD = { TextureCoordinate, 3, GL_FLOAT, -9 };
-InputProperty ShaderInputLayout::NORMAL = { Normal, 3, GL_FLOAT, -9 };
+InputProperty ShaderInputLayout::POSITION = { Position, 3, GL_FLOAT, -9, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::COLOR = { Color, 3, GL_FLOAT, -9, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::TEXCOORD = { TextureCoordinate, 3, GL_FLOAT, -9, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::NORMAL = { Normal, 3, GL_FLOAT, -9, sizeof(GLfloat) };
 
 LayoutDescription ShaderInputLayout::createLayoutDescription(std::vector<InputProperty>& inputProperties) {
 	GLint elementCount = 0;
@@ -70,9 +70,9 @@ ShaderInputLayout ShaderInputLayout::createInputLayout(LayoutDescription descrip
 
 	for (int i = 0; i < description.inputProperties.size(); i++) {
 		InputProperty prop = description.inputProperties[i];
-
+		
 		CHECK_GL(glVertexAttribPointer(ret.propertyCount, prop.size, prop.glType, false,
-			description.elementCount * sizeof(GLfloat), (void*)(prop.pointerOffset * sizeof(GLfloat))));
+			description.elementCount * prop.sizeOfType, (void*)(prop.pointerOffset * prop.sizeOfType)));
 			ret.propertyCount++;
 	};
 

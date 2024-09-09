@@ -80,12 +80,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Myztic\libs\SDL2\include;$(ProjectDir)..\Myztic\include\;$(ProjectDir)..\Myztic\glad\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Myztic\libs\SDL2\include;$(ProjectDir)..\Myztic\include\;$(ProjectDir)..\Myztic\glad\;$(ProjectDir)..\Myztic\glm\;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Myztic\libs\SDL2\include;$(ProjectDir)..\Myztic\include\;$(ProjectDir)..\Myztic\glad\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Myztic\libs\SDL2\include;$(ProjectDir)..\Myztic\include\;$(ProjectDir)..\Myztic\glad\;$(ProjectDir)..\Myztic\glm\;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -123,6 +123,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Myztic\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -145,6 +146,7 @@ copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(SolutionDir)" /y /b</Command>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Myztic\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

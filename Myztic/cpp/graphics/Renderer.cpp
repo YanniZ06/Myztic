@@ -2,6 +2,7 @@
 
 #include <graphics/Renderer.h>
 #include <Application.h>
+#include <iostream>
 
 //class Application; // Forward this to not loop any weird header inclusions
 
@@ -33,5 +34,10 @@ void Renderer::startRender() {
 		pendingRequests.clear(); //? Maybe not a smart idea, gotta make sure we have sort of 2 render queues, especially for the double buffering shittamajig
 		return;
 	}
+	if (SDL_GL_MakeCurrent(targetWin->handle, targetWin->context) != 0)
+		std::cout << "whoopsie daisy, couldn't make current opengl context to window: " << targetWin->name().c_str() << "\n";
 }
 
+void Renderer::endRender() {
+	SDL_GL_SwapWindow(targetWin->handle);
+}

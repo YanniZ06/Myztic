@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <io.h>
 #include <Application.h>
-#include <graphics/Texture2D.hpp>
 #include <SDL.h>
 #include <Scene.h>
 
@@ -44,7 +43,7 @@ class TestScene : Scene {
 	}
 
 	virtual void load(Window* callerWindow) {
-		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
+		std::cout << "Loaded to Window: " << callerWindow->name().c_str() << "\n";
 	}
 	virtual void enter() {
 		Window* myzWin = Application::windows[1].get();
@@ -107,19 +106,9 @@ int WinMain(HINSTANCE hInstance,
 
 	TestScene* scene = new TestScene();
 	WindowParams p = { "Myztic Engine Test", (Scene*)scene, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
-	Application::initMyztic(p, 10);
+	Application::initMyztic(p, 60);
 	
 	// tMainTest();
-
-	SDL_Event e;
-	bool needToQuit = false;
-	while (!needToQuit) {
-		while (SDL_PollEvent(&e)) {
-			if (e.type == SDL_QUIT) needToQuit = true;
-		}
-
-		SDL_Delay(1);
-	}
 
 #ifdef _DEBUG
 	if (errHandle)

@@ -15,7 +15,6 @@
 
 // Statics
 std::map<unsigned char, std::shared_ptr<Window>> Application::windows;
-std::thread Application::mainThread;
 std::binary_semaphore* resourceManager;
 std::binary_semaphore* waiter;
 std::atomic<uint8_t> Application::readyWinThreads = 0;
@@ -26,10 +25,6 @@ std::binary_semaphore* Application::waiter;
 ResourceManager* Application::resourceManager;
 
 void Application::initMyztic(WindowParams initWindowParams, fpsSize fps) {
-	mainThread = std::thread(_initMyztic, initWindowParams, fps);
-}
-
-void Application::_initMyztic(WindowParams p, fpsSize fps) {
 	double myzStart = Timer::stamp();
 	SDL_SetMainReady();
 
@@ -37,7 +32,7 @@ void Application::_initMyztic(WindowParams p, fpsSize fps) {
 		throw "(MYZTIC_INIT_SDL_ERROR) Error initializing SDL subsystems : " + std::string(SDL_GetError());
 	}
 
-	Window* window = Window::create(p);
+	Window* window = Window::create(initWindowParams);
 	Application::fps = Fps(fps);
 
 	SDL_GL_MakeCurrent(window->handle, window->context);
@@ -52,6 +47,7 @@ void Application::_initMyztic(WindowParams p, fpsSize fps) {
 	Timer::debugMeasure(myzStart, "Myztic Initialization");
 	app_loop();
 }
+
 //? std::atomic<int> decrementTimes = 0;
 
 void Application::app_loop() {
@@ -65,7 +61,6 @@ void Application::app_loop() {
 				shouldClose = true; 
 			}
 		}
-		
 		 
 		// Step 2: Start & continue all winloops -> create drawing requests for the next frame and handle physics
 		for (std::map<unsigned char, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it) {
@@ -74,6 +69,11 @@ void Application::app_loop() {
 
 			// Start rendering <3 (Handle draw requests (maybe manage to handle the last frames draw requests while this frame recommends a new one so this thread isnt wasted just sleeping?))
 			win->renderer.startRender();
+			glClearColor(0.7f, 0.2f, 0.6f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			//presents shit to screen
+			win->renderer.endRender();
 		}
 		SDL_Delay(1); //? ARTIFICAL LENGTH FOR TESTING
 

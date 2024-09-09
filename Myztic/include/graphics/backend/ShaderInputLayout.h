@@ -15,6 +15,8 @@ struct InputProperty {
     GLint size;
     GLenum glType;
     GLint pointerOffset;
+    //aka: sizeof(GLfloat), for example
+    unsigned long long sizeOfType;
 };
 
 struct LayoutDescription {

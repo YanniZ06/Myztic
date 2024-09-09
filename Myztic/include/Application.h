@@ -25,16 +25,12 @@ private:
     static uint8_t registeredWinThreads;
 
     static void app_loop();
-    static void _initMyztic(WindowParams p, fpsSize fps);
 public:
     /// Current windows, mapped to their ID
     static std::map<unsigned char, std::shared_ptr<Window>> windows;
     /// All running threads, mapped to their task/use-case
     static std::map<const char*, std::shared_ptr<std::thread>> threads;
 
-
-    /// The main myztic thread
-    static std::thread mainThread;
     /// Dictates whether the main thread resources are currently available or being read/modified by one of the threads
     static ResourceManager* resourceManager;
     /// Tells the main loop thread to wait on the other window threads

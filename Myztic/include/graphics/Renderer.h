@@ -2,8 +2,9 @@
 
 #include <map>
 #include <graphics/Drawable.h>
-#include <glm/glm.hpp>
+#include <glm\glm.hpp>
 #include <type_traits>
+#include "SDL.h"
 
 class Window;
 
@@ -96,6 +97,12 @@ protected:
 	void startRender();
 
 	Window* targetWin;
+
+	/**
+	* Presents the drawn objects to the screen.
+	*
+	*/
+	void endRender();
 
 	/// Render requests to be handled this frame.
 	std::vector<RenderRequestBase> nextRequests;
