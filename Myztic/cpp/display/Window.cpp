@@ -46,8 +46,9 @@ Window::Window(WindowParams params) {
 	_focused = (SDL_GetWindowFlags(handle) & SDL_WINDOW_INPUT_FOCUS) != 0;
 	renderOutOfFocus = true;
 
+	renderer = Renderer(this);
 	thread = WinThread(this);
-	
+	// No code beyond here, the thread has been moved.
 }
 
 Window::~Window() {

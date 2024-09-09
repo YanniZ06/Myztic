@@ -10,6 +10,7 @@
 #include <string>
 
 #include <display/WinThread.h>
+#include <graphics/Renderer.h>
 
 class Scene;
 
@@ -111,6 +112,9 @@ public:
 	SDL_GLContext context;
 	// The thread for this window
 	WinThread thread;
+
+	/// The renderer for this Window
+	Renderer renderer;
 
 	// Returns the scene currently displayed on this Window
 	// Scene* getActiveScene();

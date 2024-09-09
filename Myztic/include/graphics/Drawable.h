@@ -1,10 +1,12 @@
 #pragma once
 
 #include <graphics/backend/VBO.hpp>
-#include <display/Window.h>
+//#include <display/Window.h>
 #include <graphics/backend/Shader.h>
 #include <graphics/backend/ShaderInputLayout.h>
+//#include <graphics/Renderer.h>
 
+class Window;
 // todo: figure out which of these need to be protected in particular
 class Drawable {
 public:

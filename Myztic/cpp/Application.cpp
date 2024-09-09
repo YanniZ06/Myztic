@@ -69,12 +69,13 @@ void Application::app_loop() {
 		 
 		// Step 2: Start & continue all winloops -> create drawing requests for the next frame and handle physics
 		for (std::map<unsigned char, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it) {
-			it->second.get()->thread.signal->release();
+			Window* win = it->second.get();
+			win->thread.signal->release();
+
+			// Start rendering <3 (Handle draw requests (maybe manage to handle the last frames draw requests while this frame recommends a new one so this thread isnt wasted just sleeping?))
+			win->renderer.startRender();
 		}
 		SDL_Delay(1); //? ARTIFICAL LENGTH FOR TESTING
-
-		Renderer::startRender();
-		// Step ?: Handle draw requests (maybe manage to handle the last frames draw requests while this frame recommends a new one so this thread isnt wasted just sleeping?
 
 		if (readyWinThreads.load() < registeredWinThreads) { 
 			/*

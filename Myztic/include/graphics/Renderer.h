@@ -1,10 +1,11 @@
 #pragma once
 
 #include <map>
-#include <vector>
 #include <graphics/Drawable.h>
 #include <glm/glm.hpp>
 #include <type_traits>
+
+class Window;
 
 // todo: create different types of render requests, make them work more like enums yadda yadda, find out if we even need a request stack
 // maybe we can just evaluate all we need from the drawable at the end of the update loop inside the rendering thread, instead of sending requests and then reading them
@@ -46,6 +47,11 @@ public:
 		if constexpr (std::is_same<VecCount, glm::vec2>()) _type = D_LINE;
 		else _type = D_RAY;
 	}
+	DLineRequest() = default;
+	
+	// Shouldnt the compiler get rid of all of these on its own???
+	//~DLineRequest() {
+	//};
 };
 
 
@@ -59,31 +65,38 @@ public:
 class Renderer {
 	friend class Application;
 public:
-	static std::map<Window*, std::vector<RenderRequestBase>> pendingRequests;
+	Renderer(Window* drawTarget);
+	Renderer() = default;
+
+	/// Render requests to be handled the next frame.
+	std::vector<RenderRequestBase> pendingRequests; //! Protected????
 
 	/**
 	 * Requests the renderer to draw a basic 2D line from 2 points.
 	 * 
 	 * \param p1 Point A
 	 * \param p2 Point B
-	 * \param drawTarget The window the renderer should draw on.
 	 * \see drawRay
 	 */
-	static void drawLine(glm::vec2 p1, glm::vec2 p2, Window* drawTarget);
+	void drawLine(glm::vec2 p1, glm::vec2 p2);
 
 	/**
 	 * Requests the renderer to draw a basic 3D line from 2 points.
 	 * 
 	 * \param p1 Point A
 	 * \param p2 Point B
-	 * \param drawTarget The window the renderer should draw on.
 	 * \see drawLine
 	 */
-	static void drawRay(glm::vec3 p1, glm::vec3 p2, Window* drawTarget);
+	void drawRay(glm::vec3 p1, glm::vec3 p2);
 protected:
 	/**
 	* Handles rendering and presenting a frame to the screen.
 	*
 	*/
-	static void startRender();
+	void startRender();
+
+	Window* targetWin;
+
+	/// Render requests to be handled this frame.
+	std::vector<RenderRequestBase> nextRequests;
 };
