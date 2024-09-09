@@ -157,6 +157,21 @@ public:
 		SDL_SetWindowSize(handle, w, h);
 	}
 
+	/**
+	 * Closes the window on the next frame and cleans it up. 
+	 * 
+	 * This window cannot be used or referenced after this function has been called.
+	 * 
+	 */
+	inline void close() { 
+		SDL_Event e;
+		e.type = SDL_WINDOWEVENT;
+		e.window.type = SDL_WINDOWEVENT_CLOSE;
+		e.window.windowID = id();
+
+		SDL_PushEvent(&e);
+	}
+
 	// String representation for printing out windows to the console
 	explicit operator std::string();
 

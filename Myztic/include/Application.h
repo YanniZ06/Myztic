@@ -10,7 +10,7 @@
 #include <display/Fps.h>
 #include <Util.h>
 
-#define MYZTIC_WIN_LIMIT 16 // Real limit is 256, but we use this instead because nobody should need that many windows. Might be tweaked later
+#define MYZTIC_WIN_LIMIT 16 // Real limit should be 256, but we use this instead because nobody should need that many windows. Might be tweaked later
 
 /**
  * The core of Myztic. Contains all sorts of useful fields and initializes the engine.
@@ -27,7 +27,7 @@ private:
     static void app_loop();
 public:
     /// Current windows, mapped to their ID
-    static std::map<unsigned char, std::shared_ptr<Window>> windows;
+    static std::map<unsigned int, std::shared_ptr<Window>> windows;
     /// All running threads, mapped to their task/use-case
     static std::map<const char*, std::shared_ptr<std::thread>> threads;
 

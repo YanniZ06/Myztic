@@ -14,7 +14,7 @@
 #define SDL_MAIN_HANDLED
 
 // Statics
-std::map<unsigned char, std::shared_ptr<Window>> Application::windows;
+std::map<unsigned int, std::shared_ptr<Window>> Application::windows;
 std::binary_semaphore* resourceManager;
 std::binary_semaphore* waiter;
 std::atomic<uint8_t> Application::readyWinThreads = 0;
@@ -57,8 +57,35 @@ void Application::app_loop() {
 		//! std::cout << "(63) AppLoop Instance \n";
 		// Step 1: Check for and handle all sorts of SDL events, such as inputs or window actions
 		while (SDL_PollEvent(&e)) {
-			if (e.type == SDL_QUIT) {
-				shouldClose = true; 
+			switch (e.type) {
+			// Handle Window Events
+			case SDL_WINDOWEVENT:
+				Window* eWin = Application::windows[e.window.windowID].get();
+
+				//todo: dispatch window events once an event system has been made
+				switch (e.window.type) {
+				case SDL_WINDOWEVENT_CLOSE:
+					eWin->~Window();
+					break;
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+					eWin->_focused = true;
+					break;
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+					eWin->_focused = false;
+					break;
+				case SDL_WINDOWEVENT_RESIZED:
+					//TODO: handle resizing on renderer hahahah
+					break;
+				default: break;
+				}
+
+				break;
+			// Other Event Types
+			case SDL_QUIT:
+				shouldClose = true;
+				break;
+			default:
+				break;
 			}
 		}
 		 

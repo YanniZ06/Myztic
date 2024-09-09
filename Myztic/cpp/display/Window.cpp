@@ -52,8 +52,15 @@ Window::Window(WindowParams params) {
 }
 
 Window::~Window() {
+	// Unload all scenes, including current one
+	std::map<unsigned int, Scene*>::const_iterator it = loadedScenes.begin();
+	for (int i = 0; i < loadedScenes.size(); i++) {
+		this->unloadScene(it++->second);
+	}
+	delete scene; // Since we're temporarily filling the active scene field in unload scene, we need to manually get rid of that filler aswell.
+
 	SDL_DestroyWindow(handle);
-	SDL_GL_DeleteContext(context); //todo: THE RENDERER SHOULD DO THIS, NOT THE WINDOW!
+	SDL_GL_DeleteContext(context); //todo: THE RENDERER SHOULD DO THIS, NOT THE WINDOW?
 	OutputDebugStringA("Deleted window\n");
 	// delete handle;
 	// delete name;
@@ -81,10 +88,13 @@ bool Window::loadScene(Scene* scene) {
 
 bool Window::unloadScene(Scene* scene) {
 	if (scene->loadedWin != this) return false;
+	if (scene == this->scene) this->scene = new Scene(); // Make sure we break nothing if there is no current scene haha
 
 	scene->unload(this);
 	scene->loadedWin = nullptr;
 	loadedScenes.erase(scene->id);
+	delete scene;
+
 	return true;
 }
 

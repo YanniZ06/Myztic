@@ -13,6 +13,12 @@ Renderer::Renderer(Window* drawTarget) {
 	nextRequests = std::vector<RenderRequestBase>();
 }
 
+Renderer::~Renderer() {
+	pendingRequests.clear();
+	nextRequests.clear();
+	targetWin = nullptr;
+}
+
 void Renderer::drawLine(glm::vec2 p1, glm::vec2 p2)
 {
 	DLineRequest<glm::vec2> req(p1, p2);
