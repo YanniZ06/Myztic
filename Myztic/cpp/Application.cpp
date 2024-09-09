@@ -75,7 +75,6 @@ void Application::app_loop() {
 			//presents shit to screen
 			win->renderer.endRender();
 		}
-		SDL_Delay(1); //? ARTIFICAL LENGTH FOR TESTING
 
 		if (readyWinThreads.load() < registeredWinThreads) { 
 			/*
@@ -111,7 +110,7 @@ void Application::start_winloop(Window* win) {
 void Application::window_loop(Window* win) {
 	while (!win->shouldClose) {
 		//! std::cout << "(109) WindowLoop On " + win->name() << "\n";
-		SDL_Delay((win->id() + 1) * 2);
+
 		win->scene->update(fps.getFrameTime()); // Put elapsed time in here, for now it gives you the max framerate elapsed
 
 		readyWinThreads++;

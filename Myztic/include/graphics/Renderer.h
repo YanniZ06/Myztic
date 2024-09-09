@@ -68,6 +68,7 @@ class Renderer {
 public:
 	Renderer(Window* drawTarget);
 	Renderer() = default;
+	~Renderer() = default;
 
 	/// Render requests to be handled the next frame.
 	std::vector<RenderRequestBase> pendingRequests; //! Protected????
