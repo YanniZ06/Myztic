@@ -10,7 +10,6 @@ class WinThread {
 public:
 	WinThread() = default;
 	WinThread(Window* winRef);
-	
 
 	std::thread handle;
 	std::binary_semaphore* signal;

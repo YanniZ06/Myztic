@@ -63,10 +63,10 @@ void Application::app_loop() {
 				Window* eWin = Application::windows[e.window.windowID].get();
 
 				//todo: dispatch window events once an event system has been made
-				switch (e.window.type) {
+				switch (e.window.event) {
 				case SDL_WINDOWEVENT_CLOSE:
-					eWin->~Window();
-					break;
+					windows.erase(eWin->id());
+					return;
 				case SDL_WINDOWEVENT_FOCUS_GAINED:
 					eWin->_focused = true;
 					break;

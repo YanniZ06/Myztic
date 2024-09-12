@@ -57,10 +57,11 @@ Window::~Window() {
 	for (int i = 0; i < loadedScenes.size(); i++) {
 		this->unloadScene(it++->second);
 	}
-	delete scene; // Since we're temporarily filling the active scene field in unload scene, we need to manually get rid of that filler aswell.
+	delete scene;
 
 	SDL_DestroyWindow(handle);
 	SDL_GL_DeleteContext(context); //todo: THE RENDERER SHOULD DO THIS, NOT THE WINDOW?
+
 	OutputDebugStringA("Deleted window\n");
 	// delete handle;
 	// delete name;
