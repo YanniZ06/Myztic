@@ -59,7 +59,7 @@ void Application::app_loop() {
 		while (SDL_PollEvent(&e)) {
 			switch (e.type) {
 			// Handle Window Events
-			case SDL_WINDOWEVENT:
+			case SDL_WINDOWEVENT: {
 				Window* eWin = Application::windows[e.window.windowID].get();
 
 				//todo: dispatch window events once an event system has been made
@@ -80,6 +80,7 @@ void Application::app_loop() {
 				}
 
 				break;
+			}
 			// Other Event Types
 			case SDL_QUIT:
 				shouldClose = true;
@@ -90,7 +91,7 @@ void Application::app_loop() {
 		}
 		 
 		// Step 2: Start & continue all winloops -> create drawing requests for the next frame and handle physics
-		for (std::map<unsigned char, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it) {
+		for (std::map<unsigned int, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it) {
 			Window* win = it->second.get();
 			win->thread.signal->release();
 
@@ -157,7 +158,7 @@ void Application::window_loop(Window* win) {
 
 void Application::log_windows_cmd() {
 	std::cout << "Application::windows =>\n";
-	for (std::map<unsigned char, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it)
+	for (std::map<unsigned int, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it)
 	{
 		std::cout << (int)it->first << " -> " << (std::string)*it->second.get() << "\n";
 	}
