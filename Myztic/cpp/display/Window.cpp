@@ -58,11 +58,19 @@ Window::~Window() {
 		this->unloadScene(it++->second);
 	}
 	delete scene;
+	scene = nullptr;
 
-	SDL_DestroyWindow(handle);
 	SDL_GL_DeleteContext(context); //todo: THE RENDERER SHOULD DO THIS, NOT THE WINDOW?
+	SDL_DestroyWindow(handle);
 
-	OutputDebugStringA("Deleted window\n");
+	context = nullptr;
+	handle = nullptr;
+
+	renderOutOfFocus = false;
+	renderer.~Renderer();
+	inRenderPhase = false;
+
+	thread.deconstruct();
 	// delete handle;
 	// delete name;
 }

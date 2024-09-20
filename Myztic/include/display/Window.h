@@ -98,7 +98,7 @@ public:
 	bool renderOutOfFocus;
 
 	// Acts as a signal for the window and thread to close
-	bool shouldClose; //? Make getter/protected
+	bool shouldClose; //? Make getter/protected (atomic?)
 	// Acts as a signal for the window to update and render however many frames it needs to
 	bool inRenderPhase; //? Deprecated
 	
@@ -122,12 +122,12 @@ public:
 	// Todo: test this at some point jesus christ
 	// Returns a map with all the scenes currently loaded to this window
 	// outSize: Amount of loaded scenes
-	inline Scene** getLoadedScenes(int* outSize) {
-		*outSize = loadedScenes.size();
-		Scene** scenes = new Scene*[*outSize];
+	inline Scene** getLoadedScenes(size_t& outSize) {
+		outSize = loadedScenes.size();
+		Scene** scenes = new Scene*[outSize];
 
 		std::map<unsigned int, Scene*>::const_iterator it = loadedScenes.begin();
-		for (int i = 0; i < *outSize; i++) {
+		for (int i = 0; i < outSize; i++) {
 			scenes[i] = it++->second;
 		}
 

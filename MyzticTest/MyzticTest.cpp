@@ -31,8 +31,8 @@ class SceneB : Scene {
 
 class TestScene : Scene {
 	void logLoaded() {
-		int size = 0;
-		Scene** loadedScenes = this->loadedWin->getLoadedScenes(&size);
+		size_t size = 0;
+		Scene** loadedScenes = this->loadedWin->getLoadedScenes(size);
 		std::cout << "Window::getLoadedScenes =>\n";
 
 		int i = 0;

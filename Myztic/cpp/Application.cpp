@@ -62,11 +62,21 @@ void Application::app_loop() {
 			case SDL_WINDOWEVENT: {
 				Window* eWin = Application::windows[e.window.windowID].get();
 
+				if (eWin == nullptr) {
+					//should be null anyway, we dont WANT THAT HERE
+					Application::windows.erase(e.window.windowID);
+					break;
+				}
+
 				//todo: dispatch window events once an event system has been made
 				switch (e.window.event) {
 				case SDL_WINDOWEVENT_CLOSE:
+					eWin->shouldClose = true;
+					registeredWinThreads--;
+					eWin->thread.signal->release();
+					
 					windows.erase(eWin->id());
-					return;
+					break;
 				case SDL_WINDOWEVENT_FOCUS_GAINED:
 					eWin->_focused = true;
 					break;
@@ -124,6 +134,7 @@ void Application::app_loop() {
 // the event to correct frame instead of forcing that frame to be waited on which also makes sure there are (close to) 0 ignored inputs!! 
 
 void Application::start_winloop(Window* win) {
+	if (win->shouldClose) return;
 	//! std::cout << "Requested WindowLoop On " + win->name() << "\n";
 	win->thread.signal->acquire();
 
@@ -138,8 +149,8 @@ void Application::start_winloop(Window* win) {
 void Application::window_loop(Window* win) {
 	while (!win->shouldClose) {
 		//! std::cout << "(109) WindowLoop On " + win->name() << "\n";
-
-		win->scene->update(fps.getFrameTime()); // Put elapsed time in here, for now it gives you the max framerate elapsed
+		
+		win->scene->update((float)fps.getFrameTime()); // Put elapsed time in here, for now it gives you the max framerate elapsed
 
 		readyWinThreads++;
 		if (readyWinThreads.load() == registeredWinThreads) {
