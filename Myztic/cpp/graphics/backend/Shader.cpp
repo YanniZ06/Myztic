@@ -3,7 +3,7 @@
 #include <fstream>
 
 Shader::Shader(GLenum shaderType, std::string file) {
-	std::ifstream shaderFile("Assets/Shaders/" + file, std::ios::in | std::ios::binary | std::ios::ate);
+	std::ifstream shaderFile(file, std::ios::in | std::ios::binary | std::ios::ate);
 
 	if (shaderFile.is_open()) {
 		shaderFile.seekg(0, std::ios::end);
@@ -18,9 +18,9 @@ Shader::Shader(GLenum shaderType, std::string file) {
 		CHECK_GL(glCompileShader(handle));
 
 		GLint result;
-		CHECK_GL(glGetShaderiv(handle, GL_COMPILE_STATUS, &result));
+		glGetShaderiv(handle, GL_COMPILE_STATUS, &result);
 
-		if (result) {
+		if (!result) {
 			int length;
 			CHECK_GL(glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &length));
 
@@ -38,6 +38,8 @@ Shader::Shader(GLenum shaderType, std::string file) {
 		shaderFile.close();
 
 		delete[] content;
+
+		return;
 	};
 
 	printf("Failed to open shader file: %s\n", file.c_str());

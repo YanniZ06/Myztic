@@ -8,14 +8,22 @@ public:
 	inline VAO(GLuint handle) { this->vao = handle; }
 	inline VAO() = default;
 
+	/*
+	* Makes a singular VAO.
+	* 
+	*/
 	inline static VAO make() {
 		//this uses the default constructor, that's why its required
-		VAO ret;
+		VAO ret = VAO();
 		CHECK_GL(glGenVertexArrays(1, &ret.vao));
 		return ret;
 	};
 
 	template <int AMOUNT>
+	/*
+	* Makes a number of VAOs, the amount of them should be passed in the template.
+	* 
+	*/
 	inline static std::array<VAO, AMOUNT> makeNum() {
 		//this uses the default constructor too !!!
 		std::array<VAO, AMOUNT> rets;
@@ -26,14 +34,26 @@ public:
 		return rets;
 	};
 
+	/*
+	* Unbinds the VAO from the OpenGL pipeline.
+	* 
+	*/
 	inline static void unbind() {
 		CHECK_GL(glBindVertexArray(0));
 	};
 
+	/*
+	* Binds the VAO to the OpenGL pipeline.  
+	* 
+	*/
 	inline void bind() {
 		CHECK_GL(glBindVertexArray(vao));
 	};
 
+	/* 
+	* Deletes the VAO and deconstructs it.  
+	* 
+	*/
 	inline void destroy() {
 		int buf;
 		glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &buf);
@@ -45,7 +65,7 @@ public:
 
 		CHECK_GL(glDeleteVertexArrays(1, &vao));
 	};
-
-private:
 	GLuint vao;
+private:
+
 };

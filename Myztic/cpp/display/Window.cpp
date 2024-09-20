@@ -35,7 +35,7 @@ Window::Window(WindowParams params) {
 	if (!params.h) _h = 480;
 	else _h = params.h.value();
 
-	handle = SDL_CreateWindow(_name.c_str(), _x, _y, _w, _h, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	handle = SDL_CreateWindow(_name.c_str(), _x, _y, _w, _h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE);
 	if (!handle) {
 		printf("Failed to create window\n");
 	}

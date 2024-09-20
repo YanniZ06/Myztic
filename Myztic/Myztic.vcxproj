@@ -197,6 +197,7 @@
     <ClCompile Include="cpp\display\Fps.cpp" />
     <ClCompile Include="cpp\display\Window.cpp" />
     <ClCompile Include="cpp\display\WinThread.cpp" />
+    <ClCompile Include="cpp\graphics\Drawable.cpp" />
     <ClCompile Include="cpp\graphics\Renderer.cpp" />
     <ClCompile Include="cpp\Scene.cpp" />
     <ClCompile Include="cpp\Timer.cpp" />

@@ -45,5 +45,6 @@ void Renderer::startRender() {
 }
 
 void Renderer::endRender() {
+	glBindVertexArray(0);
 	SDL_GL_SwapWindow(targetWin->handle);
 }

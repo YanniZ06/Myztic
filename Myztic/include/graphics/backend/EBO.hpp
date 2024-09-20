@@ -10,6 +10,10 @@ public:
 	};
 	EBO() = default;
 
+	/**
+	 * Creates a single EBO instance
+	 * 
+	 */
 	static inline EBO make() {
 		EBO ret;
 		CHECK_GL(glGenBuffers(1, &ret.handle));
@@ -17,6 +21,10 @@ public:
 	};
 
 	template <int AMOUNT>
+	/**
+	 * Creates multiple EBO instances
+	 * 
+	 */
 	static inline std::array<EBO, AMOUNT> makeNum() {
 		std::array<EBO, AMOUNT> rets;
 
@@ -26,14 +34,29 @@ public:
 		return rets;
 	};
 
+	/**
+	 * Binds the EBO to the OpenGL pipeline
+	 * 
+	 */
 	inline void bind() {
 		CHECK_GL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle));
 	};
 
+	/**
+	 * Unbinds the EBO from the OpenGL pipeline
+	 * 
+	 */
 	inline static void unbind() {
 		CHECK_GL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	}
 
+	/**
+	 * Fills the EBO with the desired data
+	 * 
+	 * \param indices The array of elements/indices being passed in.
+	 * \param arrayLength The length of the array being passed in.
+	 * \param drawType Type of draw sequence. (static or dynamic or otherwise)
+	 */
 	inline void fill(GLfloat* indices, int arrayLength, GLenum drawType) {
 		GLint boundIndexBuffer;
 		CHECK_GL(glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &boundIndexBuffer));
@@ -42,6 +65,10 @@ public:
 		CHECK_GL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, arrayLength, (void*)indices, drawType));
 	};
 
+	/**
+	 * Destroys the EBO and deconstructs.
+	 * 
+	 */
 	inline void destroy() {
 		GLint boundIndexBuffer;
 		CHECK_GL(glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &boundIndexBuffer));

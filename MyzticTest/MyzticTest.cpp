@@ -10,6 +10,8 @@
 #include <thread>
 #include <semaphore>
 
+#include <graphics\Drawable.h>
+
 class SceneB : Scene {
 	virtual void load(Window* callerWindow) {
 		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
@@ -29,6 +31,8 @@ class SceneB : Scene {
 	}
 };
 
+Drawable* triangle = nullptr;
+
 class TestScene : Scene {
 	void logLoaded() {
 		size_t size = 0;
@@ -46,7 +50,7 @@ class TestScene : Scene {
 		std::cout << "Loaded to Window: " << callerWindow->name().c_str() << "\n";
 	}
 	virtual void enter() {
-		Window* myzWin = Application::windows[1].get();
+		Window* myzWin = Application::windows[this->loadedWin->id()].get();
 		std::cout << myzWin->name() << "\n";
 		myzWin->setName("WINDOW 1");
 
@@ -58,6 +62,32 @@ class TestScene : Scene {
 		Window* windowB = Window::create(paramsB);
 		Application::log_windows_cmd();
 		windowB->setX(windowB->x() + 250);
+
+		std::vector<InputProperty> vec = std::vector<InputProperty>();
+		vec.push_back(ShaderInputLayout::POSITION);
+
+		triangle = new Drawable(this->loadedWin, vec);
+		triangle->vbo.bind();
+
+		GLfloat vertices[9] = {
+			-0.5f, -0.5f, 0.0f,
+			0.5f, -0.5f, 0.0f,
+			0.0f,  0.5f, 0.0f
+		};
+
+		triangle->vbo.fill(vertices, 9, GL_STATIC_DRAW);
+
+		triangle->inputLayout.enableAllAttribs();
+		triangle->vbo.unbind();
+
+		Shader vs = Shader(GL_VERTEX_SHADER, "assets/shaders/vs.glsl");
+		Shader fs = Shader(GL_FRAGMENT_SHADER, "assets/shaders/fs.glsl");
+		triangle->shaderProgram.attach(vs);
+		triangle->shaderProgram.attach(fs);
+		triangle->shaderProgram.link();
+		vs.deleteShader();
+		fs.deleteShader();
+		this->loadedWin->renderer.drawables.push_back(triangle);
 
 		//SceneB* nScene = new SceneB();
 

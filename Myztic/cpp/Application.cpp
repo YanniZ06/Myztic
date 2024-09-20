@@ -32,14 +32,31 @@ void Application::initMyztic(WindowParams initWindowParams, fpsSize fps) {
 		throw "(MYZTIC_INIT_SDL_ERROR) Error initializing SDL subsystems : " + std::string(SDL_GetError());
 	}
 
-	Window* window = Window::create(initWindowParams);
+	const std::map<SDL_GLattr, int> GL_ATTRIBS{ {SDL_GL_RED_SIZE, 5}, {SDL_GL_GREEN_SIZE, 5}, {SDL_GL_BLUE_SIZE, 5}, {SDL_GL_DEPTH_SIZE, 16}, {SDL_GL_DOUBLEBUFFER, 1} };
+
+	for (std::map<SDL_GLattr, int>::const_iterator it = GL_ATTRIBS.begin(); it != GL_ATTRIBS.end(); ++it) {
+		SDL_GL_SetAttribute(it->first, it->second);
+	}
+
+	std::shared_ptr<Window> window = std::make_shared<Window>(initWindowParams);
+	Application::windows[window->id()] = window;
+
 	Application::fps = Fps(fps);
 
 	SDL_GL_MakeCurrent(window->handle, window->context);
 
-	gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
+	int gladResult = gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
+	if (gladResult == 0) {
+		throw "Failed to initialize GLAD! Most likely outdated OpenGL Version, Required: OpenGL 3.3, ERROR CODE: " + std::to_string(gladResult) + "\n";
+	}
+
+	const GLubyte* version = glGetString(GL_VERSION);
+	std::cout << version << "\n";
 
 	CHECK_GL(glViewport(0, 0, 680, 480));
+
+	window->loadScene(initWindowParams.init_scene);
+	window->switchScene(initWindowParams.init_scene);
 
 	waiter = new std::binary_semaphore(0);
 	resourceManager = new ResourceManager();
@@ -47,8 +64,6 @@ void Application::initMyztic(WindowParams initWindowParams, fpsSize fps) {
 	Timer::debugMeasure(myzStart, "Myztic Initialization");
 	app_loop();
 }
-
-//? std::atomic<int> decrementTimes = 0;
 
 void Application::app_loop() {
 	SDL_Event e;
@@ -109,6 +124,11 @@ void Application::app_loop() {
 			win->renderer.startRender();
 			glClearColor(0.7f, 0.2f, 0.6f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			for (Drawable* d : win->renderer.drawables) {
+				d->draw();
+				glDrawArrays(GL_TRIANGLES, 0, 3);
+			}
 
 			//presents shit to screen
 			win->renderer.endRender();

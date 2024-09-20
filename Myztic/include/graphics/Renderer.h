@@ -22,6 +22,7 @@ enum RenderRequestType {
 	D_LINE, D_TRI, D_QUAD,
 	D_RAY
 };
+//above feels odd, i wanna be just passing in a drawable and then it immediately renders, feels overcomplicated YANNI
 
 class RenderRequestBase {
 public:
@@ -72,6 +73,7 @@ public:
 
 	/// Render requests to be handled the next frame.
 	std::vector<RenderRequestBase> pendingRequests; //! Protected????
+	std::vector<Drawable*> drawables;
 
 	/**
 	 * Requests the renderer to draw a basic 2D line from 2 points.

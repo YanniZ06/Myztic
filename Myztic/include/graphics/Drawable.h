@@ -9,8 +9,9 @@
 class Window;
 // todo: figure out which of these need to be protected in particular
 class Drawable {
+	friend class Application;
 public:
-	Drawable(Window* drawerWin);
+	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties);
 	Drawable() = default;
 
 	/// The vertex buffer object used for OpenGL draw calls.
@@ -19,12 +20,16 @@ public:
 	ShaderInputLayout inputLayout;
 	/// The shader program used to handle shaders for OpenGL draw calls.
 	ShaderProgram shaderProgram;
+
+	/// Should persist in the queued drawables list in the renderer after the frame has been drawn or should be taken off the list.
+	bool persist = true;
 protected:
 	/// The window that is being drawn to
 	Window* drawTarget;
+	
 	/**
-	 * Renders this drawable. Debateable if useful???
+	 * Renders this drawable. Debatable if useful???
 	 * 
 	 */
-	// void draw();
+	 void draw();
 };

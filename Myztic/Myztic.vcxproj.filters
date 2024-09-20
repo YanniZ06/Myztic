@@ -122,5 +122,8 @@
     <ClCompile Include="cpp\graphics\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cpp\graphics\Drawable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

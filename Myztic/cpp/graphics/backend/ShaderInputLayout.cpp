@@ -7,6 +7,7 @@ InputProperty ShaderInputLayout::COLOR = { Color, 3, GL_FLOAT, -9, sizeof(GLfloa
 InputProperty ShaderInputLayout::TEXCOORD = { TextureCoordinate, 3, GL_FLOAT, -9, sizeof(GLfloat) };
 InputProperty ShaderInputLayout::NORMAL = { Normal, 3, GL_FLOAT, -9, sizeof(GLfloat) };
 
+
 LayoutDescription ShaderInputLayout::createLayoutDescription(std::vector<InputProperty>& inputProperties) {
 	GLint elementCount = 0;
 

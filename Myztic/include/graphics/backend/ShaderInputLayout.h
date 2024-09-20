@@ -27,24 +27,47 @@ struct LayoutDescription {
 class ShaderInputLayout {
 public:
     ShaderInputLayout();
+
+    /**
+     * Create input layout description which is passed into createInputLayout
+     * \param inputProperties Array of typedef InputProperty which consists of `type:InputPropertyType` `size:Int` `glType:Int` `pointerOffset:Int`, pointerOffset is automatically calculated
+     * \return LayoutDescription
+     */
     static LayoutDescription createLayoutDescription(std::vector<InputProperty>& inputProperties);
+
     static ShaderInputLayout createInputLayout(LayoutDescription desc);
     inline void bindInputLayout() {
         attachedVAO.bind();
     };
     inline static void unbind() { VAO::unbind(); };
     void deleteInputLayout();
+    /**
+     * Enables a specific attribute
+     * \param index Enables that attribute by index (You should know which index it is from the InputProperties you passed in)
+     */
     void enableAttrib(int index);
+    /**
+     * Enables all of our input layout attributes
+     */
     void enableAllAttribs();
+    /**
+     * Disables a specific attribute
+     * 
+     * \param index Disables that attribute by index (You should know which index it is from the InputProperties you passed in)
+     */
     void disableAttrib(int index);
+    /**
+     * Disables all of our input layout attributes.
+     * 
+     */
     void disableAllAttribs();
-
     int propertyCount;
-    LayoutDescription description;
-    VAO attachedVAO;
-private:
+
     static InputProperty POSITION;
     static InputProperty COLOR;
     static InputProperty TEXCOORD;
     static InputProperty NORMAL;
+private:
+    LayoutDescription description;
+    VAO attachedVAO;
 };
