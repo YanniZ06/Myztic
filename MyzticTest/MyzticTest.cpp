@@ -63,6 +63,8 @@ class TestScene : Scene {
 		Application::log_windows_cmd();
 		windowB->setX(windowB->x() + 250);
 
+		myzWin->switchToContext(); //! THIS IS WHAT WAS MISSING BY THE WAY, SIMPLY THIS. GOD.
+
 		std::vector<InputProperty> vec = std::vector<InputProperty>();
 		vec.push_back(ShaderInputLayout::POSITION);
 
@@ -87,6 +89,7 @@ class TestScene : Scene {
 		triangle->shaderProgram.link();
 		vs.deleteShader();
 		fs.deleteShader();
+
 		this->loadedWin->renderer.drawables.push_back(triangle);
 
 		//SceneB* nScene = new SceneB();

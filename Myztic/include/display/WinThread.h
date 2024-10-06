@@ -11,7 +11,7 @@ public:
 	WinThread() = default;
 	WinThread(Window* winRef);
 
-	void deconstruct();
+	void destroy();
 
 	std::thread handle;
 	std::binary_semaphore* signal;

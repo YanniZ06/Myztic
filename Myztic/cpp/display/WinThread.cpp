@@ -9,7 +9,8 @@ WinThread::WinThread(Window* winRef) {
 	parent = winRef;
 }
 
-void WinThread::deconstruct() {
+void WinThread::destroy() {
 	handle.join();
 	delete signal;
+	parent = nullptr;
 }

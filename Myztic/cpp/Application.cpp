@@ -114,7 +114,7 @@ void Application::app_loop() {
 				break;
 			}
 		}
-		 
+
 		// Step 2: Start & continue all winloops -> create drawing requests for the next frame and handle physics
 		for (std::map<unsigned int, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it) {
 			Window* win = it->second.get();
@@ -122,13 +122,6 @@ void Application::app_loop() {
 
 			// Start rendering <3 (Handle draw requests (maybe manage to handle the last frames draw requests while this frame recommends a new one so this thread isnt wasted just sleeping?))
 			win->renderer.startRender();
-			glClearColor(0.7f, 0.2f, 0.6f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			for (Drawable* d : win->renderer.drawables) {
-				d->draw();
-				glDrawArrays(GL_TRIANGLES, 0, 3);
-			}
 
 			//presents shit to screen
 			win->renderer.endRender();

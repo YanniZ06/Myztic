@@ -70,7 +70,7 @@ Window::~Window() {
 	renderer.~Renderer();
 	inRenderPhase = false;
 
-	thread.deconstruct();
+	thread.destroy();
 	// delete handle;
 	// delete name;
 }

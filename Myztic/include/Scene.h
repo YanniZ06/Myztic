@@ -20,8 +20,7 @@ public:
 	Scene();
 	// Scene(const Scene& s) = default;
 	Scene(Scene const&) = default; // do i need you
-
-	//~Scene();
+	~Scene();
 
 	/// The unique integer ID this scene is identified with.
 	uint32_t id;

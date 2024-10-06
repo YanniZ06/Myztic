@@ -21,6 +21,7 @@ static void CheckOpenGLError(const char* stmt, const char* fname, int line)
         }; 
 
         printf("OpenGL error %s, at %s:%i - for %s\n", errorType, fname, line, stmt);
+        err = glGetError();
         dirty = true;
     }
 

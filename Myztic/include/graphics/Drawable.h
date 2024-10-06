@@ -10,9 +10,11 @@ class Window;
 // todo: figure out which of these need to be protected in particular
 class Drawable {
 	friend class Application;
+	friend class Renderer;
 public:
 	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties);
 	Drawable() = default;
+	~Drawable();
 
 	/// The vertex buffer object used for OpenGL draw calls.
 	VBO vbo;

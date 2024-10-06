@@ -42,6 +42,14 @@ void Renderer::startRender() {
 	}
 	if (SDL_GL_MakeCurrent(targetWin->handle, targetWin->context) != 0)
 		std::cout << "whoopsie daisy, couldn't make current opengl context to window: " << targetWin->name().c_str() << "\n";
+
+	glClearColor(0.7f, 0.2f, 0.6f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	for (Drawable* d : drawables) {
+		d->draw(); // TODO: nothing, i fixed it, thank me later <3
+		glDrawArrays(GL_TRIANGLES, 0, 3); // TODO: fix this error
+	}
 }
 
 void Renderer::endRender() {

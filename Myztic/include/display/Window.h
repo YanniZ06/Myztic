@@ -38,6 +38,20 @@ public:
 
 	static Window* create(WindowParams params);
 	~Window();
+	/**
+	 * Closes the window on the next frame and cleans it up.
+	 *
+	 * This window cannot be used or referenced after this function has been called.
+	 *
+	 */
+	inline void close() {
+		SDL_Event e;
+		e.type = SDL_WINDOWEVENT;
+		e.window.type = SDL_WINDOWEVENT_CLOSE;
+		e.window.windowID = id();
+
+		SDL_PushEvent(&e);
+	}
 
 	inline std::string name() {
 		return _name;
@@ -140,8 +154,13 @@ public:
 	/// Unloads this scenes contents from this Window, returns false if the scene is not loaded to this Window
 	bool unloadScene(Scene* scene);
 
-	// Switches this windows' active scene to the input scene, returns false if the input scene is not loaded to this window
+	/// Switches this windows' active scene to the input scene, returns false if the input scene is not loaded to this window
 	bool switchScene(Scene* scene);
+
+	/// Sets the current OpenGL context to the one of this window. Should be done before directly messing with anything OpenGL related.
+	inline void switchToContext() {
+		SDL_GL_MakeCurrent(handle, context);
+	}
 
 	// Sets the whole position of the window in one call.
 	inline void setPosition(int x, int y) {
@@ -155,21 +174,6 @@ public:
 	inline void setSize(int w, int h) {
 		_w = w; _h = h;
 		SDL_SetWindowSize(handle, w, h);
-	}
-
-	/**
-	 * Closes the window on the next frame and cleans it up. 
-	 * 
-	 * This window cannot be used or referenced after this function has been called.
-	 * 
-	 */
-	inline void close() { 
-		SDL_Event e;
-		e.type = SDL_WINDOWEVENT;
-		e.window.type = SDL_WINDOWEVENT_CLOSE;
-		e.window.windowID = id();
-
-		SDL_PushEvent(&e);
 	}
 
 	// String representation for printing out windows to the console
