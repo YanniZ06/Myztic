@@ -68,8 +68,11 @@ class TestScene : Scene {
 		std::vector<InputProperty> vec = std::vector<InputProperty>();
 		vec.push_back(ShaderInputLayout::POSITION);
 
-		triangle = new Drawable(this->loadedWin, vec);
+		// This batch of code should be in renderer actually, manual renderer handling is frowned upon for what we are doing but itll do to TEST
+		triangle = new Drawable(myzWin, vec);
 		triangle->vbo.bind();
+		
+		triangle->inputLayout.bindInputLayout(); //? TEMP FIX
 
 		GLfloat vertices[9] = {
 			-0.5f, -0.5f, 0.0f,
@@ -79,8 +82,14 @@ class TestScene : Scene {
 
 		triangle->vbo.fill(vertices, 9, GL_STATIC_DRAW);
 
+		// The inputlayout correctly sets these values too, however either the glVertexAttribPointer isnt recognized or some other issue persists
+		// if I do the same thing manually here the triangle DOES render.
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); //? TEMP FIX
+		glEnableVertexAttribArray(0); //? TEMP FIX
+
 		triangle->inputLayout.enableAllAttribs();
 		triangle->vbo.unbind();
+		triangle->inputLayout.unbind(); //? TEMP FIX
 
 		Shader vs = Shader(GL_VERTEX_SHADER, "assets/shaders/vs.glsl");
 		Shader fs = Shader(GL_FRAGMENT_SHADER, "assets/shaders/fs.glsl");
@@ -90,7 +99,7 @@ class TestScene : Scene {
 		vs.deleteShader();
 		fs.deleteShader();
 
-		this->loadedWin->renderer.drawables.push_back(triangle);
+		myzWin->renderer.drawables.push_back(triangle);
 
 		//SceneB* nScene = new SceneB();
 

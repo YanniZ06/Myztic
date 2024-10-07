@@ -18,7 +18,9 @@ public:
 
 	/// The vertex buffer object used for OpenGL draw calls.
 	VBO vbo;
-	/// The shader input layout used to define shader attributes for OpenGL.
+	/// The vertex array object used alongside the VBO for OpenGL draw calls.
+	// VAO vao;
+	/// The shader input layout used to define shader attributes for OpenGL. Also handles the vertex array object (VAO).
 	ShaderInputLayout inputLayout;
 	/// The shader program used to handle shaders for OpenGL draw calls.
 	ShaderProgram shaderProgram;
@@ -33,5 +35,8 @@ protected:
 	 * Renders this drawable. Debatable if useful???
 	 * 
 	 */
-	 void draw();
+
+	// THIS IS A TEMPORARY SOLUTION, WILL ADAPT OUR DRAWING PRINCIPLE SOON 
+	 void prepareDraw();
+	 void finishDraw();
 };

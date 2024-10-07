@@ -46,9 +46,11 @@ void Renderer::startRender() {
 	glClearColor(0.7f, 0.2f, 0.6f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	// THIS IS ONLY TEMPORARY
 	for (Drawable* d : drawables) {
-		d->draw(); // TODO: nothing, i fixed it, thank me later <3
-		glDrawArrays(GL_TRIANGLES, 0, 3); // TODO: fix this error
+		d->prepareDraw(); // TODO: nothing, i fixed it, thank me later <3
+		CHECK_GL(glDrawArrays(GL_TRIANGLES, 0, 3));
+		d->finishDraw();
 	}
 }
 

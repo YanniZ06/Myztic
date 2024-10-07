@@ -2,10 +2,12 @@
 #include <Windows.h>
 #include <graphics/backend/ShaderInputLayout.h>
 
-InputProperty ShaderInputLayout::POSITION = { Position, 3, GL_FLOAT, -9, sizeof(GLfloat) };
-InputProperty ShaderInputLayout::COLOR = { Color, 3, GL_FLOAT, -9, sizeof(GLfloat) };
-InputProperty ShaderInputLayout::TEXCOORD = { TextureCoordinate, 3, GL_FLOAT, -9, sizeof(GLfloat) };
-InputProperty ShaderInputLayout::NORMAL = { Normal, 3, GL_FLOAT, -9, sizeof(GLfloat) };
+// -9 pointer offset?? really????? | nvm it changed nothing
+
+InputProperty ShaderInputLayout::POSITION = { Position, 3, GL_FLOAT, 0, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::COLOR = { Color, 3, GL_FLOAT, 0, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::TEXCOORD = { TextureCoordinate, 3, GL_FLOAT, 0, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::NORMAL = { Normal, 3, GL_FLOAT, 0, sizeof(GLfloat) };
 
 
 LayoutDescription ShaderInputLayout::createLayoutDescription(std::vector<InputProperty>& inputProperties) {
@@ -72,7 +74,7 @@ ShaderInputLayout ShaderInputLayout::createInputLayout(LayoutDescription descrip
 	for (int i = 0; i < description.inputProperties.size(); i++) {
 		InputProperty prop = description.inputProperties[i];
 		
-		CHECK_GL(glVertexAttribPointer(ret.propertyCount, prop.size, prop.glType, false,
+		CHECK_GL(glVertexAttribPointer(ret.propertyCount, prop.size, prop.glType, GL_FALSE,
 			description.elementCount * prop.sizeOfType, (void*)(prop.pointerOffset * prop.sizeOfType)));
 			ret.propertyCount++;
 	};
