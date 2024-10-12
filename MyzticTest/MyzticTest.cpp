@@ -31,8 +31,6 @@ class SceneB : Scene {
 	}
 };
 
-Drawable* triangle = nullptr;
-
 class TestScene : Scene {
 	void logLoaded() {
 		size_t size = 0;
@@ -69,30 +67,33 @@ class TestScene : Scene {
 		vec.push_back(ShaderInputLayout::POSITION);
 		
 		// This batch of code should be in renderer actually, manual renderer handling is frowned upon for what we are doing but itll do to TEST
-		triangle = new Drawable(myzWin, vec);
-		triangle->vbo.bind();
+		Drawable triangle = Drawable(myzWin, vec);
+		triangle.vbo.bind();
 		
 		//triangle->inputLayout.bindInputLayout(); //? TEMP FIX
 
-		GLfloat vertices[9] = {
+		GLfloat vertices[18] = {
 			-0.5f, -0.5f, 0.0f,
+			-0.5f, 0.5f, 0.0f,
+			0.5f, 0.5f, 0.0f,
+			0.5f, 0.5f, 0.0f,
 			0.5f, -0.5f, 0.0f,
-			0.0f,  0.5f, 0.0f
+			-0.5f, -0.5f, 0.0f,
 		};
 
-		triangle->vbo.fill(vertices, 9, GL_STATIC_DRAW);
+		triangle.vbo.fill(vertices, 18, GL_STATIC_DRAW);
 
-		triangle->inputLayout.setVertexLayout();
+		triangle.inputLayout.setVertexLayout();
 
-		triangle->inputLayout.enableAllAttribs();
-		triangle->vbo.unbind();
+		triangle.inputLayout.enableAllAttribs();
+		triangle.vbo.unbind();
 		//triangle->inputLayout.unbind(); //? TEMP FIX
 
 		Shader vs = Shader(GL_VERTEX_SHADER, "assets/shaders/vs.glsl");
 		Shader fs = Shader(GL_FRAGMENT_SHADER, "assets/shaders/fs.glsl");
-		triangle->shaderProgram.attach(vs);
-		triangle->shaderProgram.attach(fs);
-		triangle->shaderProgram.link();
+		triangle.shaderProgram.attach(vs);
+		triangle.shaderProgram.attach(fs);
+		triangle.shaderProgram.link();
 		vs.deleteShader();
 		fs.deleteShader();
 

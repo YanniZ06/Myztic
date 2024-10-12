@@ -47,10 +47,10 @@ void Renderer::startRender() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// THIS IS ONLY TEMPORARY
-	for (Drawable* d : drawables) {
-		d->prepareDraw(); // TODO: nothing, i fixed it, thank me later <3
-		CHECK_GL(glDrawArrays(GL_TRIANGLES, 0, 3));
-		d->finishDraw();
+	for (Drawable d : drawables) {
+		d.prepareDraw(); // TODO: nothing, i fixed it, thank me later <3
+		CHECK_GL(glDrawArrays(GL_TRIANGLES, 0, 6));
+		d.finishDraw();
 	}
 }
 
