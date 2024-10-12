@@ -3,10 +3,12 @@
 
 Drawable::Drawable(Window* targetWin, std::vector<InputProperty>& inputProperties) {
 	this->drawTarget = targetWin;
-	this->inputLayout = ShaderInputLayout::createInputLayout(ShaderInputLayout::createLayoutDescription(inputProperties));
+	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(inputProperties));
 	this->vbo = VBO::make();
 	// this->vao = VAO::make();
 }
+// gang was here btw :3
+// dont have a good day pls
 Drawable::~Drawable() {
 	drawTarget = nullptr;
 }

@@ -5,16 +5,14 @@
 
 class VAO {
 public:
-	inline VAO(GLuint handle) { this->vao = handle; }
-	inline VAO() = default;
-
+	inline VAO(GLuint handle = 0) { this->vao = handle; }
 	/*
 	* Makes a singular VAO.
 	* 
 	*/
 	inline static VAO make() {
 		//this uses the default constructor, that's why its required
-		VAO ret = VAO();
+		VAO ret = VAO(0);
 		CHECK_GL(glGenVertexArrays(1, &ret.vao));
 		return ret;
 	};
@@ -26,7 +24,7 @@ public:
 	*/
 	inline static std::array<VAO, AMOUNT> makeNum() {
 		//this uses the default constructor too !!!
-		std::array<VAO, AMOUNT> rets;
+		std::array<VAO, AMOUNT> rets = std::array<VAO, AMOUNT>();
 
 		for (int i = 0; i < AMOUNT; i++)
 			CHECK_GL(glGenVertexArrays(1, &rets[i].vao));

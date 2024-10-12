@@ -13,7 +13,6 @@ class Drawable {
 	friend class Renderer;
 public:
 	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties);
-	Drawable() = default;
 	~Drawable();
 
 	/// The vertex buffer object used for OpenGL draw calls.

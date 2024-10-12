@@ -26,7 +26,8 @@ struct LayoutDescription {
 
 class ShaderInputLayout {
 public:
-    ShaderInputLayout();
+    ShaderInputLayout(LayoutDescription description);
+    ShaderInputLayout() = default;
 
     /**
      * Create input layout description which is passed into createInputLayout
@@ -35,7 +36,7 @@ public:
      */
     static LayoutDescription createLayoutDescription(std::vector<InputProperty>& inputProperties);
 
-    static ShaderInputLayout createInputLayout(LayoutDescription desc);
+    void setVertexLayout();
     inline void bindInputLayout() {
         attachedVAO.bind();
     };
@@ -67,7 +68,8 @@ public:
     static InputProperty COLOR;
     static InputProperty TEXCOORD;
     static InputProperty NORMAL;
-private:
     LayoutDescription description;
+private:
+
     VAO attachedVAO;
 };

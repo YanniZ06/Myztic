@@ -9,6 +9,20 @@ InputProperty ShaderInputLayout::COLOR = { Color, 3, GL_FLOAT, 0, sizeof(GLfloat
 InputProperty ShaderInputLayout::TEXCOORD = { TextureCoordinate, 3, GL_FLOAT, 0, sizeof(GLfloat) };
 InputProperty ShaderInputLayout::NORMAL = { Normal, 3, GL_FLOAT, 0, sizeof(GLfloat) };
 
+ShaderInputLayout::ShaderInputLayout(LayoutDescription description) {
+	GLint previousVAO;
+	CHECK_GL(glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &previousVAO));
+
+	this->propertyCount = 0;
+	this->attachedVAO = VAO::make();
+	this->bindInputLayout();
+
+	this->description = description;
+
+	if (previousVAO != 0) {
+		CHECK_GL(glBindVertexArray(previousVAO));
+	};
+};
 
 LayoutDescription ShaderInputLayout::createLayoutDescription(std::vector<InputProperty>& inputProperties) {
 	GLint elementCount = 0;
@@ -25,9 +39,15 @@ LayoutDescription ShaderInputLayout::createLayoutDescription(std::vector<InputPr
 	return desc;
 };
 
-ShaderInputLayout::ShaderInputLayout() {
-	this->propertyCount = 0;
-	this->attachedVAO = VAO::make();
+void ShaderInputLayout::setVertexLayout()
+{
+	for (int i = 0; i < description.inputProperties.size(); i++) {
+		InputProperty prop = description.inputProperties[i];
+
+		CHECK_GL(glVertexAttribPointer(this->propertyCount, prop.size, prop.glType, GL_FALSE,
+			description.elementCount * prop.sizeOfType, (void*)(prop.pointerOffset * prop.sizeOfType)));
+		this->propertyCount++;
+	};
 };
 
 void ShaderInputLayout::deleteInputLayout() {
@@ -62,28 +82,4 @@ void ShaderInputLayout::disableAllAttribs() {
 	for (int i = 0; i < propertyCount; i++) {
 		CHECK_GL(glDisableVertexAttribArray(i));
 	}
-};
-
-ShaderInputLayout ShaderInputLayout::createInputLayout(LayoutDescription description) {
-	GLint previousVAO;
-	CHECK_GL(glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &previousVAO));
-
-	ShaderInputLayout ret = ShaderInputLayout();
-	ret.bindInputLayout();
-
-	for (int i = 0; i < description.inputProperties.size(); i++) {
-		InputProperty prop = description.inputProperties[i];
-		
-		CHECK_GL(glVertexAttribPointer(ret.propertyCount, prop.size, prop.glType, GL_FALSE,
-			description.elementCount * prop.sizeOfType, (void*)(prop.pointerOffset * prop.sizeOfType)));
-			ret.propertyCount++;
-	};
-
-	ret.description = description;
-
-	if (previousVAO != 0) {
-		CHECK_GL(glBindVertexArray(previousVAO));
-	};
-
-	return ret;
 };
