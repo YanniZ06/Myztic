@@ -100,6 +100,8 @@ void Application::app_loop() {
 					break;
 				case SDL_WINDOWEVENT_RESIZED:
 					//TODO: handle resizing on renderer hahahah
+					SDL_GL_MakeCurrent(eWin->handle, eWin->context);
+					CHECK_GL(glViewport(0, 0, e.window.data1, e.window.data2));
 					break;
 				default: break;
 				}

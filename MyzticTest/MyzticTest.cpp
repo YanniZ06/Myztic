@@ -67,9 +67,10 @@ class TestScene : Scene {
 		vec.push_back(ShaderInputLayout::POSITION);
 		
 		// This batch of code should be in renderer actually, manual renderer handling is frowned upon for what we are doing but itll do to TEST
+		//inputlayout is bound in Drawable.
 		Drawable triangle = Drawable(myzWin, vec);
 		triangle.vbo.bind();
-		
+	
 		//triangle->inputLayout.bindInputLayout(); //? TEMP FIX
 
 		GLfloat vertices[18] = {
