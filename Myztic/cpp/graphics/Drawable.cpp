@@ -7,8 +7,7 @@ Drawable::Drawable(Window* targetWin, std::vector<InputProperty>& inputPropertie
 	this->vbo = VBO::make();
 	// this->vao = VAO::make();
 }
-// gang was here btw :3
-// dont have a good day pls
+
 Drawable::~Drawable() {
 	drawTarget = nullptr;
 }

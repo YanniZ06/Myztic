@@ -9,13 +9,13 @@
 #include <iostream>
 
 Window* Window::create(WindowParams params) {
-	std::shared_ptr<Window> window = std::make_shared<Window>(params);
+	Window* window = new Window(params);
 	Application::windows[window->id()] = window;
 
 	window->loadScene(params.init_scene);
 	window->switchScene(params.init_scene);
 
-	return window.get();
+	return window;
 }
 
 Window::Window(WindowParams params) {
@@ -52,27 +52,12 @@ Window::Window(WindowParams params) {
 }
 
 Window::~Window() {
-	// Unload all scenes, including current one
-	std::map<unsigned int, Scene*>::const_iterator it = loadedScenes.begin();
-	for (int i = 0; i < loadedScenes.size(); i++) {
-		this->unloadScene(it++->second);
-	}
-	delete scene;
+	std::cout << "deconstructing window " << std::to_string(SDL_GetWindowID(handle)) << "\n";
+
 	scene = nullptr;
-
-	SDL_GL_DeleteContext(context); //todo: THE RENDERER SHOULD DO THIS, NOT THE WINDOW?
-	SDL_DestroyWindow(handle);
-
 	context = nullptr;
 	handle = nullptr;
-
-	renderOutOfFocus = false;
-	renderer.~Renderer();
-	inRenderPhase = false;
-
-	thread.destroy();
-	// delete handle;
-	// delete name;
+	// renderer.~Renderer();
 }
 
 bool Window::switchScene(Scene* scene)
@@ -95,15 +80,18 @@ bool Window::loadScene(Scene* scene) {
 	return true;
 }
 
-bool Window::unloadScene(Scene* scene) {
+bool Window::unloadScene(Scene* scene, bool freeMem) {
 	if (scene->loadedWin != this) return false;
-	if (scene == this->scene) this->scene = new Scene(); // Make sure we break nothing if there is no current scene haha
+	if (scene == this->scene) { // Make sure we break nothing if there is no current scene 
+		this->scene->finish();
+		this->scene = new Scene();
+	}
 
 	scene->unload(this);
 	scene->loadedWin = nullptr;
 	loadedScenes.erase(scene->id);
-	delete scene;
 
+	if (freeMem) delete scene;
 	return true;
 }
 
@@ -117,7 +105,29 @@ void Window::centerPosition(bool x, bool y) {
 }
 
 Window::operator std::string() {
-	//doing Application::fps here for now, every window is gonna have it's own independent FPS instance later
+	//doing Application::fps here for now, every window is gonna have it's own independent FPS instance later // WE ARE NOT DOING THAT ANYMORE
 	std::string winString = "Window " +  std::to_string(id())  + "[\"" + _name + "\"] : " + std::to_string(w()) + "x " + std::to_string(h()) + " at position(" + std::to_string(x()) + " | " + std::to_string(y()) + ") running on " + std::to_string(Application::fps.getMax()) + " max fps";
 	return winString;
+}
+
+// Private Cleanup
+void Window::destroy()
+{
+	// Unload all scenes, including current one
+	Application::windows.erase(id());
+	std::map<unsigned int, Scene*>::const_iterator it = loadedScenes.begin();
+	for (int i = 0; i < loadedScenes.size(); i++) {
+		this->unloadScene(it++->second);
+	}
+	std::cout << "destroying window " << std::to_string(SDL_GetWindowID(handle)) << "\n";
+	delete scene;
+
+	SDL_GL_DeleteContext(context); //todo: THE RENDERER SHOULD DO THIS, NOT THE WINDOW?
+	SDL_DestroyWindow(handle);
+
+	renderOutOfFocus = false;
+	inRenderPhase = false;
+
+	thread.destroy();
+	// this->~Window(); is called by the delete operator in Application.cpp
 }

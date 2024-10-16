@@ -14,8 +14,8 @@ Renderer::Renderer(Window* drawTarget) {
 }
 
 Renderer::~Renderer() {
-	pendingRequests.clear();
-	nextRequests.clear();
+	// pendingRequests.clear();
+	// nextRequests.clear();
 	targetWin = nullptr;
 }
 

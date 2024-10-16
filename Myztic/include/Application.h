@@ -27,9 +27,9 @@ private:
     static void app_loop();
 public:
     /// Current windows, mapped to their ID
-    static std::map<unsigned int, std::shared_ptr<Window>> windows;
+    static std::map<unsigned int, Window*> windows;
     /// All running threads, mapped to their task/use-case
-    static std::map<const char*, std::shared_ptr<std::thread>> threads;
+    static std::map<const char*, std::thread*> threads;
 
     /// Dictates whether the main thread resources are currently available or being read/modified by one of the threads
     static ResourceManager* resourceManager;

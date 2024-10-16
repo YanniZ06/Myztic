@@ -48,9 +48,13 @@ class TestScene : Scene {
 		std::cout << "Loaded to Window: " << callerWindow->name().c_str() << "\n";
 	}
 	virtual void enter() {
-		Window* myzWin = Application::windows[this->loadedWin->id()].get();
+		Window* myzWin = Application::windows[this->loadedWin->id()];
 		std::cout << myzWin->name() << "\n";
 		myzWin->setName("WINDOW 1");
+
+		std::cout << "Size of std::thread: " << sizeof(std::thread) << "\n";
+		std::cout << "Size of std::thread* : " << sizeof(std::thread*) << "\n";
+
 
 		logLoaded();
 		Application::log_windows_cmd();

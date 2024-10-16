@@ -4,13 +4,19 @@
 #include <Application.h>
 
 WinThread::WinThread(Window* winRef) {
-	handle = std::thread(Application::start_winloop, winRef);
+	handle = new std::thread(Application::start_winloop, winRef);
 	signal = new std::binary_semaphore(0);
 	parent = winRef;
 }
 
-void WinThread::destroy() {
-	handle.join();
-	delete signal;
+WinThread::~WinThread() {
+	signal = nullptr;
 	parent = nullptr;
+}
+
+void WinThread::destroy() {
+	handle->join();
+	delete signal;
+	delete handle;
+	// this->~WinThread();
 }

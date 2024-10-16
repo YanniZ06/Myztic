@@ -151,8 +151,15 @@ public:
 	/// Loads this scenes contents to this Window, returns false if the scene is already loaded to a Window
 	bool loadScene(Scene* scene);
 
-	/// Unloads this scenes contents from this Window, returns false if the scene is not loaded to this Window
-	bool unloadScene(Scene* scene);
+	/**
+	 * Unloads a scenes contents from this Window. This operation calls scene->unload(this);
+	 * \nIf the scene is currently the Windows' active scene, scene->finish(this); will be called & a dummy scene will be loaded.
+	 * 
+	 * \param scene The scene whichs contents should be unloaded from the Window.
+	 * \param freeMem If true, deletes the scene from memory entirely. The scene should no longer be referenced afterwards.
+	 * \return True if the scene was loaded to this window, otherwise false.
+	 */
+	bool unloadScene(Scene* scene, bool freeMem = false);
 
 	/// Switches this windows' active scene to the input scene, returns false if the input scene is not loaded to this window
 	bool switchScene(Scene* scene);
@@ -180,5 +187,6 @@ public:
 	explicit operator std::string();
 
 protected:
+	void destroy();
 	Scene* scene;
 };

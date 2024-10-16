@@ -14,7 +14,7 @@
 #define SDL_MAIN_HANDLED
 
 // Statics
-std::map<unsigned int, std::shared_ptr<Window>> Application::windows;
+std::map<unsigned int, Window*> Application::windows;
 std::binary_semaphore* resourceManager;
 std::binary_semaphore* waiter;
 std::atomic<uint8_t> Application::readyWinThreads = 0;
@@ -38,7 +38,7 @@ void Application::initMyztic(WindowParams initWindowParams, fpsSize fps) {
 		SDL_GL_SetAttribute(it->first, it->second);
 	}
 
-	std::shared_ptr<Window> window = std::make_shared<Window>(initWindowParams);
+	Window* window = new Window(initWindowParams);
 	Application::windows[window->id()] = window;
 
 	Application::fps = Fps(fps);
@@ -75,7 +75,7 @@ void Application::app_loop() {
 			switch (e.type) {
 			// Handle Window Events
 			case SDL_WINDOWEVENT: {
-				Window* eWin = Application::windows[e.window.windowID].get();
+				Window* eWin = Application::windows[e.window.windowID];
 
 				if (eWin == nullptr) {
 					//should be null anyway, we dont WANT THAT HERE
@@ -88,9 +88,14 @@ void Application::app_loop() {
 				case SDL_WINDOWEVENT_CLOSE:
 					eWin->shouldClose = true;
 					registeredWinThreads--;
-					eWin->thread.signal->release();
+					eWin->thread.signal->release(); // Should kill the thread because the loop condition is no longer met
 					
-					windows.erase(eWin->id());
+					std::cout << "Wanting to close window: " << eWin->id() << "\n";
+
+					eWin->destroy();
+					delete eWin;
+
+					log_windows_cmd();
 					break;
 				case SDL_WINDOWEVENT_FOCUS_GAINED:
 					eWin->_focused = true;
@@ -100,6 +105,7 @@ void Application::app_loop() {
 					break;
 				case SDL_WINDOWEVENT_RESIZED:
 					//TODO: handle resizing on renderer hahahah
+					//? ZIAD JESUS CHRIST I SAID ON RENDERER OH MY GODDDDD
 					SDL_GL_MakeCurrent(eWin->handle, eWin->context);
 					CHECK_GL(glViewport(0, 0, e.window.data1, e.window.data2));
 					break;
@@ -118,8 +124,8 @@ void Application::app_loop() {
 		}
 
 		// Step 2: Start & continue all winloops -> create drawing requests for the next frame and handle physics
-		for (std::map<unsigned int, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it) {
-			Window* win = it->second.get();
+		for (std::map<unsigned int, Window*>::const_iterator it = windows.begin(); it != windows.end(); ++it) {
+			Window* win = it->second;
 			win->thread.signal->release();
 
 			// Start rendering <3 (Handle draw requests (maybe manage to handle the last frames draw requests while this frame recommends a new one so this thread isnt wasted just sleeping?))
@@ -129,17 +135,13 @@ void Application::app_loop() {
 			win->renderer.endRender();
 		}
 
+		// Unless we are somehow already ready to continue (edge-case), pause current thread, gets unpaused once the last thread is ready
 		if (readyWinThreads.load() < registeredWinThreads) { 
-			/*
-			decrementTimes++;
-			std::cout << "waiter acquired, decremented: " + std::to_string(decrementTimes) << "\n";
-			//*/
-
 			waiter->acquire(); 
 		}
 		
 		readyWinThreads.store(0, std::memory_order_relaxed);
-		// Finally, wait the rest of the frame or continue right away
+		// Finally, wait the rest of the frame or continue right away (do math here or some shit
 		SDL_Delay(1);
 	}
 }
@@ -150,42 +152,31 @@ void Application::app_loop() {
 
 void Application::start_winloop(Window* win) {
 	if (win->shouldClose) return;
-	//! std::cout << "Requested WindowLoop On " + win->name() << "\n";
 	win->thread.signal->acquire();
 
 	registeredWinThreads++;
-	//! std::cout << "Started WindowLooping On " + win->name() << "\n";
 	window_loop(win);
 }
 
-//? std::atomic<int> incrementTimes = 0;
-
 // Todo: Run soely physics and drawing REQUESTS to the drawing (currently main) thread in here | Unlikely -> preloading is done on ANOTHER thread if we do the context preloading thing
 void Application::window_loop(Window* win) {
-	while (!win->shouldClose) {
-		//! std::cout << "(109) WindowLoop On " + win->name() << "\n";
-		
+	while (!win->shouldClose) {		
 		win->scene->update((float)fps.getFrameTime()); // Put elapsed time in here, for now it gives you the max framerate elapsed
 
 		readyWinThreads++;
-		if (readyWinThreads.load() == registeredWinThreads) {
-			/*
-			incrementTimes++;
-			std::cout << "waiter released, incremented: " + std::to_string(incrementTimes) << "\n";
-			//*/
-
-			waiter->release(); 
+		if (readyWinThreads.load() == registeredWinThreads) { // Continue main thread if this was the last window thread that finished
+			waiter->release();
 		}
-		win->thread.signal->acquire(); // Block execution until thread is released by main thread
+		win->thread.signal->acquire(); // Block execution until this window thread is released by main thread
 	}
 }
 
-// Logging and shit
+// Logging and shit (remove for end releases????)
 
 void Application::log_windows_cmd() {
 	std::cout << "Application::windows =>\n";
-	for (std::map<unsigned int, std::shared_ptr<Window>>::const_iterator it = windows.begin(); it != windows.end(); ++it)
+	for (std::map<unsigned int, Window*>::const_iterator it = windows.begin(); it != windows.end(); ++it)
 	{
-		std::cout << (int)it->first << " -> " << (std::string)*it->second.get() << "\n";
+		std::cout << (int)it->first << " -> " << (std::string)*it->second << "\n";
 	}
 }
