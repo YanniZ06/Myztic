@@ -57,7 +57,7 @@ public:
 	 * \param arrayLength The length of the array being passed in.
 	 * \param drawType Type of draw sequence. (static or dynamic or otherwise)
 	 */
-	inline void fill(GLfloat* indices, int arrayLength, GLenum drawType) {
+	inline void fill(GLuint* indices, int arrayLength, GLenum drawType) {
 		GLint boundIndexBuffer;
 		CHECK_GL(glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &boundIndexBuffer));
 		

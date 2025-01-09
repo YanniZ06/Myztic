@@ -23,14 +23,14 @@ Renderer::~Renderer() {
 void Renderer::drawLine(glm::vec2 p1, glm::vec2 p2)
 {
 	DLineRequest<glm::vec2> req(p1, p2);
-	// print : req.type();
+
 	pendingRequests.push_back(req.base());
 }
 
 void Renderer::drawRay(glm::vec3 p1, glm::vec3 p2)
 {
 	DLineRequest<glm::vec3> req(p1, p2);
-	// print : req.type();
+
 	pendingRequests.push_back(req.base());
 }
 
@@ -50,7 +50,8 @@ void Renderer::startRender() {
 	// THIS IS ONLY TEMPORARY
 	for (Drawable d : drawables) {
 		d.prepareDraw(); // TODO: nothing, i fixed it, thank me later <3
-		CHECK_GL(glDrawArrays(GL_TRIANGLES, 0, 6));
+		d.ebo.bind();
+		CHECK_GL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
 		d.finishDraw();
 	}
 }

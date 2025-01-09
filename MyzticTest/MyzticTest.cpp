@@ -13,7 +13,6 @@
 #include <graphics/backend/Shader.h>
 #include <graphics/backend/ShaderInputLayout.h>
 
-
 #include <thread>
 #include <semaphore>
 
@@ -81,25 +80,28 @@ class TestScene : Scene {
 		//inputlayout is bound in Drawable.
 		Drawable triangle = Drawable(myzWin, vec);
 		triangle.vbo.bind();
-	
-		//triangle->inputLayout.bindInputLayout(); //? TEMP FIX
 
-		GLfloat vertices[18] = {
-			-0.5f, -0.5f, 0.0f,
-			-0.5f, 0.5f, 0.0f,
-			0.5f, 0.5f, 0.0f,
-			0.5f, 0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			-0.5f, -0.5f, 0.0f,
+		GLfloat vertices[] = {
+			0.5, 0.5, 0.0,
+			0.5, -0.5, 0.0,
+			-0.5, -0.5, 0.0,
+			-0.5, 0.5, 0.0
 		};
 
-		triangle.vbo.fill(vertices, 18, GL_STATIC_DRAW);
+		triangle.vbo.fill(vertices, sizeof(vertices), GL_STATIC_DRAW);
+
+		GLuint indices[] = {
+			0, 1, 3,
+			1, 2, 3
+		};
+
+		triangle.ebo.bind();
+		triangle.ebo.fill(indices, sizeof(indices), GL_STATIC_DRAW);
 
 		triangle.inputLayout.setVertexLayout();
 
 		triangle.inputLayout.enableAllAttribs();
 		triangle.vbo.unbind();
-		//triangle->inputLayout.unbind(); //? TEMP FIX
 
 		Shader vs = Shader(GL_VERTEX_SHADER, "assets/shaders/vs.glsl");
 		Shader fs = Shader(GL_FRAGMENT_SHADER, "assets/shaders/fs.glsl");
@@ -110,16 +112,6 @@ class TestScene : Scene {
 		fs.deleteShader();
 
 		myzWin->renderer.drawables.push_back(triangle);
-
-		//SceneB* nScene = new SceneB();
-
-		//std::cout << Application::windows[2].get()->loadScene((Scene*)nScene) << "\n";
-		//std::cout << this->loadedWin->loadScene((Scene*)nScene) << "\n";
-		//logLoaded();
-
-		//std::cout << Application::windows[2].get()->unloadScene((Scene*)nScene) << "\n";
-		//std::cout << this->loadedWin->loadScene((Scene*)nScene) << "\n";
-		//logLoaded();
 	}
 
 	virtual void update(float dt) {

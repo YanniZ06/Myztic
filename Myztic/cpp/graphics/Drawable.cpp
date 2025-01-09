@@ -5,7 +5,7 @@ Drawable::Drawable(Window* targetWin, std::vector<InputProperty>& inputPropertie
 	this->drawTarget = targetWin;
 	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(inputProperties));
 	this->vbo = VBO::make();
-	// this->vao = VAO::make();
+	this->ebo = EBO::make();
 }
 
 Drawable::~Drawable() {
@@ -16,7 +16,6 @@ Drawable::~Drawable() {
 void Drawable::prepareDraw() {
 	shaderProgram.bind();
 	inputLayout.bindInputLayout();
-	// vao.bind();
 }
 
 void Drawable::finishDraw() {

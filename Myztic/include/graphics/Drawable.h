@@ -5,6 +5,7 @@
 #include <graphics/backend/Shader.h>
 #include <graphics/backend/ShaderInputLayout.h>
 #include <graphics/backend/ShaderProgram.h>
+#include <graphics/backend/EBO.hpp>
 //#include <graphics/Renderer.h>
 
 class Window;
@@ -19,8 +20,8 @@ public:
 
 	/// The vertex buffer object used for OpenGL draw calls.
 	VBO vbo;
-	/// The vertex array object used alongside the VBO for OpenGL draw calls.
-	// VAO vao;
+	/// The element buffer object, mainly used for indices.
+	EBO ebo;
 	/// The shader input layout used to define shader attributes for OpenGL. Also handles the vertex array object (VAO).
 	ShaderInputLayout inputLayout;
 	/// The shader program used to handle shaders for OpenGL draw calls.
