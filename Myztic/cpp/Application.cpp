@@ -2,6 +2,7 @@
 #include "framework.h"
 
 #include <Application.h>
+#include <display/Window.h>
 #include <graphics/Renderer.h>
 #include <Scene.h>
 
@@ -24,7 +25,7 @@ bool Application::shouldClose = false;
 std::binary_semaphore* Application::waiter;
 ResourceManager* Application::resourceManager;
 
-void Application::initMyztic(WindowParams initWindowParams, fpsSize fps) {
+void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 	double myzStart = Timer::stamp();
 	SDL_SetMainReady();
 
@@ -106,6 +107,7 @@ void Application::app_loop() {
 				case SDL_WINDOWEVENT_RESIZED:
 					//TODO: handle resizing on renderer hahahah
 					//? ZIAD JESUS CHRIST I SAID ON RENDERER OH MY GODDDDD
+					//? !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ?
 					SDL_GL_MakeCurrent(eWin->handle, eWin->context);
 					CHECK_GL(glViewport(0, 0, e.window.data1, e.window.data2));
 					break;

@@ -179,6 +179,7 @@
     <ClInclude Include="include\display\Window.h" />
     <ClInclude Include="include\display\Fps.h" />
     <ClInclude Include="include\graphics\backend\EBO.hpp" />
+    <ClInclude Include="include\graphics\backend\ShaderProgram.h" />
     <ClInclude Include="include\graphics\Drawable.h" />
     <ClInclude Include="include\graphics\Renderer.h" />
     <ClInclude Include="include\graphics\backend\Texture2D.hpp" />
@@ -186,6 +187,8 @@
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="include\Util.h" />
+    <ClInclude Include="include\utilities\IDGenerator.h" />
+    <ClInclude Include="include\utilities\ResourceManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="include\graphics\backend\VBO.hpp" />
     <ClInclude Include="include\graphics\backend\VAO.hpp" />
@@ -197,6 +200,7 @@
     <ClCompile Include="cpp\display\Fps.cpp" />
     <ClCompile Include="cpp\display\Window.cpp" />
     <ClCompile Include="cpp\display\WinThread.cpp" />
+    <ClCompile Include="cpp\graphics\backend\ShaderProgram.cpp" />
     <ClCompile Include="cpp\graphics\Drawable.cpp" />
     <ClCompile Include="cpp\graphics\Renderer.cpp" />
     <ClCompile Include="cpp\Scene.cpp" />

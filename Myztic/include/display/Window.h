@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL.h>
-#include <SDL_stdinc.h>
+#include <stdint.h>
 
 #include <map>
 #include <memory>

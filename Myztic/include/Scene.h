@@ -1,6 +1,8 @@
 #pragma once
 
-#include <display/Window.h>
+#include <stdint.h>
+
+class Window;
 
 /**
  * The base for any scene.

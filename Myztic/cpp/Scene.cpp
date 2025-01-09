@@ -1,7 +1,7 @@
 #include "pch.h" 
 
 #include <Scene.h>
-#include <Util.h>
+#include <utilities/IDGenerator.h>
 
 Scene::Scene() {
 	id = IDGenerator::instanceOf("scene")->next();

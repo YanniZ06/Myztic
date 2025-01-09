@@ -3,6 +3,8 @@
 // #include <display/Window.h>
 #include <Application.h>
 #include <Scene.h>
+#include <display/Window.h>
+
 
 // Logging
 #include <windows.h>

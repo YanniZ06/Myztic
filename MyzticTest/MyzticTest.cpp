@@ -5,7 +5,14 @@
 #include <io.h>
 #include <Application.h>
 #include <SDL.h>
+
+#include <display/Window.h>
 #include <Scene.h>
+
+// Graphics (remove when porting)
+#include <graphics/backend/Shader.h>
+#include <graphics/backend/ShaderInputLayout.h>
+
 
 #include <thread>
 #include <semaphore>
@@ -147,8 +154,11 @@ int WinMain(HINSTANCE hInstance,
 	SDL_version ver;
 	SDL_GetVersion(&ver);
 
+	// SDL VERSION printing
 	printf("Version: %u.%u Patch: %u\n", ver.major, ver.minor, ver.patch);
 
+
+	//? Actual Myztic work
 	TestScene* scene = new TestScene();
 	WindowParams p = { "Myztic Engine Test", (Scene*)scene, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
 	Application::initMyztic(p, 60);

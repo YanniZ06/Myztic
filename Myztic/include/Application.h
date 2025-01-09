@@ -6,11 +6,13 @@
 #include <chrono>
 //#include <semaphore>
 
-#include <display/Window.h>
 #include <display/Fps.h>
-#include <Util.h>
+#include <utilities/ResourceManager.h>
 
 #define MYZTIC_WIN_LIMIT 16 // Real limit should be 256, but we use this instead because nobody should need that many windows. Might be tweaked later
+
+class Window;
+struct WindowParams;
 
 /**
  * The core of Myztic. Contains all sorts of useful fields and initializes the engine.
@@ -49,7 +51,7 @@ public:
      * \throw MYZTIC_INIT_SDL_ERROR along with error information if one of the following SDL subsystems could not be initialized:
      * \n `SDL_INIT_VIDEO`, `SDL_INIT_EVENTS`, `SDL_INIT_GAMECONTROLLER`, `SDL_INIT_JOYSTICK` or `SDL_INIT_HAPTIC`
      */
-    static void initMyztic(WindowParams initWindowParams, fpsSize fps);
+    static void initMyztic(WindowParams& initWindowParams, fpsSize fps);
     // Logs the window map to the command line
     static void log_windows_cmd();
 

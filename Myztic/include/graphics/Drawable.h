@@ -4,9 +4,11 @@
 //#include <display/Window.h>
 #include <graphics/backend/Shader.h>
 #include <graphics/backend/ShaderInputLayout.h>
+#include <graphics/backend/ShaderProgram.h>
 //#include <graphics/Renderer.h>
 
 class Window;
+
 // todo: figure out which of these need to be protected in particular
 class Drawable {
 	friend class Application;

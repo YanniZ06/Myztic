@@ -2,6 +2,7 @@
 
 #include <graphics/Renderer.h>
 #include <Application.h>
+#include <display/Window.h>
 #include <iostream>
 
 //class Application; // Forward this to not loop any weird header inclusions
