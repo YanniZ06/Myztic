@@ -72,44 +72,18 @@ class TestScene : Scene {
 		windowB->setX(windowB->x() + 250);
 
 		myzWin->switchToContext(); //! THIS IS WHAT WAS MISSING BY THE WAY, SIMPLY THIS. GOD.
-
-		std::vector<InputProperty> vec = std::vector<InputProperty>();
-		vec.push_back(ShaderInputLayout::POSITION);
 		
 		// This batch of code should be in renderer actually, manual renderer handling is frowned upon for what we are doing but itll do to TEST
 		//inputlayout is bound in Drawable.
-		Drawable triangle = Drawable(myzWin, vec);
-		triangle.vbo.bind();
+	
 
-		GLfloat vertices[] = {
+		std::vector<GLfloat> vertices = {
 			0.5, 0.5, 0.0,
 			0.5, -0.5, 0.0,
-			-0.5, -0.5, 0.0,
-			-0.5, 0.5, 0.0
+			-0.5, 0.5, 0.0,
+			-0.5, -0.5, 0.0
 		};
-
-		triangle.vbo.fill(vertices, sizeof(vertices), GL_STATIC_DRAW);
-
-		GLuint indices[] = {
-			0, 1, 3,
-			1, 2, 3
-		};
-
-		triangle.ebo.bind();
-		triangle.ebo.fill(indices, sizeof(indices), GL_STATIC_DRAW);
-
-		triangle.inputLayout.setVertexLayout();
-
-		triangle.inputLayout.enableAllAttribs();
-		triangle.vbo.unbind();
-
-		Shader vs = Shader(GL_VERTEX_SHADER, "assets/shaders/vs.glsl");
-		Shader fs = Shader(GL_FRAGMENT_SHADER, "assets/shaders/fs.glsl");
-		triangle.shaderProgram.attach(vs);
-		triangle.shaderProgram.attach(fs);
-		triangle.shaderProgram.link();
-		vs.deleteShader();
-		fs.deleteShader();
+		Drawable triangle = Drawable::makeTriStrip(myzWin, vertices);
 
 		myzWin->renderer.drawables.push_back(triangle);
 	}

@@ -19,6 +19,7 @@ class Window;
  *
  * Prefixes are as follow:
  * **D_** is used for drawing requests, such as drawing a triangle.
+ * **
  */
 enum RenderRequestType {
 	D_LINE, D_TRI, D_QUAD,

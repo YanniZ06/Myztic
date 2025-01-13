@@ -25,6 +25,7 @@ struct LayoutDescription {
 };
 
 class ShaderInputLayout {
+    friend class Drawable;
 public:
     ShaderInputLayout(LayoutDescription description);
     ShaderInputLayout() = default;
