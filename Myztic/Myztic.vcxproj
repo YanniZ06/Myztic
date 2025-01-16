@@ -78,11 +78,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)glm;$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)glm;$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(SolutionDir)libs\AL\includes;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)glm;$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)glm;$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(SolutionDir)libs\AL\includes;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -99,6 +99,13 @@
       </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)libs\AL\x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>xcopy $(SolutionDir)libs\AL\x32\soft_oal.dll $(OutputDir) /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -119,6 +126,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)libs\AL\x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>xcopy $(SolutionDir)libs\AL\x32\soft_oal.dll $(OutputDir) /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -137,14 +151,17 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies);OpenAL32.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)libs\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)libs\SDL2\lib\x64;$(SolutionDir)libs\AL\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <Lib>
       <SubSystem>Console</SubSystem>
     </Lib>
+    <PostBuildEvent>
+      <Command>xcopy $(SolutionDir)libs\AL\x64\soft_oal.dll $(OutputDir) /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -167,9 +184,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)libs\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies);OpenAL32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)libs\SDL2\lib\x64;$(SolutionDir)libs\AL\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>xcopy $(SolutionDir)libs\AL\x64\soft_oal.dll $(OutputDir) /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\display\WinThread.h" />
