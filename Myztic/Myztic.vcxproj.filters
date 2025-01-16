@@ -96,6 +96,9 @@
     <ClInclude Include="include\utilities\IDGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

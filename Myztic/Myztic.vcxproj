@@ -183,6 +183,7 @@
     <ClInclude Include="include\graphics\Drawable.h" />
     <ClInclude Include="include\graphics\Renderer.h" />
     <ClInclude Include="include\graphics\backend\Texture2D.hpp" />
+    <ClInclude Include="include\Sprite.h" />
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\stb_image.h" />
