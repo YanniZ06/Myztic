@@ -36,8 +36,6 @@ void Renderer::drawRay(glm::vec3 p1, glm::vec3 p2)
 
 // This is the full renderer logic per Window that is used in Application's render phase
 
-std::vector<Drawable> persist_drawables = std::vector<Drawable>();
-
 void Renderer::startRender() {
 	if (!targetWin->focused() && !targetWin->renderOutOfFocus) {
 		pendingRequests.clear(); //? Maybe not a smart idea, gotta make sure we have sort of 2 render queues, especially for the double buffering shittamajig
@@ -49,7 +47,8 @@ void Renderer::startRender() {
 	glClearColor(0.7f, 0.2f, 0.6f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	persist_drawables.clear();
+	std::vector<Drawable> persist_drawables = std::vector<Drawable>();
+
 	for (Drawable d : drawables) {
 		d.prepareDraw();
 		if (!d.usesEBO) {

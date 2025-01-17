@@ -104,7 +104,7 @@
       <AdditionalDependencies>OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)libs\AL\x32\soft_oal.dll $(OutputDir) /y</Command>
+      <Command>xcopy "$(SolutionDir)libs\AL\x32\soft_oal.dll" "$(OutputPath)" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,7 +131,7 @@
       <AdditionalDependencies>OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)libs\AL\x32\soft_oal.dll $(OutputDir) /y</Command>
+      <Command>xcopy "$(SolutionDir)libs\AL\x32\soft_oal.dll" "$(OutputPath)" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -160,7 +160,7 @@
       <SubSystem>Console</SubSystem>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)libs\AL\x64\soft_oal.dll $(OutputDir) /y</Command>
+      <Command>xcopy "$(SolutionDir)libs\AL\x64\soft_oal.dll" "$(OutputPath)" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -188,7 +188,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)libs\SDL2\lib\x64;$(SolutionDir)libs\AL\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)libs\AL\x64\soft_oal.dll $(OutputDir) /y</Command>
+      <Command>xcopy "$(SolutionDir)libs\AL\x64\soft_oal.dll" "$(OutputPath)" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -203,7 +203,6 @@
     <ClInclude Include="include\graphics\Drawable.h" />
     <ClInclude Include="include\graphics\Renderer.h" />
     <ClInclude Include="include\graphics\backend\Texture2D.hpp" />
-    <ClInclude Include="include\Sprite.h" />
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\stb_image.h" />
