@@ -47,8 +47,6 @@ void Renderer::startRender() {
 	glClearColor(0.7f, 0.2f, 0.6f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	std::vector<Drawable> persist_drawables = std::vector<Drawable>();
-
 	for (Drawable d : drawables) {
 		d.prepareDraw();
 		if (!d.usesEBO) {
@@ -58,9 +56,7 @@ void Renderer::startRender() {
 			CHECK_GL(glDrawElements(d.vert_type, d.vert_indices.size(), GL_UNSIGNED_INT, NULL));
 		}
 		d.finishDraw();
-		if (d.persist) persist_drawables.push_back(d); // ?
 	}
-	drawables = persist_drawables; // ?
 }
 
 void Renderer::endRender() {
