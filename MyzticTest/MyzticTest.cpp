@@ -9,6 +9,8 @@
 #include <display/Window.h>
 #include <Scene.h>
 
+#include <Audio.h>
+
 // Graphics (remove when porting)
 #include <graphics/backend/Shader.h>
 #include <graphics/backend/ShaderInputLayout.h>
@@ -54,6 +56,8 @@ class TestScene : Scene {
 		std::cout << "Loaded to Window: " << callerWindow->name().c_str() << "\n";
 	}
 	virtual void enter() {
+		Audio::initialize();
+
 		Window* myzWin = Application::windows[this->loadedWin->id()];
 		std::cout << myzWin->name() << "\n";
 		myzWin->setName("WINDOW 1");

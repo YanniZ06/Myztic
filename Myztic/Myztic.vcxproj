@@ -104,7 +104,7 @@
       <AdditionalDependencies>OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)libs\AL\x32\soft_oal.dll" "$(OutputPath)" /y</Command>
+      <Command>xcopy "$(SolutionDir)libs\AL\x32\OpenAL32.dll" "$(OutputPath)" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,7 +131,7 @@
       <AdditionalDependencies>OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)libs\AL\x32\soft_oal.dll" "$(OutputPath)" /y</Command>
+      <Command>xcopy "$(SolutionDir)libs\AL\x32\OpenAL32.dll" "$(OutputPath)" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -160,7 +160,7 @@
       <SubSystem>Console</SubSystem>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)libs\AL\x64\soft_oal.dll" "$(OutputPath)" /y</Command>
+      <Command>xcopy "$(SolutionDir)libs\AL\x64\OpenAL32.dll" "$(OutputPath)" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -188,11 +188,12 @@
       <AdditionalLibraryDirectories>$(SolutionDir)libs\SDL2\lib\x64;$(SolutionDir)libs\AL\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)libs\AL\x64\soft_oal.dll" "$(OutputPath)" /y</Command>
+      <Command>xcopy "$(SolutionDir)libs\AL\x64\OpenAL32.dll" "$(OutputPath)" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\audio\backend\ALExt.h" />
+    <ClInclude Include="include\audio\Microphone.h" />
     <ClInclude Include="include\audio\PlaybackDevice.h" />
     <ClInclude Include="include\display\WinThread.h" />
     <ClInclude Include="include\ErrorHandler.hpp" />
@@ -229,6 +230,7 @@
     <ClCompile Include="cpp\Scene.cpp" />
     <ClCompile Include="cpp\Timer.cpp" />
     <ClCompile Include="cpp\Util.cpp" />
+    <ClCompile Include="cpp\Audio.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
