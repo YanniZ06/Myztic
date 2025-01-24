@@ -28,17 +28,11 @@
     <Filter Include="Source Files\graphics\backend">
       <UniqueIdentifier>{458282ac-13e0-4839-863a-2b1cb34cb698}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\graphics\frontend">
-      <UniqueIdentifier>{6e7935c4-b6ec-4ed0-90bd-63a71a1ea80f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\audio">
       <UniqueIdentifier>{75c3f7c6-dcda-4f0b-82e8-e61e3e8fcfa6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\audio\backend">
       <UniqueIdentifier>{41d68f86-4f06-46d0-8ddc-972ef29048d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\audio\frontend">
-      <UniqueIdentifier>{a754d0f6-8853-4035-af1d-65b7db620b37}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\display">
       <UniqueIdentifier>{20766a37-76ad-4b1f-bb75-37bd177e273a}</UniqueIdentifier>
@@ -99,12 +93,6 @@
     <ClInclude Include="include\utilities\IDGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\graphics\Drawable.h">
-      <Filter>Header Files\graphics\frontend</Filter>
-    </ClInclude>
-    <ClInclude Include="include\graphics\Renderer.h">
-      <Filter>Header Files\graphics\frontend</Filter>
-    </ClInclude>
     <ClInclude Include="include\graphics\backend\Texture2D.hpp">
       <Filter>Header Files\graphics\backend</Filter>
     </ClInclude>
@@ -117,20 +105,26 @@
     <ClInclude Include="include\audio\backend\ALExt.h">
       <Filter>Header Files\audio\backend</Filter>
     </ClInclude>
-    <ClInclude Include="include\Audio.h">
-      <Filter>Header Files\audio\frontend</Filter>
-    </ClInclude>
-    <ClInclude Include="include\audio\Microphone.h">
-      <Filter>Header Files\audio\frontend</Filter>
-    </ClInclude>
-    <ClInclude Include="include\audio\PlaybackDevice.h">
-      <Filter>Header Files\audio\backend</Filter>
-    </ClInclude>
     <ClInclude Include="include\graphics\backend\ShaderProgram.h">
       <Filter>Header Files\graphics\backend</Filter>
     </ClInclude>
     <ClInclude Include="include\display\WinThread.h">
       <Filter>Header Files\display</Filter>
+    </ClInclude>
+    <ClInclude Include="include\audio\PlaybackDevice.h">
+      <Filter>Header Files\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\audio\Microphone.h">
+      <Filter>Header Files\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\Drawable.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\Renderer.h">
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

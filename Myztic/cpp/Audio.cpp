@@ -5,8 +5,13 @@
 #include <string>
 #include <iostream>
 
+#include <stdexcept>
+
 
 #include "Audio.h"
+
+std::vector<const char*> Audio::pbdList;
+std::vector<const char*> Audio::micList;
 
 void Audio::initialize()
 {
@@ -57,13 +62,18 @@ void Audio::initialize()
 	int PATCH_VER = versionNums[2];
 	if (driverName != "ALSOFT" || MINOR_VER < 24 || (MINOR_VER == 24 && PATCH_VER < 2)) {
 		std::string errMsg = std::string("Myztic Audio failed to initialize! You must have OpenAL Soft installed and use 1.24.2 minimum.\nDriver in use: " + driverName + "\nMINOR.PATCH: " + std::to_string(MINOR_VER) + "." + std::to_string(PATCH_VER));
-
-		throw errMsg.c_str(); // todo: figure out why crash doesnt throw this but instead just complains about disfunctional string ??? 
+		
+		throw std::runtime_error(errMsg.c_str()); // todo: make crash function that displays a text window to the user
 	}
 
 	//std::string yes = std::string("Initialized Myztic Audio.\nDriver in use: " + driverName + "\nMINOR.PATCH: " + std::to_string(MINOR_VER) + "." + std::to_string(PATCH_VER) + "\n");
 	//std::cout << yes.c_str();
 
+	pbdList = std::vector<const char*>();
+	micList = std::vector<const char*>();
+
+	const char* deviceList = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
+	std::cout << deviceList << "\n";
 	// todo: setup PlayBackDevice list aswell as InputDevice list (strings that can be passed into Audio:: functions to open them, to then open contexts on them or record or whatnot)
 
 	// Close temporary context and device
