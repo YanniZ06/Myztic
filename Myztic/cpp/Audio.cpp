@@ -60,8 +60,9 @@ void Audio::initialize()
 
 		throw errMsg.c_str(); // todo: figure out why crash doesnt throw this but instead just complains about disfunctional string ??? 
 	}
-	// std::string yes = std::string("Initialized Myztic Audio.\nDriver in use: " + driverName + "\nMINOR.PATCH: " + std::to_string(MINOR_VER) + "." + std::to_string(PATCH_VER) + "\n");
-	// std::cout << yes.c_str();
+
+	//std::string yes = std::string("Initialized Myztic Audio.\nDriver in use: " + driverName + "\nMINOR.PATCH: " + std::to_string(MINOR_VER) + "." + std::to_string(PATCH_VER) + "\n");
+	//std::cout << yes.c_str();
 
 	// todo: setup PlayBackDevice list aswell as InputDevice list (strings that can be passed into Audio:: functions to open them, to then open contexts on them or record or whatnot)
 

@@ -25,20 +25,21 @@ class Drawable {
 	friend class Renderer;
 public:
 	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties);
-	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties, std::vector<GLfloat>& vertData);
+	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties, std::vector<Vertex>& vertData);
 	~Drawable();
 
 	//? raw pixel data, this isnt thought out much yet, will do with ziad
+	//? hello this is ziad, this should ONLYY be available when GL_DYNAMIC_DRAW is input.
 	void* pixelData = nullptr;
 	//! PixelsType pixelInfo;
 
 	/// Vertices for our drawable
-	std::vector<GLfloat> verts;
+	std::vector<Vertex> verts;
 	/// The type of primitive a set of vertices represents -- must be a value accepted by glDrawElements as its first parameter
 	int vert_type = GL_TRIANGLES;
-	/// Vertice-specific indices for EBO usage -- requires a useEBO() call to initialize.
+	/// Vertex-specific indices for EBO usage -- requires a useEBO() call to initialize.
 	std::vector<GLuint> vert_indices;
-	bool usesEBO = false;;
+	bool usesEBO = false;
 
 	/// The vertex buffer object used for OpenGL draw calls.
 	VBO vbo;
@@ -51,7 +52,7 @@ public:
 
 	/// Inlined, toggles EBO usage [currently only toggles on]
 	void useEBO();
-	static Drawable makeTriStrip(Window* drawerWin, std::vector<GLfloat>& verts);
+	static Drawable makeQuad(Window* drawerWin, std::vector<InputProperty>& inputProperties, std::vector<Vertex>& verts);
 
 	// ???
 	/// Should persist in the queued drawables list in the renderer after the frame has been drawn or should be taken off the list.

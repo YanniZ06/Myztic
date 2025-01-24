@@ -79,17 +79,16 @@ class TestScene : Scene {
 		
 		// This batch of code should be in renderer actually, manual renderer handling is frowned upon for what we are doing but itll do to TEST
 		//inputlayout is bound in Drawable.
-	
-
-		std::vector<GLfloat> vertices = {
-			0.5, 0.5, 0.0,
-			0.5, -0.5, 0.0,
-			-0.5, 0.5, 0.0,
-			-0.5, -0.5, 0.0
+		std::vector<Vertex> vertices = {
+			{glm::vec3(0.5, 0.5, 0.0), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)},
+			{glm::vec3(0.5, -0.5, 0.0), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)},
+			{glm::vec3(-0.5, -0.5, 0.0), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)},
+			{glm::vec3(-0.5, 0.5, 0.0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)}
 		};
-		Drawable triangle = Drawable::makeTriStrip(myzWin, vertices);
+		unsigned long long s = sizeof(Vertex);
+		std::vector<InputProperty> inputs = { ShaderInputLayout::POSITION, ShaderInputLayout::COLOR };
 
-		myzWin->renderer.drawables.push_back(triangle);
+		myzWin->renderer.drawables.push_back(Drawable::makeQuad(myzWin, inputs, vertices));
 	}
 
 	virtual void update(float dt) {

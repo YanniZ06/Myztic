@@ -5,8 +5,8 @@
 // -9 pointer offset?? really????? | nvm it changed nothing
 
 InputProperty ShaderInputLayout::POSITION = { Position, 3, GL_FLOAT, 0, sizeof(GLfloat) };
-InputProperty ShaderInputLayout::COLOR = { Color, 3, GL_FLOAT, 0, sizeof(GLfloat) };
-InputProperty ShaderInputLayout::TEXCOORD = { TextureCoordinate, 3, GL_FLOAT, 0, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::COLOR = { Color, 4, GL_FLOAT, 0, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::TEXCOORD = { TextureCoordinate, 2, GL_FLOAT, 0, sizeof(GLfloat) };
 InputProperty ShaderInputLayout::NORMAL = { Normal, 3, GL_FLOAT, 0, sizeof(GLfloat) };
 
 ShaderInputLayout::ShaderInputLayout(LayoutDescription description) {

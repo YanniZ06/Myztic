@@ -138,7 +138,10 @@
     </Link>
     <PreBuildEvent>
       <Command>copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(OutDir)" /y /b
-copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(SolutionDir)" /y /b</Command>
+copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(SolutionDir)" /y /b
+copy "$(SolutionDir)..\Myztic\OpenAL32"$(SolutionDir)" /y /b
+copy "$(SolutionDir)..\Myztic\OpenAL32.dll" "$(OutDir)" /y /b
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -161,7 +164,10 @@ copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(SolutionDir)" /y /b</Command>
     </Link>
     <PreBuildEvent>
       <Command>copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(OutDir)" /y /b
-copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(SolutionDir)" /y /b</Command>
+copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(SolutionDir)" /y /b
+copy "$(SolutionDir)..\Myztic\OpenAL32"$(SolutionDir)" /y /b
+copy "$(SolutionDir)..\Myztic\OpenAL32.dll" "$(OutDir)" /y /b
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
