@@ -69,11 +69,20 @@ void Audio::initialize()
 	//std::string yes = std::string("Initialized Myztic Audio.\nDriver in use: " + driverName + "\nMINOR.PATCH: " + std::to_string(MINOR_VER) + "." + std::to_string(PATCH_VER) + "\n");
 	//std::cout << yes.c_str();
 
+	// OpenAL Soft version is supported, next fill the available devices lists
 	pbdList = std::vector<const char*>();
 	micList = std::vector<const char*>();
 
-	const char* deviceList = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
-	std::cout << deviceList << "\n";
+	const char* deviceListRaw = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
+
+	// Get all devices which are separated by a null character. The string is terminated by two null characters.
+	while (strlen(deviceListRaw) > 0) {
+		pbdList.push_back(deviceListRaw);
+		deviceListRaw += strlen(deviceListRaw) + 1;
+	}
+
+
+
 	// todo: setup PlayBackDevice list aswell as InputDevice list (strings that can be passed into Audio:: functions to open them, to then open contexts on them or record or whatnot)
 
 	// Close temporary context and device
