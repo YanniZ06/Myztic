@@ -11,9 +11,13 @@ enum InputPropertyType {
 };
 
 struct InputProperty {
+    //semantic type
     InputPropertyType type;
+    //as in how many elements this InputProperty
     GLint size;
+    //as in GL_FLOAT for example
     GLenum glType;
+    //calculated automatically
     GLint pointerOffset;
     //aka: sizeof(GLfloat), for example
     unsigned long long sizeOfType;

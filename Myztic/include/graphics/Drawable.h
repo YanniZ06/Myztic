@@ -8,6 +8,7 @@
 #include <graphics/backend/EBO.hpp>
 
 #include <glad.h>
+#include <graphics\Vertex.h>
 //#include <graphics/Renderer.h>
 
 class Window;
@@ -25,7 +26,7 @@ class Drawable {
 	friend class Renderer;
 public:
 	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties);
-	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties, std::vector<Vertex>& vertData);
+	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties, VertexBuffer& vertData);
 	~Drawable();
 
 	//? raw pixel data, this isnt thought out much yet, will do with ziad
@@ -34,7 +35,7 @@ public:
 	//! PixelsType pixelInfo;
 
 	/// Vertices for our drawable
-	std::vector<Vertex> verts;
+	VertexBuffer vertexData = VertexBuffer(VertexLayout{}.Append(VertexLayout::Position3D));
 	/// The type of primitive a set of vertices represents -- must be a value accepted by glDrawElements as its first parameter
 	int vert_type = GL_TRIANGLES;
 	/// Vertex-specific indices for EBO usage -- requires a useEBO() call to initialize.
@@ -52,7 +53,7 @@ public:
 
 	/// Inlined, toggles EBO usage [currently only toggles on]
 	void useEBO();
-	static Drawable makeQuad(Window* drawerWin, std::vector<InputProperty>& inputProperties, std::vector<Vertex>& verts);
+	static Drawable makeQuad(Window* drawerWin, VertexBuffer& verts);
 
 	// ???
 	/// Should persist in the queued drawables list in the renderer after the frame has been drawn or should be taken off the list.
@@ -67,12 +68,6 @@ protected:
 	void prepareDraw();
 	void finishDraw();
 };
-
-/*
-inline VAO* Drawable::getVAO() {
-	return &inputLayout.attachedVAO;
-}
-*/
 
 // todo: logic to untoggle 
 inline void Drawable::useEBO() {

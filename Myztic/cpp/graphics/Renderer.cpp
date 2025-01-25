@@ -51,7 +51,7 @@ void Renderer::startRender() {
 	for (Drawable d : drawables) {
 		d.prepareDraw();
 		if (!d.usesEBO) {
-			CHECK_GL(glDrawArrays(d.vert_type, 0, d.verts.size()))
+			CHECK_GL(glDrawArrays(d.vert_type, 0, d.vertexData.Size()))
 		}
 		else {
 			CHECK_GL(glDrawElements(d.vert_type, d.vert_indices.size(), GL_UNSIGNED_INT, NULL));

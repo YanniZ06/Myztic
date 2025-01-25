@@ -218,7 +218,7 @@
     <ClInclude Include="include\graphics\backend\VAO.hpp" />
     <ClInclude Include="include\graphics\backend\ShaderInputLayout.h" />
     <ClInclude Include="include\graphics\backend\Shader.h" />
-    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="include\graphics\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp\Application.cpp" />

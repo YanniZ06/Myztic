@@ -4,7 +4,7 @@
 #include <array>
 #include <graphics\backend\ShaderInputLayout.h>
 #include <glm.hpp>
-#include <Vertex.h>
+#include <graphics\Vertex.h>
 
 class VBO {
 public:
@@ -70,18 +70,18 @@ public:
 	/*
 	* Fills the vertex buffer with information
 	* 
-	* \param vertices The array of vertices/elements to fill the vertex buffer
+	* \param data The data to input into the vertex buffer
 	* \param arrayLength The length of the array of elements to fill the vertex buffer
 	* \param drawType The drawing method the renderer should use, should use GL_STATIC_DRAW if you aren't gonna modify the vertices and use GL_DYNAMIC_DRAW if you will.
 	*/
-	inline void fill(Vertex* vertices, int arrayLength, GLenum drawType) {
+	inline void fill(void* data, int arrayLength, GLenum drawType) {
 		int buf;
 		glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &buf);
 
 		if (buf != vbo)
 			printf("[[WARNING]]: TRYING TO MODIFY CURRENTLY BOUND VERTEX BUFFER: %i FROM A NOT BOUND BUFFER CLASS: %u\n", buf, vbo);
 	
-		CHECK_GL(glBufferData(GL_ARRAY_BUFFER, arrayLength, (void*)vertices, drawType));
+		CHECK_GL(glBufferData(GL_ARRAY_BUFFER, arrayLength, data, drawType));
 	};
 private:
 	GLuint vbo;

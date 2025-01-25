@@ -18,7 +18,7 @@
 #include <thread>
 #include <semaphore>
 
-#include <graphics\Drawable.h>
+#include <graphics\Vertex.h>
 
 class SceneB : Scene {
 	virtual void load(Window* callerWindow) {
@@ -79,16 +79,23 @@ class TestScene : Scene {
 		
 		// This batch of code should be in renderer actually, manual renderer handling is frowned upon for what we are doing but itll do to TEST
 		//inputlayout is bound in Drawable.
-		std::vector<Vertex> vertices = {
-			{glm::vec3(0.5, 0.5, 0.0), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)},
-			{glm::vec3(0.5, -0.5, 0.0), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)},
-			{glm::vec3(-0.5, -0.5, 0.0), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)},
-			{glm::vec3(-0.5, 0.5, 0.0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)}
+		struct Vertex {
+			glm::vec3 pos;
+			glm::vec4 col;
 		};
-		unsigned long long s = sizeof(Vertex);
-		std::vector<InputProperty> inputs = { ShaderInputLayout::POSITION, ShaderInputLayout::COLOR };
+		std::vector<Vertex> vertices = {
+			{{0.5, 0.5, 0.0}, {1.0f, 0.0f, 0.0f, 1.0f}},
+			{{0.5, -0.5, 0.0}, {0.0f, 1.0f, 0.0f, 1.0f}},
+			{{-0.5, -0.5, 0.0 }, {0.0f, 0.0f, 1.0f, 1.0f}},
+			{{-0.5, 0.5, 0.0}, {1.0f, 1.0f, 1.0f, 1.0f}}
+		};
 
-		myzWin->renderer.drawables.push_back(Drawable::makeQuad(myzWin, inputs, vertices));
+		VertexBuffer buf(std::move(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Float4Color)));
+		for (int i = 0; i < vertices.size(); i++) {
+			buf.EmplaceBack(vertices[i].pos, vertices[i].col);
+		}
+
+		myzWin->renderer.drawables.push_back(Drawable::makeQuad(myzWin, buf));
 	}
 
 	virtual void update(float dt) {

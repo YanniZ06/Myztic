@@ -4,15 +4,15 @@
 Drawable::Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties) {
 	this->drawTarget = drawerWin;
 	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(inputProperties));
-	verts = std::vector<Vertex>();
+	vertexData = VertexBuffer(std::move(VertexLayout{}.Append(VertexLayout::Position3D)));
 	this->vbo = VBO::make();
 }
 
-Drawable::Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties, std::vector<Vertex>& vertData) {
+Drawable::Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties, VertexBuffer& vertData) {
 	this->drawTarget = drawerWin;
 	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(inputProperties));
 	//copy operation, safe to get rid of the original variable.
-	verts = vertData;
+	vertexData = vertData;
 	this->vbo = VBO::make();
 }
 
@@ -20,16 +20,13 @@ Drawable::~Drawable() {
 	drawTarget = nullptr;
 }
 
-Drawable Drawable::makeQuad(Window* drawer_win, std::vector<InputProperty>& inputProperties, std::vector<Vertex>& verts) {
-	Drawable obj = Drawable(drawer_win, inputProperties, verts);
+Drawable Drawable::makeQuad(Window* drawer_win, VertexBuffer& verts) {
+	std::vector<InputProperty> ips = verts.GetLayout().GetDescription().inputProperties;
+	Drawable obj = Drawable(drawer_win, ips, verts);
 	obj.vert_type = GL_TRIANGLES;
 	obj.vbo.bind();
-	unsigned long long actualSize = 0;
-	for (int i = 0; i < inputProperties.size(); i++) {
-		actualSize += (inputProperties[i].sizeOfType * inputProperties[i].size);
-	};
 	//reconsider this especially for GL_STATIC_DRAW.
-	obj.vbo.fill(verts.data(), actualSize * verts.size(), GL_STATIC_DRAW);
+	obj.vbo.fill((void*)verts.GetData(), verts.SizeBytes(), GL_STATIC_DRAW);
 
 	obj.inputLayout.setVertexLayout();
 	obj.inputLayout.enableAllAttribs();
