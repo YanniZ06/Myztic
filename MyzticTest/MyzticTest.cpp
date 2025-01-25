@@ -19,6 +19,7 @@
 #include <semaphore>
 
 #include <graphics\Vertex.h>
+#include <graphics\Sprite.h>
 
 class SceneB : Scene {
 	virtual void load(Window* callerWindow) {
@@ -82,20 +83,21 @@ class TestScene : Scene {
 		struct Vertex {
 			glm::vec3 pos;
 			glm::vec4 col;
+			glm::vec2 uv;
 		};
 		std::vector<Vertex> vertices = {
-			{{0.5, 0.5, 0.0}, {1.0f, 0.0f, 0.0f, 1.0f}},
-			{{0.5, -0.5, 0.0}, {0.0f, 1.0f, 0.0f, 1.0f}},
-			{{-0.5, -0.5, 0.0 }, {0.0f, 0.0f, 1.0f, 1.0f}},
-			{{-0.5, 0.5, 0.0}, {1.0f, 1.0f, 1.0f, 1.0f}}
+			{{0.5, 0.5, 0.0}, {1.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+			{{0.5, -0.5, 0.0}, {0.0f, 1.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
+			{{-0.5, -0.5, 0.0 }, {0.0f, 0.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
+			{{-0.5, 0.5, 0.0}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
 		};
 
-		VertexBuffer buf(std::move(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Float4Color)));
+		VertexBuffer buf(std::move(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Float4Color).Append(VertexLayout::Texture2D)));
 		for (int i = 0; i < vertices.size(); i++) {
-			buf.EmplaceBack(vertices[i].pos, vertices[i].col);
+			buf.EmplaceBack(vertices[i].pos, vertices[i].col, vertices[i].uv);
 		}
 
-		myzWin->renderer.drawables.push_back(Drawable::makeQuad(myzWin, buf));
+		myzWin->renderer.drawables.push_back(Sprite(myzWin, buf, "assets/textures/yanni.png"));
 	}
 
 	virtual void update(float dt) {

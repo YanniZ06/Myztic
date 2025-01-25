@@ -26,7 +26,7 @@ class Drawable {
 	friend class Renderer;
 public:
 	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties);
-	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties, VertexBuffer& vertData);
+	Drawable(Window* drawerWin, VertexBuffer& vertData);
 	~Drawable();
 
 	//? raw pixel data, this isnt thought out much yet, will do with ziad
@@ -65,8 +65,8 @@ protected:
 	/// Inlined, retrieves the VAO from the inputLayout
 	// VAO* getVAO();
 	// THIS IS A TEMPORARY SOLUTION, WILL ADAPT OUR DRAWING PRINCIPLE SOON 
-	void prepareDraw();
-	void finishDraw();
+	virtual void prepareDraw();
+	virtual void finishDraw();
 };
 
 // todo: logic to untoggle 

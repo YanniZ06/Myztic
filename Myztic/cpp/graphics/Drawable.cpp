@@ -8,9 +8,10 @@ Drawable::Drawable(Window* drawerWin, std::vector<InputProperty>& inputPropertie
 	this->vbo = VBO::make();
 }
 
-Drawable::Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties, VertexBuffer& vertData) {
+Drawable::Drawable(Window* drawerWin, VertexBuffer& vertData) {
 	this->drawTarget = drawerWin;
-	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(inputProperties));
+	std::vector<InputProperty> ips = vertData.GetLayout().GetDescription().inputProperties;
+	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(ips));
 	//copy operation, safe to get rid of the original variable.
 	vertexData = vertData;
 	this->vbo = VBO::make();
@@ -22,7 +23,7 @@ Drawable::~Drawable() {
 
 Drawable Drawable::makeQuad(Window* drawer_win, VertexBuffer& verts) {
 	std::vector<InputProperty> ips = verts.GetLayout().GetDescription().inputProperties;
-	Drawable obj = Drawable(drawer_win, ips, verts);
+	Drawable obj = Drawable(drawer_win, verts);
 	obj.vert_type = GL_TRIANGLES;
 	obj.vbo.bind();
 	//reconsider this especially for GL_STATIC_DRAW.

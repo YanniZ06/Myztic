@@ -45,19 +45,24 @@ void Renderer::startRender() {
 	if (SDL_GL_MakeCurrent(targetWin->handle, targetWin->context) != 0)
 		std::cout << "whoopsie daisy, couldn't make current opengl context to window: " << targetWin->name().c_str() << "\n";
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
 	glClearColor(0.7f, 0.2f, 0.6f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	for (Drawable d : drawables) {
 		d.prepareDraw();
 		if (!d.usesEBO) {
-			CHECK_GL(glDrawArrays(d.vert_type, 0, d.vertexData.Size()))
+			CHECK_GL(glDrawArrays(d.vert_type, 0, d.vertexData.Size()));
 		}
 		else {
 			CHECK_GL(glDrawElements(d.vert_type, d.vert_indices.size(), GL_UNSIGNED_INT, NULL));
 		}
 		d.finishDraw();
 	}
+
+	glDisable(GL_BLEND);
 }
 
 void Renderer::endRender() {
