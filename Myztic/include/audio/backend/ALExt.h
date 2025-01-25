@@ -6,7 +6,8 @@
 #include <alext.h>
 class ALExt {
 public:
-	static void initDeviceClock();
+    static void initAllEXT(ALCdevice* device);
+	static void initDeviceClock(ALCdevice* device);
 	static bool deviceClockAvailable(ALCdevice* device);
 	static LPALCGETINTEGER64VSOFT alcGetInteger64vSOFT;
 
@@ -45,15 +46,32 @@ public:
     static LPALGETAUXILIARYEFFECTSLOTIV alGetAuxiliaryEffectSlotiv;
     static LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf;
     static LPALGETAUXILIARYEFFECTSLOTFV alGetAuxiliaryEffectSlotfv;
+
+    static void initSysEvents(ALCdevice* device);
+    static LPALCEVENTISSUPPORTEDSOFT alcEventIsSupportedSOFT;
+    static LPALCEVENTCONTROLSOFT alcEventControlSOFT;
+    static LPALCEVENTCALLBACKSOFT alcEventCallbackSOFT;
 };
+
+inline void ALExt::initAllEXT(ALCdevice* device) {
+    initSysEvents(device);
+    initDeviceClock(device);
+    initEFX();
+}
+
+inline void ALExt::initSysEvents(ALCdevice* device) {
+    alcEventIsSupportedSOFT = (LPALCEVENTISSUPPORTEDSOFT)alcGetProcAddress(device, "alcEventIsSupportedSOFT");
+    alcEventControlSOFT = (LPALCEVENTCONTROLSOFT)alcGetProcAddress(device, "alcEventControlSOFT");
+    alcEventCallbackSOFT = (LPALCEVENTCALLBACKSOFT)alcGetProcAddress(device, "alcEventControlSOFT");
+}
 
 // Device Clock
 inline bool ALExt::deviceClockAvailable(ALCdevice* device) {
     return alcIsExtensionPresent(device, "ALC_SOFT_device_clock") == 1;
 }
 
-inline void ALExt::initDeviceClock() {
-    alcGetInteger64vSOFT = (LPALCGETINTEGER64VSOFT)alcGetProcAddress(nullptr, "alcGetInteger64vSOFT");
+inline void ALExt::initDeviceClock(ALCdevice* device) {
+    alcGetInteger64vSOFT = (LPALCGETINTEGER64VSOFT)alcGetProcAddress(device, "alcGetInteger64vSOFT");
 }
 
 // EFX

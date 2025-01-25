@@ -7,7 +7,7 @@
 
 #include <stdexcept>
 
-
+#include <audio/backend/ALExt.h>
 #include "Audio.h"
 
 std::vector<const char*> Audio::pbdList;
@@ -81,8 +81,20 @@ void Audio::initialize()
 		deviceListRaw += strlen(deviceListRaw) + 1;
 	}
 
+	const char* in_deviceListRaw = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
+	while (strlen(in_deviceListRaw) > 0) {
+		micList.push_back(in_deviceListRaw);
+		in_deviceListRaw += strlen(in_deviceListRaw) + 1;
+	}
 
+	// Load in all extensions
+	ALExt::initAllEXT(tempDevice);
 
+	// Setup system audio events here
+	// WIP 
+	// ALExt::alcEventIsSupportedSOFT(ALC_EVENT_TYPE_DEVICE_ADDED_SOFT, ALC_PLAYBACK_DEVICE_SOFT);
+
+	// basically finished 
 	// todo: setup PlayBackDevice list aswell as InputDevice list (strings that can be passed into Audio:: functions to open them, to then open contexts on them or record or whatnot)
 
 	// Close temporary context and device
