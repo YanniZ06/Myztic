@@ -37,7 +37,7 @@ Drawable Drawable::makeQuad(Window* drawer_win, VertexBuffer& verts) {
 	obj.vert_indices = std::vector<GLuint>({ 0, 1, 3, 1, 2, 3 });
 
 	obj.ebo.bind();
-	obj.ebo.fill(obj.vert_indices.data(), sizeof(GLuint) * obj.vert_indices.size(), GL_STATIC_DRAW);
+	obj.ebo.fill(obj.vert_indices.data(), sizeof(GLuint) * static_cast<GLint>(obj.vert_indices.size()), GL_STATIC_DRAW);
 
 	Shader vs = Shader(GL_VERTEX_SHADER, "assets/shaders/vs.glsl");
 	Shader fs = Shader(GL_FRAGMENT_SHADER, "assets/shaders/fs.glsl");

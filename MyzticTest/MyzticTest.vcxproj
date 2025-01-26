@@ -80,12 +80,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Myztic\libs\SDL2\include;$(ProjectDir)..\Myztic\include\;$(ProjectDir)..\Myztic\glad\;$(ProjectDir)..\Myztic\glm\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Myztic\libs\SDL2\include;$(ProjectDir)..\Myztic\include\;$(ProjectDir)..\Myztic\glad\;$(ProjectDir)..\Myztic\glm\;$(ProjectDir)..\Myztic\libs\AL\includes;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Myztic\libs\SDL2\include;$(ProjectDir)..\Myztic\include\;$(ProjectDir)..\Myztic\glad\;$(ProjectDir)..\Myztic\glm\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Myztic\libs\SDL2\include;$(ProjectDir)..\Myztic\include\;$(ProjectDir)..\Myztic\glad\;$(ProjectDir)..\Myztic\glm\;$(ProjectDir)..\Myztic\libs\AL\includes;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -132,14 +132,14 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)..\Myztic\x64\$(ConfigurationName)\Myztic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)..\Myztic\x64\$(ConfigurationName)\Myztic.lib;$(ProjectDir)..\Myztic\libs\AL\x64\OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
     <PreBuildEvent>
       <Command>copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(OutDir)" /y /b
 copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(SolutionDir)" /y /b
-copy "$(SolutionDir)..\Myztic\OpenAL32"$(SolutionDir)" /y /b
+copy "$(SolutionDir)..\Myztic\OpenAL32.dll" "$(SolutionDir)" /y /b
 copy "$(SolutionDir)..\Myztic\OpenAL32.dll" "$(OutDir)" /y /b
 </Command>
     </PreBuildEvent>
@@ -160,12 +160,12 @@ copy "$(SolutionDir)..\Myztic\OpenAL32.dll" "$(OutDir)" /y /b
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)..\Myztic\x64\$(ConfigurationName)\Myztic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)..\Myztic\x64\$(ConfigurationName)\Myztic.lib;$(ProjectDir)..\Myztic\libs\AL\x64\OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(OutDir)" /y /b
 copy "$(SolutionDir)..\Myztic\SDL2.dll" "$(SolutionDir)" /y /b
-copy "$(SolutionDir)..\Myztic\OpenAL32"$(SolutionDir)" /y /b
+copy "$(SolutionDir)..\Myztic\OpenAL32.dll" "$(SolutionDir)" /y /b
 copy "$(SolutionDir)..\Myztic\OpenAL32.dll" "$(OutDir)" /y /b
 </Command>
     </PreBuildEvent>

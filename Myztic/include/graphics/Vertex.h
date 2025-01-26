@@ -86,24 +86,24 @@ public:
 	class Element
 	{
 	public:
-		Element(ElementType type, size_t offset)
+		Element(ElementType type, GLint offset)
 			:
 			type(type),
 			offset(offset)
 		{}
-		size_t GetOffsetAfter() const noexcept
+		GLint GetOffsetAfter() const noexcept
 		{
 			return offset + Size();
 		}
-		size_t GetOffset() const
+		GLint GetOffset() const
 		{
 			return offset;
 		}
-		size_t Size() const noexcept
+		GLint Size() const noexcept
 		{
 			return SizeOf(type);
 		}
-		static constexpr size_t SizeOf(ElementType type)
+		static constexpr GLint SizeOf(ElementType type)
 		{
 			switch (type)
 			{
@@ -148,16 +148,17 @@ public:
 			case BGRAColor:
 				return GenerateLayout<BGRAColor>(GetOffset());
 			}
+			return {ShaderInputLayout::POSITION};
 		}
 	private:
 		template<ElementType type>
-		static constexpr InputProperty GenerateLayout(size_t offset)
+		static constexpr InputProperty GenerateLayout(GLint offset)
 		{
-			return { Map<type>::semantic, Map<type>::elementCount, Map<type>::glFormat, 0, Map<type>::sizeOfFormat };
+			return { Map<type>::semantic, Map<type>::elementCount, Map<type>::glFormat, offset, Map<type>::sizeOfFormat };
 		}
 	private:
 		ElementType type;
-		size_t offset;
+		GLint offset;
 	};
 public:
 	template<ElementType Type>
@@ -182,13 +183,13 @@ public:
 		elements.emplace_back(type, Size());
 		return *this;
 	}
-	size_t Size() const
+	GLint Size() const
 	{
-		return elements.empty() ? 0u : elements.back().GetOffsetAfter();
+		return static_cast<GLint>(elements.empty() ? 0u : elements.back().GetOffsetAfter());
 	}
-	size_t GetElementCount() const noexcept
+	GLint GetElementCount() const noexcept
 	{
-		return elements.size();
+		return static_cast<GLint>(elements.size());
 	}
 	LayoutDescription GetDescription() const
 	{
@@ -296,13 +297,13 @@ public:
 	{
 		return layout;
 	}
-	size_t Size() const
+	GLint Size() const
 	{
-		return buffer.size() / layout.Size();
+		return static_cast<GLint>(buffer.size() / layout.Size());
 	}
-	size_t SizeBytes() const
+	GLint SizeBytes() const
 	{
-		return buffer.size();
+		return static_cast<GLint>(buffer.size());
 	}
 	template<typename ...Params>
 	void EmplaceBack(Params&&... params)

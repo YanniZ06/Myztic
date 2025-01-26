@@ -8,7 +8,6 @@
 
 #include <display/Window.h>
 #include <Scene.h>
-
 #include <Audio.h>
 
 // Graphics (remove when porting)
@@ -96,7 +95,7 @@ class TestScene : Scene {
 		for (int i = 0; i < vertices.size(); i++) {
 			buf.EmplaceBack(vertices[i].pos, vertices[i].col, vertices[i].uv);
 		}
-
+		std::cout << buf.Size() << "\n";
 		myzWin->renderer.drawables.push_back(Sprite(myzWin, buf, "assets/textures/yanni.png"));
 	}
 

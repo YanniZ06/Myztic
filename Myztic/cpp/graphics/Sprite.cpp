@@ -3,6 +3,7 @@
 #include <graphics\Drawable.h>
 #include <display\Window.h>
 #include <graphics\Vertex.h>
+//this must only be called once and it must be in a source file not an hpp file like Texture2D
 #define STB_IMAGE_IMPLEMENTATION
 #include <graphics\Sprite.h>
 
