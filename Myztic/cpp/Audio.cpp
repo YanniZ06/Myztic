@@ -1,17 +1,16 @@
 #include "pch.h"
 
-#include <al.h>
-#include <alc.h>
 #include <string>
 #include <iostream>
 
 #include <stdexcept>
 
-#include <audio/backend/ALExt.h>
+#include <audio\backend\ALExt.h>
 #include <Audio.h>
 
 std::vector<const char*> Audio::pbdList;
 std::vector<const char*> Audio::micList;
+AUD::SystemEvents Audio::systemEvents;
 const char* Audio::defaultPbd;
 
 void Audio::initialize()
@@ -111,4 +110,20 @@ void Audio::initialize()
 	alcMakeContextCurrent(NULL);
 	alcDestroyContext(tempContext);
 	alcCloseDevice(tempDevice);
+}
+
+std::vector<const char*> Audio::getInputDevices() {
+	return Audio::micList;
+}
+
+void Audio::refreshDefaultPlaybackDevice() {
+	Audio::defaultPbd = alcGetString(NULL, ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
+}
+
+const char* Audio::getDefaultPlaybackDevice() {
+	return Audio::defaultPbd;
+}
+
+std::vector<const char*> Audio::getPlaybackDevices() {
+	return Audio::pbdList;
 }

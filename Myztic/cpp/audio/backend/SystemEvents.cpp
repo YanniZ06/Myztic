@@ -1,10 +1,10 @@
 #include "pch.h"
 
+#include <al.h>
 #include <audio\backend\SystemEvents.h>
-
-#include <audio/backend/ALExt.h>
 #include <iostream>
 #include <SDL.h>
+#include <alext.h>
 
 // todo: ?
 void ALC_APIENTRY openalEventCallback(ALCenum eventType, ALCenum deviceType, ALCdevice* device, ALCsizei length, const ALCchar* message, void* userParam) AL_API_NOEXCEPT17 {

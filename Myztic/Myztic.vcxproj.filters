@@ -150,9 +150,6 @@
     <ClInclude Include="include\events\EventTransmitter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cpp\audio\backend\ALExt.cpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -201,6 +198,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp\audio\backend\SystemEvents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\events\AudioEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\audio\backend\ALExt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

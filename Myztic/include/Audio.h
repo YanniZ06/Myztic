@@ -31,21 +31,3 @@ private:
 	/// List of available Microphone's
 	static std::vector<const char*> micList;
 };
-
-inline std::vector<const char*> Audio::getPlaybackDevices() {
-	return Audio::pbdList;
-}
-
-inline const char* Audio::getDefaultPlaybackDevice() {
-	return Audio::defaultPbd;
-}
-
-inline void Audio::refreshDefaultPlaybackDevice() {
-	Audio::defaultPbd = alcGetString(NULL, ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
-}
-
-inline std::vector<const char*> Audio::getInputDevices() {
-	return Audio::micList;
-}
-
-AUD::SystemEvents Audio::systemEvents;

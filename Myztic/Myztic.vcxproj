@@ -192,7 +192,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="cpp\audio\backend\ALExt.cpp" />
     <ClInclude Include="cpp\stb_image.h" />
     <ClInclude Include="include\audio\backend\ALExt.h" />
     <ClInclude Include="include\audio\backend\SystemEvents.h" />
@@ -229,9 +228,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp\Application.cpp" />
+    <ClCompile Include="cpp\audio\backend\ALExt.cpp" />
     <ClCompile Include="cpp\display\Fps.cpp" />
     <ClCompile Include="cpp\display\Window.cpp" />
     <ClCompile Include="cpp\display\WinThread.cpp" />
+    <ClCompile Include="cpp\events\AudioEvent.cpp" />
     <ClCompile Include="cpp\graphics\backend\ShaderProgram.cpp" />
     <ClCompile Include="cpp\graphics\Drawable.cpp" />
     <ClCompile Include="cpp\graphics\Renderer.cpp" />

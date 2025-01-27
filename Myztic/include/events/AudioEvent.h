@@ -3,7 +3,7 @@
 // Audio Events are more or less special, as they are not called by the EventTransmitter, but instead directly have their events transmitted when they're called
 #include <stdint.h>
 #include <utility>
-#include <audio/backend/ALExt.h>
+#include <alc.h>
 
 enum DeviceType {
 	PLAYBACK_DEVICE = 0,
@@ -19,15 +19,8 @@ template<typename ...Args>
 class BaseAudioEvent {
 	friend class Application;
 public:
-	inline void registerEvent(void (*callbackFunction)(Args...)) {
-		callback = callbackFunction;		
-		ALExt::alcEventControlSOFT(1, &eID, 1);
-	}
-
-	inline void unregisterEvent() {
-		callback = nullptr;
-		ALExt::alcEventControlSOFT(1, &eID, 0);
-	};
+	void registerEvent(void (*callbackFunction)(Args...));
+	void unregisterEvent();
 
 	void (*callback)(Args...); // Should work as protected (?????)
 protected:
@@ -90,16 +83,3 @@ public:
 	 */
 	DefaultDeviceChangedEvent();
 };
-
-#include <audio/backend/ALExt.h>
-inline DeviceAddedEvent::DeviceAddedEvent() {
-	eID = ALC_EVENT_TYPE_DEVICE_ADDED_SOFT;
-}
-
-inline DeviceLostEvent::DeviceLostEvent() {
-	eID = ALC_EVENT_TYPE_DEVICE_REMOVED_SOFT;
-}
-
-inline DefaultDeviceChangedEvent::DefaultDeviceChangedEvent() {
-	eID = ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT;
-}
