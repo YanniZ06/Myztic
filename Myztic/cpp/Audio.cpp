@@ -8,10 +8,11 @@
 #include <stdexcept>
 
 #include <audio/backend/ALExt.h>
-#include "Audio.h"
+#include <Audio.h>
 
 std::vector<const char*> Audio::pbdList;
 std::vector<const char*> Audio::micList;
+const char* Audio::defaultPbd;
 
 void Audio::initialize()
 {
@@ -74,25 +75,34 @@ void Audio::initialize()
 	micList = std::vector<const char*>();
 
 	const char* deviceListRaw = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
+	const char* in_deviceListRaw = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
 
-	// Get all devices which are separated by a null character. The string is terminated by two null characters.
 	while (strlen(deviceListRaw) > 0) {
 		pbdList.push_back(deviceListRaw);
 		deviceListRaw += strlen(deviceListRaw) + 1;
 	}
 
-	const char* in_deviceListRaw = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
 	while (strlen(in_deviceListRaw) > 0) {
 		micList.push_back(in_deviceListRaw);
 		in_deviceListRaw += strlen(in_deviceListRaw) + 1;
 	}
+	defaultPbd = alcGetString(NULL, ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
 
 	// Load in all extensions
 	ALExt::initAllEXT(tempDevice);
 
-	// Setup system audio events here
-	// WIP 
-	// ALExt::alcEventIsSupportedSOFT(ALC_EVENT_TYPE_DEVICE_ADDED_SOFT, ALC_PLAYBACK_DEVICE_SOFT);
+	// Setup system audio events 
+	Audio::systemEvents = AUD::SystemEvents();
+	Audio::systemEvents.supported = std::map<const char*, bool>{ 
+		// PlaybackDevice Events
+		{"new_PlaybackDevice", ALExt::alcEventIsSupportedSOFT(ALC_EVENT_TYPE_DEVICE_ADDED_SOFT, ALC_PLAYBACK_DEVICE_SOFT) == 1},
+		{"lost_PlaybackDevice", ALExt::alcEventIsSupportedSOFT(ALC_EVENT_TYPE_DEVICE_REMOVED_SOFT, ALC_PLAYBACK_DEVICE_SOFT) == 1},
+		{"changed_DefaultPlaybackDevice", ALExt::alcEventIsSupportedSOFT(ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT, ALC_PLAYBACK_DEVICE_SOFT) == 1},
+		// Microphone Events
+		{"new_Microphone", ALExt::alcEventIsSupportedSOFT(ALC_EVENT_TYPE_DEVICE_ADDED_SOFT, ALC_CAPTURE_DEVICE_SOFT) == 1},
+		{"lost_Microphone", ALExt::alcEventIsSupportedSOFT(ALC_EVENT_TYPE_DEVICE_REMOVED_SOFT, ALC_CAPTURE_DEVICE_SOFT) == 1},
+		{"changed_DefaultMicrophone", ALExt::alcEventIsSupportedSOFT(ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT, ALC_CAPTURE_DEVICE_SOFT) == 1}
+	};
 
 	// basically finished 
 	// todo: setup PlayBackDevice list aswell as InputDevice list (strings that can be passed into Audio:: functions to open them, to then open contexts on them or record or whatnot)

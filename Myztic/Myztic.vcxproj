@@ -192,8 +192,10 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="cpp\audio\backend\ALExt.cpp" />
     <ClInclude Include="cpp\stb_image.h" />
     <ClInclude Include="include\audio\backend\ALExt.h" />
+    <ClInclude Include="include\audio\backend\SystemEvents.h" />
     <ClInclude Include="include\audio\Microphone.h" />
     <ClInclude Include="include\audio\PlaybackDevice.h" />
     <ClInclude Include="include\display\WinThread.h" />
@@ -202,6 +204,9 @@
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\display\Window.h" />
     <ClInclude Include="include\display\Fps.h" />
+    <ClInclude Include="include\events\AudioEvent.h" />
+    <ClInclude Include="include\events\BaseEvent.h" />
+    <ClInclude Include="include\events\EventTransmitter.h" />
     <ClInclude Include="include\graphics\backend\EBO.hpp" />
     <ClInclude Include="include\graphics\backend\ShaderProgram.h" />
     <ClInclude Include="include\graphics\Drawable.h" />
@@ -235,6 +240,7 @@
     <ClCompile Include="cpp\Timer.cpp" />
     <ClCompile Include="cpp\Util.cpp" />
     <ClCompile Include="cpp\Audio.cpp" />
+    <ClCompile Include="cpp\audio\backend\SystemEvents.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

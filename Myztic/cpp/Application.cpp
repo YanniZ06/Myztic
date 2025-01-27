@@ -2,12 +2,16 @@
 #include "framework.h"
 
 #include <Application.h>
+#include <Audio.h>
+#include <events/EventTransmitter.h>
 #include <display/Window.h>
 #include <graphics/Renderer.h>
 #include <Scene.h>
 
 #include <SDL.h>
 #include <glad.h>
+#include <alext.h>
+
 
 #include <Timer.h>
 #include <ErrorHandler.hpp>
@@ -84,7 +88,7 @@ void Application::app_loop() {
 					break;
 				}
 
-				//todo: dispatch window events once an event system has been made
+				//todo: dispatch window events once an event system has been made (HAHAHAHAHAHAHAHAHAHAHHAHAH guess what)
 				switch (e.window.event) {
 				case SDL_WINDOWEVENT_CLOSE:
 					eWin->shouldClose = true;
@@ -105,9 +109,6 @@ void Application::app_loop() {
 					eWin->_focused = false;
 					break;
 				case SDL_WINDOWEVENT_RESIZED:
-					//TODO: handle resizing on renderer hahahah
-					//? ZIAD JESUS CHRIST I SAID ON RENDERER OH MY GODDDDD
-					//? !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ?
 					SDL_GL_MakeCurrent(eWin->handle, eWin->context);
 					CHECK_GL(glViewport(0, 0, e.window.data1, e.window.data2));
 					break;
@@ -120,6 +121,27 @@ void Application::app_loop() {
 			case SDL_QUIT:
 				shouldClose = true;
 				break;
+			case SDL_USEREVENT: 
+				if (e.user.type != Audio::systemEvents.OPENAL_SYSTEM_EVENT_SDLEVENTTYPE) break; // Queued OpenAL system event
+
+				switch ((int)e.user.data1) {
+				case ALC_EVENT_TYPE_DEVICE_ADDED_SOFT:
+					Audio::systemEvents.onDeviceAdded.callback((const char*)e.user.data2, (DeviceType)e.user.code); //? redefinition according to the linker??
+					// refresh playback list
+
+					break;
+				case ALC_EVENT_TYPE_DEVICE_REMOVED_SOFT:
+					// refresh playback list, potentially retarget device (if removed device was the current one)
+
+					break;
+				case ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT:
+					// transmit event prior to refresh, pass in Audio::getDefaultPlaybackDevice as first parameter, probably leave device retarget to programmer
+
+					Audio::refreshDefaultPlaybackDevice();
+				default:
+					break;
+				}
+
 			default:
 				break;
 			}
