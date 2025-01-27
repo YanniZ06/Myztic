@@ -206,5 +206,8 @@
     <ClCompile Include="cpp\audio\backend\ALExt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cpp\events\BaseEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

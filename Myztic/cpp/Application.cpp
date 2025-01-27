@@ -124,9 +124,10 @@ void Application::app_loop() {
 			case SDL_USEREVENT: 
 				if (e.user.type != Audio::systemEvents.OPENAL_SYSTEM_EVENT_SDLEVENTTYPE) break; // Queued OpenAL system event
 
-				switch ((int)e.user.data1) {
+				// To obtain event-related device names we increment the system message up until where the device name is mentioned
+				switch ((int)e.user.data1) { // todo: replace first arg of callback with affected device name (using offs
 				case ALC_EVENT_TYPE_DEVICE_ADDED_SOFT:
-					Audio::systemEvents.onDeviceAdded.callback((const char*)e.user.data2, (DeviceType)e.user.code); //? redefinition according to the linker??
+					Audio::systemEvents.onDeviceAdded.callback((const char*)e.user.data2, (DeviceType)e.user.code);
 					// refresh playback list
 
 					break;
@@ -134,10 +135,28 @@ void Application::app_loop() {
 					// refresh playback list, potentially retarget device (if removed device was the current one)
 
 					break;
-				case ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT:
+				case ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT: {
+					if ((DeviceType)e.user.code == PLAYBACK_DEVICE) {
+						const char* oldDeviceName = Audio::defaultPbd;
+						const char* newDeviceName = (const char*)e.user.data2 + 33;
+
+						//todo: maybe directly set defaultPbd using newDeviceName (if that is a proper device name)
+						//Audio::refreshDefaultPlaybackDevice();
+
+						Audio::systemEvents.onDefaultDeviceChanged.callback(oldDeviceName, newDeviceName, PLAYBACK_DEVICE);
+
+
+						break;
+					}
+
+					const char* oldDeviceName = Audio::defaultMic;
+					const char* newDeviceName = (const char*)e.user.data2 + 0; // todo: get offset
+
+					Audio::systemEvents.onDefaultDeviceChanged.callback(oldDeviceName, newDeviceName, PLAYBACK_DEVICE);
 					// transmit event prior to refresh, pass in Audio::getDefaultPlaybackDevice as first parameter, probably leave device retarget to programmer
 
-					Audio::refreshDefaultPlaybackDevice();
+					break;
+				}
 				default:
 					break;
 				}

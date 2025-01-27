@@ -20,12 +20,13 @@ class BaseAudioEvent {
 	friend class Application;
 public:
 	void registerEvent(void (*callbackFunction)(Args...));
+	void registerEmpty();
 	void unregisterEvent();
 
-	void (*callback)(Args...); // Should work as protected (?????)
 protected:
 	BaseAudioEvent() = default;
-
+	
+	void (*callback)(Args...); // Should work as protected (?????)
 	ALCenum eID = 0;
 };
 
@@ -34,7 +35,7 @@ protected:
  *
  *
  * Callback argument list for registerEvent():
- * * `const char * eventMessage` -- a string that holds information about the event
+ * * `const char * dName` -- name of the device that has become available
  * * `DeviceType dType` -- the `DeviceType` associated with this event
  *
  * \note Only to be used if `Audio::systemEvents.supported["new_PlaybackDevice" or "new_Microphone"]` returns true.
@@ -52,7 +53,7 @@ public:
  *
  *
  * Callback argument list for registerEvent():
- * * `const char * eventMessage` -- a string that holds information about the event
+ * * `const char * dName` -- name of the device that has been lost
  * * `DeviceType dType` -- the `DeviceType` associated with this event
  *
  * \note Only to be used if `Audio::systemEvents.supported["lost_PlaybackDevice" or "lost_Microphone"]` returns true.
@@ -70,8 +71,8 @@ public:
  * 
  * 
  * Callback argument list for registerEvent():
- * * `const char * oldDefaultDevice` -- the default device name prior to the event; will be unobtainable if the default de
- * * `const char * eventMessage` -- a string that holds information about the event
+ * * `const char * oldDefaultDevice` -- the default device name prior to the event;
+ * * `const char * newDefaultDevice` -- name of the new default device
  * * `DeviceType dType` -- the `DeviceType` associated with this event
  * 
  * \note Only to be used if `Audio::systemEvents.supported["changed_DefaultPlaybackDevice" or "changed_DefaultMicrophone"]` returns true. 

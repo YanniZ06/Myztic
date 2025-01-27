@@ -81,9 +81,9 @@ void ALExt::initDeviceClock(ALCdevice* device) {
 }
 
 void ALExt::initSysEvents(ALCdevice* device) {
-    alcEventIsSupportedSOFT = (LPALCEVENTISSUPPORTEDSOFT)alcGetProcAddress(device, "alcEventIsSupportedSOFT");
-    alcEventControlSOFT = (LPALCEVENTCONTROLSOFT)alcGetProcAddress(device, "alcEventControlSOFT");
-    alcEventCallbackSOFT = (LPALCEVENTCALLBACKSOFT)alcGetProcAddress(device, "alcEventControlSOFT");
+    alcEventIsSupportedSOFT = (LPALCEVENTISSUPPORTEDSOFT)alcGetProcAddress(NULL, "alcEventIsSupportedSOFT");
+    alcEventControlSOFT = (LPALCEVENTCONTROLSOFT)alcGetProcAddress(NULL, "alcEventControlSOFT");
+    alcEventCallbackSOFT = (LPALCEVENTCALLBACKSOFT)alcGetProcAddress(NULL, "alcEventCallbackSOFT");
 }
 
 void ALExt::initAllEXT(ALCdevice* device) {

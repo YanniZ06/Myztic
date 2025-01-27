@@ -2,13 +2,15 @@
 
 #include <map>
 #include <events/AudioEvent.h>
+#include <al.h>
 // #include <tuple>
 
 namespace AUD { // Might remove later, currently this is a precaution for an additional SystemEvents class showing up at some point
 	class SystemEvents {
 		friend class Application;
 	public:
-		SystemEvents();
+		SystemEvents() = default;
+		SystemEvents(bool active);
 
 		/**
 		 * A map of audio-related system events.
@@ -58,9 +60,11 @@ namespace AUD { // Might remove later, currently this is a precaution for an add
 		std::map<const char*, bool> supported;
 
 		DeviceAddedEvent onDeviceAdded;
+		DefaultDeviceChangedEvent onDefaultDeviceChanged;
 
 	protected:
-		int OPENAL_SYSTEM_EVENT_SDLEVENTTYPE;
+		static int OPENAL_SYSTEM_EVENT_SDLEVENTTYPE;
+		static void ALC_APIENTRY openalEventCallback(ALCenum eventType, ALCenum deviceType, ALCdevice* device, ALCsizei length, const ALCchar* message, void* userParam) AL_API_NOEXCEPT17;
 	private:
 		/// Basically holds references to SDLEvent data1, to deal with the fact we only have 2 user arguments
 		/// worked around by using event.user.code

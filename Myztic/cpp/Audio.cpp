@@ -12,6 +12,7 @@ std::vector<const char*> Audio::pbdList;
 std::vector<const char*> Audio::micList;
 AUD::SystemEvents Audio::systemEvents;
 const char* Audio::defaultPbd;
+const char* Audio::defaultMic;
 
 void Audio::initialize()
 {
@@ -86,12 +87,13 @@ void Audio::initialize()
 		in_deviceListRaw += strlen(in_deviceListRaw) + 1;
 	}
 	defaultPbd = alcGetString(NULL, ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
+	defaultMic = alcGetString(NULL, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
 
 	// Load in all extensions
 	ALExt::initAllEXT(tempDevice);
 
 	// Setup system audio events 
-	Audio::systemEvents = AUD::SystemEvents();
+	Audio::systemEvents = AUD::SystemEvents(true);
 	Audio::systemEvents.supported = std::map<const char*, bool>{ 
 		// PlaybackDevice Events
 		{"new_PlaybackDevice", ALExt::alcEventIsSupportedSOFT(ALC_EVENT_TYPE_DEVICE_ADDED_SOFT, ALC_PLAYBACK_DEVICE_SOFT) == 1},
@@ -112,12 +114,51 @@ void Audio::initialize()
 	alcCloseDevice(tempDevice);
 }
 
+// Microphone
+
+void Audio::refreshDefaultInputDevice()
+{
+	Audio::refreshInputDevices();
+	Audio::defaultMic = alcGetString(NULL, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
+}
+
+void Audio::refreshInputDevices()
+{
+	micList.clear();
+	const char* in_deviceListRaw = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
+
+	while (strlen(in_deviceListRaw) > 0) {
+		micList.push_back(in_deviceListRaw);
+		in_deviceListRaw += strlen(in_deviceListRaw) + 1;
+	}
+}
+
+const char* Audio::getDefaultInputDevice()
+{
+	return Audio::defaultMic;
+}
+
 std::vector<const char*> Audio::getInputDevices() {
 	return Audio::micList;
 }
 
+
+// Playback Device
+
 void Audio::refreshDefaultPlaybackDevice() {
+	Audio::refreshPlaybackDevices();
 	Audio::defaultPbd = alcGetString(NULL, ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
+}
+
+void Audio::refreshPlaybackDevices()
+{
+	pbdList.clear();
+	const char* deviceListRaw = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
+
+	while (strlen(deviceListRaw) > 0) {
+		pbdList.push_back(deviceListRaw);
+		deviceListRaw += strlen(deviceListRaw) + 1;
+	}
 }
 
 const char* Audio::getDefaultPlaybackDevice() {

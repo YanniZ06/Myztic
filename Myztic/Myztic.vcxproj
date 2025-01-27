@@ -233,6 +233,7 @@
     <ClCompile Include="cpp\display\Window.cpp" />
     <ClCompile Include="cpp\display\WinThread.cpp" />
     <ClCompile Include="cpp\events\AudioEvent.cpp" />
+    <ClCompile Include="cpp\events\BaseEvent.cpp" />
     <ClCompile Include="cpp\graphics\backend\ShaderProgram.cpp" />
     <ClCompile Include="cpp\graphics\Drawable.cpp" />
     <ClCompile Include="cpp\graphics\Renderer.cpp" />

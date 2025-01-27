@@ -7,7 +7,16 @@ template <typename ...Args>
 void BaseAudioEvent<Args...>::registerEvent(void (*callbackFunction)(Args...)) {
 	callback = callbackFunction;
 	ALExt::alcEventControlSOFT(1, &eID, 1);
-};
+}
+
+template<typename ...Args>
+void BaseAudioEvent<Args...>::registerEmpty() {
+	auto empty = [](Args...) {}; // Create Lambda as function substitute
+
+	callback = empty;
+	ALExt::alcEventControlSOFT(1, &eID, 1);
+}
+
 
 template <typename ...Args>
 void BaseAudioEvent<Args...>::unregisterEvent() {
