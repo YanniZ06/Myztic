@@ -76,7 +76,7 @@ public:
 
 	/// Render requests to be handled the next frame.
 	std::vector<RenderRequestBase> pendingRequests; //! Protected????
-	std::vector<Drawable> drawables;
+	std::vector<Drawable*> drawables;
 
 	/**
 	 * Requests the renderer to draw a basic 2D line from 2 points.

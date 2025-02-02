@@ -46,3 +46,29 @@ Shader::Shader(GLenum shaderType, std::string file) {
 
 	throw "Couldn't open the shader file.";
 };
+
+Shader Shader::fromString(GLenum shaderType, const char* data) {
+	Shader ret = Shader();
+	ret.handle = CHECK_GL(glCreateShader(shaderType));
+	CHECK_GL(glShaderSource(ret.handle, 1, &data, NULL));
+	CHECK_GL(glCompileShader(ret.handle));
+
+	GLint result;
+	glGetShaderiv(ret.handle, GL_COMPILE_STATUS, &result);
+
+	if (!result) {
+		int length;
+		CHECK_GL(glGetShaderiv(ret.handle, GL_INFO_LOG_LENGTH, &length));
+
+		// + 1 for null terminator
+		GLchar* infoLog = new GLchar[length + (size_t)1];
+		CHECK_GL(glGetShaderInfoLog(ret.handle, length, nullptr, infoLog));
+
+		std::string log(infoLog);
+
+		delete[] infoLog;
+		throw "Could not compile shader, info dump: " + log;
+	}
+
+	return ret;
+};

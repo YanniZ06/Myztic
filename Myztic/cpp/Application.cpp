@@ -16,6 +16,8 @@
 #include <Timer.h>
 #include <ErrorHandler.hpp>
 
+#include <graphics\PrecompiledShaders.h>
+
 #define SDL_MAIN_HANDLED
 
 // Statics
@@ -60,12 +62,13 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 
 	CHECK_GL(glViewport(0, 0, 680, 480));
 
+	PrecompiledShaders::Compile();
+
 	window->loadScene(initWindowParams.init_scene);
 	window->switchScene(initWindowParams.init_scene);
 
 	waiter = new std::binary_semaphore(0);
 	resourceManager = new ResourceManager();
-
 	Timer::debugMeasure(myzStart, "Myztic Initialization");
 	app_loop();
 }

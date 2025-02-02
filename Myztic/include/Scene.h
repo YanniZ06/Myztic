@@ -1,8 +1,10 @@
 #pragma once
 
 #include <stdint.h>
+#include <vector>
 
 class Window;
+class Camera;
 
 /**
  * The base for any scene.
@@ -61,7 +63,15 @@ public:
 	 * \param dt Time passed since the last update call, in milliseconds.
 	 */
 	virtual void update(float dt);
+
+	/*
+	* An array of cameras, as each scene object might link to a camera, if it does, it's rendered in either a perspective or an orthographic manner.
+	* If an object isn't linked to a camera, it's rendered directly ON THE SCREEN (most likely 2D HUD objects).
+	*/
+	std::vector<Camera*> cameras = std::vector<Camera*>();
+
+	/**  
+	 * Main camera that almost the entirety of the scene is rendered in.
+	*/
+	Camera* mainCamera = nullptr;
 };
-
-
-

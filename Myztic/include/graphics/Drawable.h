@@ -6,13 +6,13 @@
 #include <graphics/backend/ShaderInputLayout.h>
 #include <graphics/backend/ShaderProgram.h>
 #include <graphics/backend/EBO.hpp>
-
+#include <glm.hpp>
 #include <glad.h>
 #include <graphics\Vertex.h>
 //#include <graphics/Renderer.h>
 
-class Window;
-
+class Scene;
+class Camera;
 //? WIP
 /*
 enum PixelsType {
@@ -25,8 +25,8 @@ class Drawable {
 	friend class Application;
 	friend class Renderer;
 public:
-	Drawable(Window* drawerWin, std::vector<InputProperty>& inputProperties);
-	Drawable(Window* drawerWin, VertexBuffer& vertData);
+	Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperties);
+	Drawable(Scene* linkedScene, VertexBuffer& vertData);
 	~Drawable();
 
 	//? raw pixel data, this isnt thought out much yet, will do with ziad
@@ -53,20 +53,30 @@ public:
 
 	/// Inlined, toggles EBO usage [currently only toggles on]
 	void useEBO();
-	static Drawable makeQuad(Window* drawerWin, VertexBuffer& verts);
+	/**  
+	* Instantiates a quad Drawable.
+	* \param linkedScene The scene this Drawable is linked to/Drawn in.
+	* \param verts The VertexBuffer object describing the input layout; for example: a written template: `VertexBuffer(VertexLayout{}.Append(VertexLayout::Position3D));`
+	* \param shaders A vector of Shader objects to be linked with the ShaderProgram, will NOT be deleted after attachment, if not used from PrecompiledShaders, you may delete them, otherwise, NEVER DELETE PRECOMPILED SHADERS.
+	*/
+	static Drawable makeQuad(Scene* linkedScene, VertexBuffer& verts, std::vector<Shader> shaders);
 
 	// ???
 	/// Should persist in the queued drawables list in the renderer after the frame has been drawn or should be taken off the list.
 	bool persist = true;
+	//The camera the object is bound to.
+	Camera* camera = nullptr;
+	//The transformation matrix for the object.
+	glm::mat4 transformation = glm::mat4(1.f);
 protected:
 	/// The window that is being drawn to
-	Window* drawTarget;
+	Scene* linkedScene;
 	
 	/// Inlined, retrieves the VAO from the inputLayout
 	// VAO* getVAO();
 	// THIS IS A TEMPORARY SOLUTION, WILL ADAPT OUR DRAWING PRINCIPLE SOON 
-	virtual void prepareDraw();
-	virtual void finishDraw();
+	void prepareDraw();
+	void finishDraw();
 };
 
 // todo: logic to untoggle 

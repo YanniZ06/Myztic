@@ -1,6 +1,7 @@
 #include "pch.h" 
-
 #include <Scene.h>
+#include <display\Window.h>
+#include <graphics\Camera.h>
 #include <utilities/IDGenerator.h>
 
 Scene::Scene() {

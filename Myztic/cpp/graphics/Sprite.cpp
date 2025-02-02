@@ -7,7 +7,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <graphics\Sprite.h>
 
-Sprite::Sprite(Window* drawerWin, VertexBuffer& vbuf, std::string texturePath) : Drawable(drawerWin, vbuf) {
+Sprite::Sprite(Scene* linkedScene, VertexBuffer& vbuf, std::string texturePath, bool usesEBO, std::vector<Shader> shaders) : Drawable(linkedScene, vbuf) {
 	vert_type = GL_TRIANGLES;
 	vbo.bind();
 	//reconsider this especially for GL_STATIC_DRAW.
@@ -16,20 +16,19 @@ Sprite::Sprite(Window* drawerWin, VertexBuffer& vbuf, std::string texturePath) :
 	inputLayout.setVertexLayout();
 	inputLayout.enableAllAttribs();
 
-	useEBO();
+	if (usesEBO)
+		useEBO();
 
-	vert_indices = std::vector<GLuint>({ 0, 1, 3, 1, 2, 3 });
+	if (usesEBO) {
+		vert_indices = std::vector<GLuint>({ 0, 1, 3, 1, 2, 3 });
+		ebo.bind();
+		ebo.fill(vert_indices.data(), sizeof(GLuint) * vert_indices.size(), GL_STATIC_DRAW);
+	}
 
-	ebo.bind();
-	ebo.fill(vert_indices.data(), sizeof(GLuint) * vert_indices.size(), GL_STATIC_DRAW);
+	for (Shader s : shaders)
+		shaderProgram.attach(s);
 
-	Shader vs = Shader(GL_VERTEX_SHADER, "assets/shaders/vs.glsl");
-	Shader fs = Shader(GL_FRAGMENT_SHADER, "assets/shaders/fs.glsl");
-	shaderProgram.attach(vs);
-	shaderProgram.attach(fs);
 	shaderProgram.link();
-	vs.deleteShader();
-	fs.deleteShader();
 
 	inputLayout.unbind();
 	vbo.unbind();
@@ -38,14 +37,12 @@ Sprite::Sprite(Window* drawerWin, VertexBuffer& vbuf, std::string texturePath) :
 
 void Sprite::prepareDraw()
 {
-	shaderProgram.bind();
-	inputLayout.bindInputLayout();
+	Drawable::prepareDraw();
 	texture.bind();
 }
 
-void Sprite::endDraw()
+void Sprite::finishDraw()
 {
-	shaderProgram.unbind();
-	inputLayout.unbind();
+	Drawable::finishDraw();
 	texture.unbind();
 }

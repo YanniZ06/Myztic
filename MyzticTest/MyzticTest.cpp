@@ -19,6 +19,7 @@
 
 #include <graphics\Vertex.h>
 #include <graphics\Sprite.h>
+#include <graphics\Camera.h>
 
 class SceneB : Scene {
 	virtual void load(Window* callerWindow) {
@@ -40,6 +41,9 @@ class SceneB : Scene {
 };
 
 class TestScene : Scene {
+	Sprite* spr;
+	float elapsed = 0.f;
+
 	void logLoaded() {
 		size_t size = 0;
 		Scene** loadedScenes = this->loadedWin->getLoadedScenes(size);
@@ -81,25 +85,67 @@ class TestScene : Scene {
 		//inputlayout is bound in Drawable.
 		struct Vertex {
 			glm::vec3 pos;
-			glm::vec4 col;
 			glm::vec2 uv;
 		};
 		std::vector<Vertex> vertices = {
-			{{0.5, 0.5, 0.0}, {1.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-			{{0.5, -0.5, 0.0}, {0.0f, 1.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
-			{{-0.5, -0.5, 0.0 }, {0.0f, 0.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
-			{{-0.5, 0.5, 0.0}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
+			{{-0.5, -0.5, -0.5},  {0.0, 0.0}},
+			{{0.5, -0.5, -0.5},  {1.0, 0.0}},
+			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
+			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
+			{{-0.5,  0.5, -0.5},  {0.0, 1.0}},
+			{{-0.5, -0.5, -0.5},  {0.0, 0.0}},
+
+			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
+			{{0.5, -0.5,  0.5},  {1.0, 0.0}},
+			{{0.5,  0.5,  0.5},  {1.0, 1.0}},
+			{{0.5,  0.5,  0.5},  {1.0, 1.0}},
+			{{-0.5,  0.5,  0.5},  {0.0, 1.0}},
+			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
+
+			{{-0.5,  0.5,  0.5},  {1.0, 0.0}},
+			{{-0.5,  0.5, -0.5},  {1.0, 1.0}},
+			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
+			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
+			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
+			{{-0.5,  0.5,  0.5},  {1.0, 0.0}},
+
+			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
+			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
+			{{0.5, -0.5, -0.5},  {0.0, 1.0}},
+			{{0.5, -0.5, -0.5},  {0.0, 1.0}},
+			{{0.5, -0.5,  0.5},  {0.0, 0.0}},
+			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
+
+			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
+			{{0.5, -0.5, -0.5},  {1.0, 1.0}},
+			{{0.5, -0.5,  0.5},  {1.0, 0.0}},
+			{{0.5, -0.5,  0.5},  {1.0, 0.0}},
+			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
+			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
+
+			{{-0.5,  0.5, -0.5},  {0.0, 1.0}},
+			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
+			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
+			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
+			{{-0.5,  0.5,  0.5},  {0.0, 0.0}},
+			{{-0.5,  0.5, -0.5},  {0.0, 1.0}}
 		};
 
-		VertexBuffer buf(std::move(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Float4Color).Append(VertexLayout::Texture2D)));
+		VertexBuffer buf(std::move(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Texture2D)));
 		for (int i = 0; i < vertices.size(); i++) {
-			buf.EmplaceBack(vertices[i].pos, vertices[i].col, vertices[i].uv);
+			buf.EmplaceBack(vertices[i].pos, vertices[i].uv);
 		}
+		
 		std::cout << buf.Size() << "\n";
-		myzWin->renderer.drawables.push_back(Sprite(myzWin, buf, "assets/textures/yanni.png"));
+		spr = new Sprite(this, buf, "assets/textures/glint.png", false);
+		spr->transformation = glm::rotate(glm::mat4(1.f), glm::radians(45.f), glm::vec3(1.f, 1.f, 1.f));
+		mainCamera = new Camera(ProjectionType::Perspective, this, glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f));
+		spr->camera = mainCamera;
+		myzWin->renderer.drawables.push_back(spr);
 	}
 
 	virtual void update(float dt) {
+		elapsed += dt;
 		
 	}
 };

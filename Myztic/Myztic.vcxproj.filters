@@ -150,6 +150,12 @@
     <ClInclude Include="include\events\EventTransmitter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\graphics\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\PrecompiledShaders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -207,6 +213,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp\events\BaseEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\graphics\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\graphics\PrecompiledShaders.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
