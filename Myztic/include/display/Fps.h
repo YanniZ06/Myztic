@@ -25,6 +25,9 @@ public:
 	inline double getFrameTime() {
 		return frameTime;
 	}
+	inline float getRawFrameTime() {
+		return rawFrameTime;
+	}
 	// The fps the app actually runs at currently
 	inline fpsSize used() {
 		return _used; // This value is populated by the Application
@@ -35,4 +38,5 @@ protected:
 	fpsSize max;
 
 	double frameTime;
+	float rawFrameTime;
 };

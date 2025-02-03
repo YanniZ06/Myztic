@@ -12,6 +12,7 @@ class Scene;
 class Camera {
 	friend class Scene;
 	friend class Drawable;
+	friend class Application;
 public:
 	//Unit UP vector
 	static inline glm::vec3 UP = glm::vec3(0, 1, 0);
@@ -165,10 +166,9 @@ public:
 	};
 public:
 	ProjectionType projection_type;
+	float yawAngle = -90.f;
+	float pitchAngle = 0.f;
 private:
-	glm::vec3 cam_position;
-	glm::vec3 look_at;
-
 	GLfloat fov = 90.f;
 	GLfloat near_plane = 0.001f;
 	GLfloat far_plane = 1000.f;
@@ -190,6 +190,8 @@ private:
 		};
 	};
 protected:
+	glm::vec3 cam_position;
+	glm::vec3 look_at;
 	glm::mat4 intern_ProjecMatrix;
 	glm::mat4 intern_ViewMatrix;
 };

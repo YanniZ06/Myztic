@@ -140,6 +140,7 @@ class TestScene : Scene {
 		spr = new Sprite(this, buf, "assets/textures/glint.png", false);
 		spr->transformation = glm::rotate(glm::mat4(1.f), glm::radians(45.f), glm::vec3(1.f, 1.f, 1.f));
 		mainCamera = new Camera(ProjectionType::Perspective, this, glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f));
+		cameras.push_back(mainCamera);
 		spr->camera = mainCamera;
 		myzWin->renderer.drawables.push_back(spr);
 	}
