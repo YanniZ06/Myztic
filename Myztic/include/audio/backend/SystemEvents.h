@@ -10,7 +10,7 @@ namespace AUD { // Might remove later, currently this is a precaution for an add
 		friend class Application;
 	public:
 		SystemEvents() = default;
-		SystemEvents(bool active);
+		SystemEvents(bool active); // SystemEvents being a static is auto-initialized by cpp, great! Could turn that off but just in case id rather have a seperate constructor. Love it.
 
 		/**
 		 * A map of audio-related system events.

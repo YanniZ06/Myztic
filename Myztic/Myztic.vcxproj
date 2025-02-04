@@ -192,6 +192,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\events\MouseMoveEvent.h" />
     <ClInclude Include="include\graphics\Camera.h" />
     <ClInclude Include="cpp\stb_image.h" />
     <ClInclude Include="include\audio\backend\ALExt.h" />
@@ -205,8 +206,7 @@
     <ClInclude Include="include\display\Window.h" />
     <ClInclude Include="include\display\Fps.h" />
     <ClInclude Include="include\events\AudioEvent.h" />
-    <ClInclude Include="include\events\BaseEvent.h" />
-    <ClInclude Include="include\events\EventTransmitter.h" />
+    <ClInclude Include="include\events\EventDispatcher.h" />
     <ClInclude Include="include\graphics\backend\EBO.hpp" />
     <ClInclude Include="include\graphics\backend\ShaderProgram.h" />
     <ClInclude Include="include\graphics\Drawable.h" />
@@ -235,7 +235,7 @@
     <ClCompile Include="cpp\display\Window.cpp" />
     <ClCompile Include="cpp\display\WinThread.cpp" />
     <ClCompile Include="cpp\events\AudioEvent.cpp" />
-    <ClCompile Include="cpp\events\BaseEvent.cpp" />
+    <ClCompile Include="cpp\events\EventDispatcher.cpp" />
     <ClCompile Include="cpp\graphics\backend\ShaderProgram.cpp" />
     <ClCompile Include="cpp\graphics\Camera.cpp" />
     <ClCompile Include="cpp\graphics\Drawable.cpp" />

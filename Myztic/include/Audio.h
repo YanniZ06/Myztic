@@ -3,6 +3,15 @@
 #include <vector>
 #include <audio/backend/SystemEvents.h>
 
+class PlaybackDevice;
+
+enum PlaybackDeviceError {
+	/// The passed in string does not match any available device on the system
+	INVALID_DEVICE_NAME,
+	/// The backend failed to move the old device content into the new device, the old device will instead stay active	(if available)
+	REOPEN_DEVICE_FAILED
+};
+
 class Audio {
 	friend class Application;
 public:
@@ -10,10 +19,10 @@ public:
 	/**
 	 * Returns a vector with all available audio output devices.
 	 * 
-	 * \warn A DeviceAddedEvent and DeviceLostEvent must be registered over Audio::systemEvents for this list to update automatically.
+	 * \warning A DeviceAddedEvent and DeviceLostEvent must be registered over Audio::systemEvents for this list to update automatically.
 	 * If you do not wish to use a callback you may use the registerEmpty() functions.
 	 * 
-	 * \warn If Audio::systemEvents.supported["new_PlaybackDevice" or "lost_PlaybackDevice"] yield false, the available playback devices
+	 * \warning If Audio::systemEvents.supported["new_PlaybackDevice" or "lost_PlaybackDevice"] yield false, the available playback devices
 	 * must be manually updated using Audio::refreshPlaybackDevices()
 	 */
 	static std::vector<const char*> getPlaybackDevices();
@@ -21,10 +30,10 @@ public:
 	/**
 	 * Returns the default playback device.
 	 * 
-	 * \warn A DefaultDeviceChangedEvent must be registered over Audio::systemEvents for this list to update automatically.
+	 * \warning A DefaultDeviceChangedEvent must be registered over Audio::systemEvents for this list to update automatically.
 	 * If you do not wish to use a callback you may use the registerEmpty() functions.
 	 * 
-	 * \warn If Audio::systemEvents.supported["changed_DefaultPlaybackDevice"] yields false, the default playback device
+	 * \warning If Audio::systemEvents.supported["changed_DefaultPlaybackDevice"] yields false, the default playback device
 	 * must be manually updated using Audio::refreshDefaultPlaybackDevice()
 	 */
 	static const char* getDefaultPlaybackDevice();
@@ -42,12 +51,24 @@ public:
 	static void refreshDefaultPlaybackDevice();
 
 	/**
+	 * Opens a new output device for audio playback.
+	 * 
+	 * \remark There is no functionality to directly "close" a PlaybackDevice, as each call to this function
+	 * closes the old PlaybackDevice on its own.
+	 * 
+	 * \param deviceName A valid name listed in getPlaybackDevices(), or NULL for the default available device.
+	 * \throw std::runtime_error where what() describes one of the  
+	 */
+	static PlaybackDevice* openPlaybackDevice(const char* deviceName);
+
+	static PlaybackDevice* currentPlaybackDevice;
+	/**
 	 * Returns a vector with all available audio input devices.
 	 * 
-	 * \warn A DeviceAddedEvent and DeviceLostEvent must be registered over Audio::systemEvents for this list to update automatically.
+	 * \warning A DeviceAddedEvent and DeviceLostEvent must be registered over Audio::systemEvents for this list to update automatically.
 	 * If you do not wish to use a callback you may use the registerEmpty() functions.
 	 * 
-	 * \warn If Audio::systemEvents.supported["new_Microphone" or "lost_Microphone"] yield false, the available microphones
+	 * \warning If Audio::systemEvents.supported["new_Microphone" or "lost_Microphone"] yield false, the available microphones
 	 * must be manually updated using Audio::refreshInputDevices()
 	 */
 	static std::vector<const char*> getInputDevices();
@@ -55,10 +76,10 @@ public:
 	/**
 	 * Returns the default microphone.
 	 * 
-	 * \warn A DefaultDeviceChangedEvent must be registered over Audio::systemEvents for this list to update automatically.
+	 * \warning A DefaultDeviceChangedEvent must be registered over Audio::systemEvents for this list to update automatically.
 	 * If you do not wish to use a callback you may use onDeviceAdded.registerEmpty().
 	 * 
-	 * \warn If Audio::systemEvents.supported["changed_DefaultMicrophone"] yields false, the default microphone
+	 * \warning If Audio::systemEvents.supported["changed_DefaultMicrophone"] yields false, the default microphone
 	 * must be manually updated using Audio::refreshDefaultInputDevice()
 	 */
 	static const char* getDefaultInputDevice();

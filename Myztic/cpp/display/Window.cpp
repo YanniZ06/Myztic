@@ -64,7 +64,7 @@ Window::~Window() {
 
 bool Window::switchScene(Scene* scene)
 {
-	if (this->scene) this->scene->finish();
+	if (this->scene) this->scene->finish(scene);
 	if (scene->loadedWin != this) return false;
 
 	scene->enter();
@@ -78,20 +78,21 @@ bool Window::loadScene(Scene* scene) {
 	scene->loadedWin = this;
 	scene->load(this);
 	//std::shared_ptr<Scene> ss = std::shared_ptr<Scene>(scene);
-	loadedScenes[scene->id] = scene;
+	loadedScenes[scene->getId()] = scene;
 	return true;
 }
 
 bool Window::unloadScene(Scene* scene, bool freeMem) {
 	if (scene->loadedWin != this) return false;
 	if (scene == this->scene) { // Make sure we break nothing if there is no current scene 
-		this->scene->finish();
-		this->scene = new Scene();
+		Scene* placeHolderScene = new Scene();
+		this->scene->finish(placeHolderScene);
+		this->scene = placeHolderScene;
 	}
 
 	scene->unload(this);
 	scene->loadedWin = nullptr;
-	loadedScenes.erase(scene->id);
+	loadedScenes.erase(scene->getId());
 
 	if (freeMem) delete scene;
 	return true;

@@ -6,6 +6,14 @@
 
 Scene::Scene() {
 	id = IDGenerator::instanceOf("scene")->next();
+	tag = "unnamedScene";
+	loadedWin = nullptr;
+}
+
+Scene::Scene(const char* name)
+{
+	id = IDGenerator::instanceOf("scene")->next();
+	tag = name;
 	loadedWin = nullptr;
 }
 
@@ -16,5 +24,5 @@ Scene::~Scene() {
 void Scene::load(Window* callerWindow) {}
 void Scene::unload(Window* callerWindow) {}
 void Scene::enter() {}
-void Scene::finish() {}
+void Scene::finish(Scene* nextScene) {}
 void Scene::update(float dt) {}

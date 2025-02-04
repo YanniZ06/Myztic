@@ -3,7 +3,7 @@
 
 #include <Application.h>
 #include <Audio.h>
-#include <events/EventTransmitter.h>
+#include <events/EventDispatcher.h>
 #include <display/Window.h>
 #include <graphics/Renderer.h>
 #include <Scene.h>
@@ -122,6 +122,13 @@ void Application::app_loop() {
 
 				break;
 			}
+			// Mouse Events
+			/*case SDL_MOUSEMOTION:
+				Window* eWin = nullptr;
+				if (windows.count(e.motion.windowID)) eWin = windows[e.motion.windowID];
+
+				break;
+			*/
 			// Other Event Types
 			case SDL_QUIT:
 				shouldClose = true;
@@ -177,6 +184,7 @@ void Application::app_loop() {
 					default: break;
 				}
 				break;
+			// /*
 			case SDL_MOUSEMOTION:
 				if (windows.count(e.motion.windowID)) {
 					Window* win = windows[e.motion.windowID];
@@ -196,7 +204,9 @@ void Application::app_loop() {
 				}
 				
 				break;
-			case SDL_USEREVENT: 
+			//	*/
+			/*
+			case SDL_USEREVENT:
 				if (e.user.type != Audio::systemEvents.OPENAL_SYSTEM_EVENT_SDLEVENTTYPE) break; // Queued OpenAL system event
 
 				// To obtain event-related device names we increment the system message up until where the device name is mentioned
@@ -232,10 +242,11 @@ void Application::app_loop() {
 
 					break;
 				}
+				
 				default:
 					break;
 				}
-
+			*/
 			default:
 				break;
 			}

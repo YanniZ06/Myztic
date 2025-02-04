@@ -7,7 +7,8 @@
 
 enum DeviceType {
 	PLAYBACK_DEVICE = 0,
-	MICROPHONE = 1
+	MICROPHONE = 1,
+	INVALID = 2,
 };
 
 /**
@@ -15,18 +16,21 @@ enum DeviceType {
  * 
  * Use registerEvent 
  */
-template<typename ...Args>
 class BaseAudioEvent {
 	friend class Application;
 public:
-	void registerEvent(void (*callbackFunction)(Args...));
+	const char* dName;
+	DeviceType dType;
+
+
+	virtual void registerEvent(void (*callbackFunction)(void*));
 	void registerEmpty();
 	void unregisterEvent();
 
 protected:
-	BaseAudioEvent() = default;
+	BaseAudioEvent();
 	
-	void (*callback)(Args...); // Should work as protected (?????)
+	void (*callback)(void*); // Should work as protected (?????)
 	ALCenum eID = 0;
 };
 
@@ -34,13 +38,13 @@ protected:
  * Fires when a new audio device has become available.
  *
  *
- * Callback argument list for registerEvent():
+ * Common member field documentation for registerEvent():
  * * `const char * dName` -- name of the device that has become available
  * * `DeviceType dType` -- the `DeviceType` associated with this event
  *
  * \note Only to be used if `Audio::systemEvents.supported["new_PlaybackDevice" or "new_Microphone"]` returns true.
  */
-class DeviceAddedEvent : public BaseAudioEvent<const char*, DeviceType> {
+class DeviceAddedEvent : public BaseAudioEvent {
 public:
 	/**
 	 * Should not be called, use Audio::systemEvents.onDeviceAdded instead.
@@ -52,13 +56,13 @@ public:
  * Fires when an audio device is no longer available.
  *
  *
- * Callback argument list for registerEvent():
+ * Common member field documentation for registerEvent():
  * * `const char * dName` -- name of the device that has been lost
  * * `DeviceType dType` -- the `DeviceType` associated with this event
  *
  * \note Only to be used if `Audio::systemEvents.supported["lost_PlaybackDevice" or "lost_Microphone"]` returns true.
  */
-class DeviceLostEvent : public BaseAudioEvent<const char*, DeviceType> {
+class DeviceLostEvent : public BaseAudioEvent {
 public:
 	/**
 	 * Should not be called, use Audio::systemEvents.onDeviceLost instead.
@@ -70,15 +74,16 @@ public:
  * Fires when the default audio device changes.
  * 
  * 
- * Callback argument list for registerEvent():
+ * Common member field documentation for registerEvent():
  * * `const char * oldDefaultDevice` -- the default device name prior to the event;
  * * `const char * newDefaultDevice` -- name of the new default device
  * * `DeviceType dType` -- the `DeviceType` associated with this event
  * 
  * \note Only to be used if `Audio::systemEvents.supported["changed_DefaultPlaybackDevice" or "changed_DefaultMicrophone"]` returns true. 
  */
-class DefaultDeviceChangedEvent : public BaseAudioEvent<const char*, const char*, DeviceType> {
+class DefaultDeviceChangedEvent : public BaseAudioEvent {
 public:
+	const char* newDefaultDevice;
 	/**
 	 * Should not be called, use Audio::systemEvents.onDefaultDeviceChanged instead.
 	 */

@@ -71,8 +71,9 @@ void Audio::initialize()
 	//std::cout << yes.c_str();
 
 	// OpenAL Soft version is supported, next fill the available devices lists
-	pbdList = std::vector<const char*>();
-	micList = std::vector<const char*>();
+	// Statics already initialized???
+	// pbdList = std::vector<const char*>();
+	// micList = std::vector<const char*>();
 
 	const char* deviceListRaw = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
 	const char* in_deviceListRaw = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);

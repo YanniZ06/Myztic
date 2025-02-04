@@ -21,17 +21,28 @@ class Camera;
  */
 class Scene {
 public:
+	/**
+	 * Constructs your scene and sets your tag to "unnamed".
+	 */
 	Scene();
-	// Scene(const Scene& s) = default;
-	Scene(Scene const&) = default; // do i need you
+	/**
+	 * Constructs your scene whilst allowing you to set its tag.
+	 * 
+	 * \param name Sets the tag for this scene, to allow resolving it by name. If multiple instances of the same scene exist and share the same tag you must use getId() instead.
+	 */
+	Scene(const char* name);
 	~Scene();
 
-	/// The unique integer ID this scene is identified with.
-	uint32_t id;
+	/// String name-tag for the scene
+	const char* tag;
 	/// A pointer to the Window this scene is currently loaded to
 	Window* loadedWin;
 	// todo: member fields
 
+	/// Returns the unique integer ID this scene is identified with.
+	inline uint32_t getId() {
+		return id;
+	};
 	/**
 	 * Called when this scene is being loaded into a windows scene cache.
 	 * 
@@ -52,8 +63,10 @@ public:
 	virtual void enter();
 	/**
 	 * Called when this scene is overriden and becomes inactive.
+	 * 
+	 * \param nextScene The scene that will be switched to.
 	 */
-	virtual void finish();
+	virtual void finish(Scene* nextScene);
 
 	/**
 	 * Called each game-loop frame while this scene is loaded to a Window.
@@ -66,7 +79,7 @@ public:
 
 	/*
 	* An array of cameras, as each scene object might link to a camera, if it does, it's rendered in either a perspective or an orthographic manner.
-	* If an object isn't linked to a camera, it's rendered directly ON THE SCREEN (most likely 2D HUD objects).
+	* If an object isn't linked to a camera, it's rendered directly onto the screen (most likely 2D HUD objects).
 	*/
 	std::vector<Camera*> cameras = std::vector<Camera*>();
 
@@ -74,4 +87,6 @@ public:
 	 * Main camera that almost the entirety of the scene is rendered in.
 	*/
 	Camera* mainCamera = nullptr;
+protected:
+	uint32_t id;
 };

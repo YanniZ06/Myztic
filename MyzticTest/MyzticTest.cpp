@@ -35,7 +35,7 @@ class SceneB : Scene {
 		std::cout << "SceneB entered\n";
 		// Application::log_windows_cmd();
 	}
-	virtual void finish() {
+	virtual void finish(Scene* nextScene) {
 		std::cout << "SceneB finished\n";
 	}
 };
@@ -51,7 +51,7 @@ class TestScene : Scene {
 
 		int i = 0;
 		while (i < size) {
-			std::cout << "Scene Number "<< i <<":" << loadedScenes[i++]->id << "\n";
+			std::cout << "Scene Number "<< i <<":" << loadedScenes[i++]->getId() << "\n";
 		}
 		std::cout << "Finished\n";
 	}

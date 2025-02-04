@@ -69,7 +69,7 @@ public:
 	//The transformation matrix for the object.
 	glm::mat4 transformation = glm::mat4(1.f);
 protected:
-	/// The window that is being drawn to
+	/// The scene that is being drawn to
 	Scene* linkedScene;
 	
 	/// Inlined, retrieves the VAO from the inputLayout

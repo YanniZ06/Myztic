@@ -141,19 +141,19 @@
     <ClInclude Include="include\audio\backend\SystemEvents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\events\BaseEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\events\AudioEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\events\EventTransmitter.h">
+    <ClInclude Include="include\events\EventDispatcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\graphics\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\graphics\PrecompiledShaders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\events\MouseMoveEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -212,13 +212,13 @@
     <ClCompile Include="cpp\audio\backend\ALExt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\events\BaseEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cpp\graphics\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp\graphics\PrecompiledShaders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\events\EventDispatcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
