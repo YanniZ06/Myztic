@@ -1,6 +1,5 @@
 #include "pch.h"
 
-// #include <display/Window.h>
 #include <Application.h>
 #include <Scene.h>
 #include <display/Window.h>
@@ -10,8 +9,8 @@
 #include <windows.h>
 #include <iostream>
 
-Window* Window::create(WindowParams params) {
-	Window* window = new Window(params);
+Myztic::Window* Myztic::Window::create(WindowParams params) {
+	Myztic::Window* window = new Myztic::Window(params);
 	Application::windows[window->id()] = window;
 
 	window->loadScene(params.init_scene);
@@ -20,7 +19,7 @@ Window* Window::create(WindowParams params) {
 	return window;
 }
 
-Window::Window(WindowParams params) {
+Myztic::Window::Window(WindowParams params) {
 	_name = params.name;
 	scene = nullptr;
 	shouldClose = false;
@@ -53,7 +52,7 @@ Window::Window(WindowParams params) {
 	// No code beyond here, the thread has been moved.
 }
 
-Window::~Window() {
+Myztic::Window::~Window() {
 	std::cout << "deconstructing window " << std::to_string(SDL_GetWindowID(handle)) << "\n";
 
 	scene = nullptr;
@@ -62,7 +61,7 @@ Window::~Window() {
 	// renderer.~Renderer();
 }
 
-bool Window::switchScene(Scene* scene)
+bool Myztic::Window::switchScene(Scene* scene)
 {
 	if (this->scene) this->scene->finish(scene);
 	if (scene->loadedWin != this) return false;
@@ -72,7 +71,7 @@ bool Window::switchScene(Scene* scene)
 	return true;
 }
 
-bool Window::loadScene(Scene* scene) {
+bool Myztic::Window::loadScene(Scene* scene) {
 	if (scene->loadedWin) return false;
 
 	scene->loadedWin = this;
@@ -82,7 +81,7 @@ bool Window::loadScene(Scene* scene) {
 	return true;
 }
 
-bool Window::unloadScene(Scene* scene, bool freeMem) {
+bool Myztic::Window::unloadScene(Scene* scene, bool freeMem) {
 	if (scene->loadedWin != this) return false;
 	if (scene == this->scene) { // Make sure we break nothing if there is no current scene 
 		Scene* placeHolderScene = new Scene();
@@ -98,7 +97,7 @@ bool Window::unloadScene(Scene* scene, bool freeMem) {
 	return true;
 }
 
-void Window::centerPosition(bool x, bool y) {
+void Myztic::Window::centerPosition(bool x, bool y) {
 	int tx = _x; int ty = _y;
 	if (x) tx = SDL_WINDOWPOS_CENTERED;
 	if (y) ty = SDL_WINDOWPOS_CENTERED;
@@ -107,14 +106,14 @@ void Window::centerPosition(bool x, bool y) {
 	SDL_GetWindowPosition(handle, &_x, &_y);
 }
 
-Window::operator std::string() {
+Myztic::Window::operator std::string() {
 	//doing Application::fps here for now, every window is gonna have it's own independent FPS instance later // WE ARE NOT DOING THAT ANYMORE
-	std::string winString = "Window " +  std::to_string(id())  + "[\"" + _name + "\"] : " + std::to_string(w()) + "x " + std::to_string(h()) + " at position(" + std::to_string(x()) + " | " + std::to_string(y()) + ") running on " + std::to_string(Application::fps.getMax()) + " max fps";
+	std::string winString = "Myztic::Window " +  std::to_string(id())  + "[\"" + _name + "\"] : " + std::to_string(w()) + "x " + std::to_string(h()) + " at position(" + std::to_string(x()) + " | " + std::to_string(y()) + ") running on " + std::to_string(Application::fps.getMax()) + " max fps";
 	return winString;
 }
 
 // Private Cleanup
-void Window::destroy()
+void Myztic::Window::destroy()
 {
 	// Unload all scenes, including current one
 	Application::windows.erase(id());
@@ -132,5 +131,5 @@ void Window::destroy()
 	inRenderPhase = false;
 
 	thread.destroy();
-	// this->~Window(); is called by the delete operator in Application.cpp
+	// this->~Myztic::Window(); is called by the delete operator in Application.cpp
 }

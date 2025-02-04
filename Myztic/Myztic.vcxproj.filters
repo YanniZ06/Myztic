@@ -132,7 +132,7 @@
     <ClInclude Include="include\display\WinThread.h">
       <Filter>Header Files\display</Filter>
     </ClInclude>
-    <ClInclude Include="include\graphics\Sprite.h">
+    <ClInclude Include="include\graphics\TexturedDrawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cpp\stb_image.h">
@@ -200,7 +200,7 @@
     <ClCompile Include="cpp\graphics\Drawable.cpp">
       <Filter>Source Files\graphics\frontend</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\graphics\Sprite.cpp">
+    <ClCompile Include="cpp\graphics\TexturedDrawable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp\audio\backend\SystemEvents.cpp">

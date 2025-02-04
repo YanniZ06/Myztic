@@ -2,45 +2,45 @@
 
 #include <audio/backend/ALExt.h>
 
-LPALCGETINTEGER64VSOFT ALExt::alcGetInteger64vSOFT;
-LPALGENEFFECTS ALExt::alGenEffects;
-LPALDELETEEFFECTS ALExt::alDeleteEffects;
-LPALISEFFECT ALExt::alIsEffect;
-LPALEFFECTI ALExt::alEffecti;
-LPALEFFECTIV ALExt::alEffectiv;
-LPALEFFECTF ALExt::alEffectf;
-LPALEFFECTFV ALExt::alEffectfv;
-LPALGETEFFECTI ALExt::alGetEffecti;
-LPALGETEFFECTIV ALExt::alGetEffectiv;
-LPALGETEFFECTF ALExt::alGetEffectf;
-LPALGETEFFECTFV ALExt::alGetEffectfv;
-LPALGENFILTERS ALExt::alGenFilters;
-LPALDELETEFILTERS ALExt::alDeleteFilters;
-LPALISFILTER ALExt::alIsFilter;
-LPALFILTERI ALExt::alFilteri;
-LPALFILTERIV ALExt::alFilteriv;
-LPALFILTERF ALExt::alFilterf;
-LPALFILTERFV ALExt::alFilterfv;
-LPALGETFILTERI ALExt::alGetFilteri;
-LPALGETFILTERIV ALExt::alGetFilteriv;
-LPALGETFILTERF ALExt::alGetFilterf;
-LPALGETFILTERFV ALExt::alGetFilterfv;
-LPALGENAUXILIARYEFFECTSLOTS ALExt::alGenAuxiliaryEffectSlots;
-LPALDELETEAUXILIARYEFFECTSLOTS ALExt::alDeleteAuxiliaryEffectSlots;
-LPALISAUXILIARYEFFECTSLOT ALExt::alIsAuxiliaryEffectSlot;
-LPALAUXILIARYEFFECTSLOTI ALExt::alAuxiliaryEffectSloti;
-LPALAUXILIARYEFFECTSLOTIV ALExt::alAuxiliaryEffectSlotiv;
-LPALAUXILIARYEFFECTSLOTF ALExt::alAuxiliaryEffectSlotf;
-LPALAUXILIARYEFFECTSLOTFV ALExt::alAuxiliaryEffectSlotfv;
-LPALGETAUXILIARYEFFECTSLOTI ALExt::alGetAuxiliaryEffectSloti;
-LPALGETAUXILIARYEFFECTSLOTIV ALExt::alGetAuxiliaryEffectSlotiv;
-LPALGETAUXILIARYEFFECTSLOTF ALExt::alGetAuxiliaryEffectSlotf;
-LPALGETAUXILIARYEFFECTSLOTFV ALExt::alGetAuxiliaryEffectSlotfv;
-LPALCEVENTISSUPPORTEDSOFT ALExt::alcEventIsSupportedSOFT;
-LPALCEVENTCONTROLSOFT ALExt::alcEventControlSOFT;
-LPALCEVENTCALLBACKSOFT ALExt::alcEventCallbackSOFT;
+LPALCGETINTEGER64VSOFT Myztic::ALExt::alcGetInteger64vSOFT;
+LPALGENEFFECTS Myztic::ALExt::alGenEffects;
+LPALDELETEEFFECTS Myztic::ALExt::alDeleteEffects;
+LPALISEFFECT Myztic::ALExt::alIsEffect;
+LPALEFFECTI Myztic::ALExt::alEffecti;
+LPALEFFECTIV Myztic::ALExt::alEffectiv;
+LPALEFFECTF Myztic::ALExt::alEffectf;
+LPALEFFECTFV Myztic::ALExt::alEffectfv;
+LPALGETEFFECTI Myztic::ALExt::alGetEffecti;
+LPALGETEFFECTIV Myztic::ALExt::alGetEffectiv;
+LPALGETEFFECTF Myztic::ALExt::alGetEffectf;
+LPALGETEFFECTFV Myztic::ALExt::alGetEffectfv;
+LPALGENFILTERS Myztic::ALExt::alGenFilters;
+LPALDELETEFILTERS Myztic::ALExt::alDeleteFilters;
+LPALISFILTER Myztic::ALExt::alIsFilter;
+LPALFILTERI Myztic::ALExt::alFilteri;
+LPALFILTERIV Myztic::ALExt::alFilteriv;
+LPALFILTERF Myztic::ALExt::alFilterf;
+LPALFILTERFV Myztic::ALExt::alFilterfv;
+LPALGETFILTERI Myztic::ALExt::alGetFilteri;
+LPALGETFILTERIV Myztic::ALExt::alGetFilteriv;
+LPALGETFILTERF Myztic::ALExt::alGetFilterf;
+LPALGETFILTERFV Myztic::ALExt::alGetFilterfv;
+LPALGENAUXILIARYEFFECTSLOTS Myztic::ALExt::alGenAuxiliaryEffectSlots;
+LPALDELETEAUXILIARYEFFECTSLOTS Myztic::ALExt::alDeleteAuxiliaryEffectSlots;
+LPALISAUXILIARYEFFECTSLOT Myztic::ALExt::alIsAuxiliaryEffectSlot;
+LPALAUXILIARYEFFECTSLOTI Myztic::ALExt::alAuxiliaryEffectSloti;
+LPALAUXILIARYEFFECTSLOTIV Myztic::ALExt::alAuxiliaryEffectSlotiv;
+LPALAUXILIARYEFFECTSLOTF Myztic::ALExt::alAuxiliaryEffectSlotf;
+LPALAUXILIARYEFFECTSLOTFV Myztic::ALExt::alAuxiliaryEffectSlotfv;
+LPALGETAUXILIARYEFFECTSLOTI Myztic::ALExt::alGetAuxiliaryEffectSloti;
+LPALGETAUXILIARYEFFECTSLOTIV Myztic::ALExt::alGetAuxiliaryEffectSlotiv;
+LPALGETAUXILIARYEFFECTSLOTF Myztic::ALExt::alGetAuxiliaryEffectSlotf;
+LPALGETAUXILIARYEFFECTSLOTFV Myztic::ALExt::alGetAuxiliaryEffectSlotfv;
+LPALCEVENTISSUPPORTEDSOFT Myztic::ALExt::alcEventIsSupportedSOFT;
+LPALCEVENTCONTROLSOFT Myztic::ALExt::alcEventControlSOFT;
+LPALCEVENTCALLBACKSOFT Myztic::ALExt::alcEventCallbackSOFT;
 
-void ALExt::initEFX() {
+void Myztic::ALExt::initEFX() {
     alGenEffects = (LPALGENEFFECTS)alGetProcAddress("alGenEffects");
     alDeleteEffects = (LPALDELETEEFFECTS)alGetProcAddress("alDeleteEffects");
     alIsEffect = (LPALISEFFECT)alGetProcAddress("alIsEffect");
@@ -76,17 +76,17 @@ void ALExt::initEFX() {
     alGetAuxiliaryEffectSlotfv = (LPALGETAUXILIARYEFFECTSLOTFV)alGetProcAddress("alGetAuxiliaryEffectSlotfv");
 }
 
-void ALExt::initDeviceClock(ALCdevice* device) {
+void Myztic::ALExt::initDeviceClock(ALCdevice* device) {
     alcGetInteger64vSOFT = (LPALCGETINTEGER64VSOFT)alcGetProcAddress(device, "alcGetInteger64vSOFT");
 }
 
-void ALExt::initSysEvents(ALCdevice* device) {
+void Myztic::ALExt::initSysEvents(ALCdevice* device) {
     alcEventIsSupportedSOFT = (LPALCEVENTISSUPPORTEDSOFT)alcGetProcAddress(NULL, "alcEventIsSupportedSOFT");
     alcEventControlSOFT = (LPALCEVENTCONTROLSOFT)alcGetProcAddress(NULL, "alcEventControlSOFT");
     alcEventCallbackSOFT = (LPALCEVENTCALLBACKSOFT)alcGetProcAddress(NULL, "alcEventCallbackSOFT");
 }
 
-void ALExt::initAllEXT(ALCdevice* device) {
+void Myztic::ALExt::initAllEXT(ALCdevice* device) {
     initSysEvents(device);
     initDeviceClock(device);
     initEFX();

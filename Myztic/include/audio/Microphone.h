@@ -6,8 +6,9 @@
 #include <list>
 
 using std::list;
-
-class Microphone {
-	std::string name;
-	ALCdevice* handle;
-};
+namespace Myztic {
+	class Microphone {
+		std::string name;
+		ALCdevice* handle;
+	};
+}

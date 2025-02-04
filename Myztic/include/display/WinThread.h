@@ -4,17 +4,18 @@
 #include <semaphore>
 #include <utility>
 
-class Window;
+namespace Myztic {
+	class Window;
+	class WinThread {
+	public:
+		WinThread() = default;
+		WinThread(Window* winRef);
+		~WinThread();
 
-class WinThread {
-public:
-	WinThread() = default;
-	WinThread(Window* winRef);
-	~WinThread();
+		void destroy();
 
-	void destroy();
-
-	std::thread* handle; // We cannot copy a std::thread directly, so we reference it instead
-	std::binary_semaphore* signal;
-	Window* parent;
-};
+		std::thread* handle; // We cannot copy a std::thread directly, so we reference it instead
+		std::binary_semaphore* signal;
+		Window* parent;
+	};
+}

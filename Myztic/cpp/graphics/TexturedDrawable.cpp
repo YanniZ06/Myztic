@@ -5,9 +5,9 @@
 #include <graphics\Vertex.h>
 //this must only be called once and it must be in a source file not an hpp file like Texture2D
 #define STB_IMAGE_IMPLEMENTATION
-#include <graphics\Sprite.h>
+#include <graphics\TexturedDrawable.h>
 
-Sprite::Sprite(Scene* linkedScene, VertexBuffer& vbuf, std::string texturePath, bool usesEBO, std::vector<Shader> shaders) : Drawable(linkedScene, vbuf) {
+Myztic::TexturedDrawable::TexturedDrawable(Scene* linkedScene, VertexBuffer& vbuf, std::string texturePath, bool usesEBO, std::vector<Shader> shaders) : Drawable(linkedScene, vbuf) {
 	vert_type = GL_TRIANGLES;
 	vbo.bind();
 	//reconsider this especially for GL_STATIC_DRAW.
@@ -35,13 +35,13 @@ Sprite::Sprite(Scene* linkedScene, VertexBuffer& vbuf, std::string texturePath, 
 	texture = Texture2D::fromFile(texturePath);
 }
 
-void Sprite::prepareDraw()
+void Myztic::TexturedDrawable::prepareDraw()
 {
 	Drawable::prepareDraw();
 	texture.bind();
 }
 
-void Sprite::finishDraw()
+void Myztic::TexturedDrawable::finishDraw()
 {
 	Drawable::finishDraw();
 	texture.unbind();

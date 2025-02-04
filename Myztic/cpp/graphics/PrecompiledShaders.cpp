@@ -3,12 +3,12 @@
 #include <Timer.h>
 #include <graphics\PrecompiledShaders.h>
 
-Shader PrecompiledShaders::texture_color_vs = Shader();
-Shader PrecompiledShaders::texture_color_fs = Shader();
-Shader PrecompiledShaders::texture_vs = Shader();
-Shader PrecompiledShaders::texture_fs = Shader();
+Myztic::Shader Myztic::PrecompiledShaders::texture_color_vs = Shader();
+Myztic::Shader Myztic::PrecompiledShaders::texture_color_fs = Shader();
+Myztic::Shader Myztic::PrecompiledShaders::texture_vs = Shader();
+Myztic::Shader Myztic::PrecompiledShaders::texture_fs = Shader();
 
-void PrecompiledShaders::Compile() {
+void Myztic::PrecompiledShaders::Compile() {
 	double start = Timer::stamp();
 	texture_vs = Shader::fromString(GL_VERTEX_SHADER, BASIC_TEXTURE_VS);
 	texture_color_vs = Shader::fromString(GL_VERTEX_SHADER, BASIC_TEXTURE_COLOR_VS);

@@ -18,16 +18,16 @@
 #include <semaphore>
 
 #include <graphics\Vertex.h>
-#include <graphics\Sprite.h>
+#include <graphics\TexturedDrawable.h>
 #include <graphics\Camera.h>
 
-class SceneB : Scene {
-	virtual void load(Window* callerWindow) {
+class SceneB : Myztic::Scene {
+	virtual void load(Myztic::Window* callerWindow) {
 		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
 		std::cout << "ID: " << std::to_string(id) << "\n";
 	}
 
-	virtual void unload(Window* callerWindow) {
+	virtual void unload(Myztic::Window* callerWindow) {
 		std::cout << "Unloaded from Window: " << (std::string)*callerWindow << "\n";
 	}
 
@@ -35,13 +35,13 @@ class SceneB : Scene {
 		std::cout << "SceneB entered\n";
 		// Application::log_windows_cmd();
 	}
-	virtual void finish(Scene* nextScene) {
+	virtual void finish(Myztic::Scene* nextScene) {
 		std::cout << "SceneB finished\n";
 	}
 };
 
-class TestScene : Scene {
-	Sprite* spr;
+class TestScene : Myztic::Scene {
+	Myztic::TexturedDrawable* spr;
 	float elapsed = 0.f;
 
 	void logLoaded() {
@@ -56,13 +56,13 @@ class TestScene : Scene {
 		std::cout << "Finished\n";
 	}
 
-	virtual void load(Window* callerWindow) {
+	virtual void load(Myztic::Window* callerWindow) {
 		std::cout << "Loaded to Window: " << callerWindow->name().c_str() << "\n";
 	}
 	virtual void enter() {
-		Audio::initialize();
+		Myztic::Audio::initialize();
 
-		Window* myzWin = Application::windows[this->loadedWin->id()];
+		Myztic::Window* myzWin = Myztic::Application::windows[this->loadedWin->id()];
 		std::cout << myzWin->name() << "\n";
 		myzWin->setName("WINDOW 1");
 
@@ -71,12 +71,12 @@ class TestScene : Scene {
 
 
 		logLoaded();
-		Application::log_windows_cmd();
+		Myztic::Application::log_windows_cmd();
 
 		// Segunda Windowa (excellente espanol)
-		WindowParams paramsB = { "WINDOW 2", (Scene*)new SceneB(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
-		Window* windowB = Window::create(paramsB);
-		Application::log_windows_cmd();
+		Myztic::WindowParams paramsB = { "WINDOW 2", (Scene*)new SceneB(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
+		Myztic::Window* windowB = Myztic::Window::create(paramsB);
+		Myztic::Application::log_windows_cmd();
 		windowB->setX(windowB->x() + 250);
 
 		myzWin->switchToContext(); //! THIS IS WHAT WAS MISSING BY THE WAY, SIMPLY THIS. GOD.
@@ -131,15 +131,15 @@ class TestScene : Scene {
 			{{-0.5,  0.5, -0.5},  {0.0, 1.0}}
 		};
 
-		VertexBuffer buf(std::move(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Texture2D)));
+		Myztic::VertexBuffer buf(std::move(Myztic::VertexLayout{}.Append(Myztic::VertexLayout::Position3D).Append(Myztic::VertexLayout::Texture2D)));
 		for (int i = 0; i < vertices.size(); i++) {
 			buf.EmplaceBack(vertices[i].pos, vertices[i].uv);
 		}
 		
 		std::cout << buf.Size() << "\n";
-		spr = new Sprite(this, buf, "assets/textures/glint.png", false);
+		spr = new Myztic::TexturedDrawable(this, buf, "assets/textures/glint.png", false);
 		spr->transformation = glm::rotate(glm::mat4(1.f), glm::radians(45.f), glm::vec3(1.f, 1.f, 1.f));
-		mainCamera = new Camera(ProjectionType::Perspective, this, glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f));
+		mainCamera = new Myztic::Camera(Myztic::ProjectionType::Perspective, this, glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f));
 		cameras.push_back(mainCamera);
 		spr->camera = mainCamera;
 		myzWin->renderer.drawables.push_back(spr);
@@ -184,8 +184,8 @@ int WinMain(HINSTANCE hInstance,
 
 	//? Actual Myztic work
 	TestScene* scene = new TestScene();
-	WindowParams p = { "Myztic Engine Test", (Scene*)scene, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
-	Application::initMyztic(p, 60);
+	Myztic::WindowParams p = { "Myztic Engine Test", (Myztic::Scene*)scene, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
+	Myztic::Application::initMyztic(p, 60);
 	
 	// tMainTest();
 

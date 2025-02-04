@@ -22,18 +22,18 @@
 #define SDL_MAIN_HANDLED
 
 // Statics
-std::map<unsigned int, Window*> Application::windows;
+std::map<unsigned int, Myztic::Window*> Myztic::Application::windows;
 std::binary_semaphore* resourceManager;
 std::binary_semaphore* waiter;
-std::atomic<uint8_t> Application::readyWinThreads = 0;
-uint8_t Application::registeredWinThreads = 0;
-Fps Application::fps;
-bool Application::shouldClose = false;
-std::binary_semaphore* Application::waiter;
-ResourceManager* Application::resourceManager;
+std::atomic<uint8_t> Myztic::Application::readyWinThreads = 0;
+uint8_t Myztic::Application::registeredWinThreads = 0;
+Myztic::Fps Myztic::Application::fps;
+bool Myztic::Application::shouldClose = false;
+std::binary_semaphore* Myztic::Application::waiter;
+Myztic::ResourceManager* Myztic::Application::resourceManager;
 bool freeCamera = false;
 
-void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
+void Myztic::Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 	double myzStart = Timer::stamp();
 	SDL_SetMainReady();
 
@@ -75,7 +75,7 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 	app_loop();
 }
 
-void Application::app_loop() {
+void Myztic::Application::app_loop() {
 	SDL_Event e;
 
 	while (!shouldClose) {
@@ -279,7 +279,7 @@ void Application::app_loop() {
 // Like, 3 frames arent rendered yet, but you press a key that youd need to press in frame 2 while frame 1 hasnt finished, so it gets the time of your input, and assigns
 // the event to correct frame instead of forcing that frame to be waited on which also makes sure there are (close to) 0 ignored inputs!! 
 
-void Application::start_winloop(Window* win) {
+void Myztic::Application::start_winloop(Window* win) {
 	if (win->shouldClose) return;
 	win->thread.signal->acquire();
 
@@ -288,7 +288,7 @@ void Application::start_winloop(Window* win) {
 }
 
 // Todo: Run soely physics and drawing REQUESTS to the drawing (currently main) thread in here | Unlikely -> preloading is done on ANOTHER thread if we do the context preloading thing
-void Application::window_loop(Window* win) {
+void Myztic::Application::window_loop(Window* win) {
 	while (!win->shouldClose) {		
 		win->scene->update((float)fps.getFrameTime()); // Put elapsed time in here, for now it gives you the max framerate elapsed
 
@@ -302,7 +302,7 @@ void Application::window_loop(Window* win) {
 
 // Logging and shit (remove for end releases????)
 
-void Application::log_windows_cmd() {
+void Myztic::Application::log_windows_cmd() {
 	std::cout << "Application::windows =>\n";
 	for (std::map<unsigned int, Window*>::const_iterator it = windows.begin(); it != windows.end(); ++it)
 	{

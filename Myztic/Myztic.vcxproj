@@ -214,7 +214,7 @@
     <ClInclude Include="include\graphics\Renderer.h" />
     <ClInclude Include="include\graphics\backend\Texture2D.hpp" />
     <ClInclude Include="include\Audio.h" />
-    <ClInclude Include="include\graphics\Sprite.h" />
+    <ClInclude Include="include\graphics\TexturedDrawable.h" />
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\stb_image.h" />
@@ -241,7 +241,7 @@
     <ClCompile Include="cpp\graphics\Drawable.cpp" />
     <ClCompile Include="cpp\graphics\PrecompiledShaders.cpp" />
     <ClCompile Include="cpp\graphics\Renderer.cpp" />
-    <ClCompile Include="cpp\graphics\Sprite.cpp" />
+    <ClCompile Include="cpp\graphics\TexturedDrawable.cpp" />
     <ClCompile Include="cpp\Scene.cpp" />
     <ClCompile Include="cpp\Timer.cpp" />
     <ClCompile Include="cpp\Util.cpp" />

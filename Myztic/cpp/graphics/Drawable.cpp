@@ -5,13 +5,13 @@
 #include <display\Window.h>
 #include <graphics\Camera.h>
 
-Drawable::Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperties) : linkedScene(linkedScene) {
+Myztic::Drawable::Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperties) : linkedScene(linkedScene) {
 	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(inputProperties));
 	vertexData = VertexBuffer(std::move(VertexLayout{}.Append(VertexLayout::Position3D)));
 	this->vbo = VBO::make();
 }
 
-Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData) : linkedScene(linkedScene) {
+Myztic::Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData) : linkedScene(linkedScene) {
 	std::vector<InputProperty> ips = vertData.GetLayout().GetDescription().inputProperties;
 	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(ips));
 	//copy operation, safe to get rid of the original variable.
@@ -19,13 +19,13 @@ Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData) : linkedScene(lin
 	this->vbo = VBO::make();
 }
 
-Drawable::~Drawable() {
+Myztic::Drawable::~Drawable() {
 	linkedScene = nullptr;
 }
 
-Drawable Drawable::makeQuad(Scene* linkedScene, VertexBuffer& verts, std::vector<Shader> shaders) {
-	std::vector<InputProperty> ips = verts.GetLayout().GetDescription().inputProperties;
-	Drawable obj = Drawable(linkedScene, verts);
+Myztic::Drawable Myztic::Drawable::makeQuad(Scene* linkedScene, Myztic::VertexBuffer& verts, std::vector<Shader> shaders) {
+	std::vector<Myztic::InputProperty> ips = verts.GetLayout().GetDescription().inputProperties;
+	Myztic::Drawable obj = Myztic::Drawable(linkedScene, verts);
 	obj.vert_type = GL_TRIANGLES;
 	obj.vbo.bind();
 	//reconsider this especially for GL_STATIC_DRAW.
@@ -53,7 +53,7 @@ Drawable Drawable::makeQuad(Scene* linkedScene, VertexBuffer& verts, std::vector
 }
 
 // prepare draw
-void Drawable::prepareDraw() {
+void Myztic::Drawable::prepareDraw() {
 	shaderProgram.bind();
 	glUniformMatrix4fv(shaderProgram.getUniformLocation("world"), 1, GL_FALSE, glm::value_ptr(transformation));
 	glUniformMatrix4fv(shaderProgram.getUniformLocation("view"), 1, GL_FALSE, (camera == nullptr) ? glm::value_ptr(glm::mat4(1.f)) : glm::value_ptr(camera->intern_ViewMatrix));
@@ -61,7 +61,7 @@ void Drawable::prepareDraw() {
 	inputLayout.bindInputLayout();
 }
 
-void Drawable::finishDraw() {
+void Myztic::Drawable::finishDraw() {
 	shaderProgram.unbind();
 	inputLayout.unbind();
 }

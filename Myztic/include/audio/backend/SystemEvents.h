@@ -5,7 +5,7 @@
 #include <al.h>
 // #include <tuple>
 
-namespace AUD { // Might remove later, currently this is a precaution for an additional SystemEvents class showing up at some point
+namespace Myztic { // Might remove later, currently this is a precaution for an additional SystemEvents class showing up at some point
 	class SystemEvents {
 		friend class Application;
 	public:

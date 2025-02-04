@@ -1,7 +1,6 @@
 #pragma once
 
 #include <graphics\backend\Shader.h>
-
 #define BASIC_TEXTURE_COLOR_VS R"(#version 330 core
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec4 aCol;
@@ -54,6 +53,7 @@ void main()
     FragColor = texture(tex, TexCoord);
 })"
 
+namespace Myztic {
 class PrecompiledShaders {
 public:
     static Shader texture_color_vs;
@@ -63,3 +63,4 @@ public:
 
     static void Compile();
 };
+}
