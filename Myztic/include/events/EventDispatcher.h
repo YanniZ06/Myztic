@@ -1,6 +1,6 @@
 #pragma once
 
-#include <events/MouseMoveEvent.h>
+#include <events/MouseEvent.h>
 
 #include <functional>
 #include <map>

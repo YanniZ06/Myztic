@@ -153,7 +153,7 @@
     <ClInclude Include="include\graphics\PrecompiledShaders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\events\MouseMoveEvent.h">
+    <ClInclude Include="include\events\MouseEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

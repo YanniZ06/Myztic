@@ -192,7 +192,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\events\MouseMoveEvent.h" />
+    <ClInclude Include="include\events\MouseEvent.h" />
     <ClInclude Include="include\graphics\Camera.h" />
     <ClInclude Include="cpp\stb_image.h" />
     <ClInclude Include="include\audio\backend\ALExt.h" />
