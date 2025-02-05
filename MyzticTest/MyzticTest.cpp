@@ -188,7 +188,7 @@ int WinMain(HINSTANCE hInstance,
 	//? Actual Myztic work
 	TestScene* scene = new TestScene();
 	WindowParams p = { "Myztic Engine Test", (Scene*)scene, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
-	Application::initMyztic(p, 60);
+	Application::initMyztic(p, 120); // 120 / the fps is currently not representative of the actual fps used (uncapped or monitor refresh-rate, depending on os settings and such)
 	
 	// tMainTest();
 

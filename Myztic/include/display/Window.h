@@ -14,11 +14,15 @@
 
 namespace Myztic {
 	class Scene;
+
 	struct WindowParams {
+		/// The name for your window
 		std::string name;
+		/// The scene this window starts on
 		Scene* init_scene;
 
 		std::optional<int> x, y, w, h;
+		/// Custom SDL_WindowFlags OR'd together, for example like `SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_BORDERLESS | SDL_WINDOW_MINIMIZED`
 		std::optional<SDL_WindowFlags> flags;
 	};
 
@@ -33,7 +37,7 @@ namespace Myztic {
 		std::map<unsigned int, Scene*> loadedScenes;
 
 	public:
-		// Not meant to be called. Use Window::create instead
+		/// Not meant to be called. Use Window::create instead
 		Window(WindowParams params);
 
 		static Window* create(WindowParams params);

@@ -42,8 +42,10 @@ void Renderer::startRender() {
 		pendingRequests.clear(); //? Maybe not a smart idea, gotta make sure we have sort of 2 render queues, especially for the double buffering shittamajig
 		return;
 	}
-	if (SDL_GL_MakeCurrent(targetWin->handle, targetWin->context) != 0)
+	if (SDL_GL_MakeCurrent(targetWin->handle, targetWin->context) != 0) {
 		std::cout << "whoopsie daisy, couldn't make current opengl context to window: " << targetWin->name().c_str() << "\n";
+		return;
+	}
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -62,7 +64,6 @@ void Renderer::startRender() {
 		}
 		d->finishDraw();
 	}
-
 	glDisable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 }

@@ -39,8 +39,9 @@ namespace Myztic {
 
 	protected:
 		double _used;
-		fpsSize max;
+		fpsSize counter;
 
+		fpsSize max;
 		double frameTime;
 		float rawFrameTime;
 	};

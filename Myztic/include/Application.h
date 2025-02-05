@@ -12,6 +12,12 @@
 #define MYZTIC_WIN_LIMIT 16 // Real limit should be 256, but we use this instead because nobody should need that many windows. Might be tweaked later
 
 namespace Myztic {
+    enum class VSyncType : int8_t {
+        VSYNC_ADAPATIVE = -1,
+        VSYNC_NONE = 0,
+        VSYNC_ON = 1
+    };
+
     class Window;
     struct WindowParams;
     /**
@@ -42,6 +48,19 @@ namespace Myztic {
         static Fps fps;
         static bool shouldClose;
 
+        // todo: wip
+        /**
+         * Sets the VSync option for this Application.
+         * 
+         * \remark Depending on OS or hardware options, the setting might not be applied.
+         */
+        /*
+        static inline void vSync(VSyncType setting) {
+            for (auto it = windows.begin(); it != windows.end(); ++it) {
+                it->second->switchToContext();
+            }
+        }
+        */
 
         /**
          * Initializes Myztic Engine.
@@ -56,6 +75,8 @@ namespace Myztic {
         static void log_windows_cmd();
 
     protected:
+        static VSyncType vSync_; // todo: wip
+
         // Starts an update loop for the input window, but makes sure to wait for the next event queue
         static void start_winloop(Window* win);
         // Update loop execution for the window

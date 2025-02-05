@@ -8,6 +8,7 @@ Fps::Fps(fpsSize max) {
 	frameTime = (1 / (float)max) * 1000;
 	rawFrameTime = 1 / (float)max;
 	_used = static_cast<double>(max);
+	counter = 0;
 	this->max = max;
 }
 

@@ -57,6 +57,7 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 	Application::fps = Fps(fps);
 
 	SDL_GL_MakeCurrent(window->handle, window->context);
+	SDL_GL_SetSwapInterval(0); // Ask to disable vsync until its been implemented properly
 
 	int gladResult = gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 	if (gladResult == 0) {
@@ -84,6 +85,7 @@ double frameBeginTime;
 void Application::app_loop() {
 	SDL_Event e;
 
+	double secondTimer = Timer::stamp();
 	while (!shouldClose) {
 		frameBeginTime = Timer::stamp();
 
@@ -279,9 +281,15 @@ void Application::app_loop() {
 		
 		readyWinThreads.store(0, std::memory_order_relaxed);
 		// Finally, wait the rest of the frame or continue right away (do math here or some shit
-		SDL_Delay(1);
-
-		// fps._used = 1 / (Timer::stamp() - frameBeginTime); // Calculates current fps
+		// SDL_Delay(1);
+ 
+		if (Timer::stamp() - secondTimer >= 1000) {
+			fps._used = fps.counter;
+			fps.counter = 0;
+			secondTimer = Timer::stamp();
+			// std::cout << "FPS registered: " << fps._used << "\n";
+		}
+		fps.counter++;
 	}
 }
 
@@ -314,7 +322,7 @@ void Application::window_loop(Window* win) {
 
 void Application::log_windows_cmd() {
 	std::cout << "Application::windows =>\n";
-	for (std::map<unsigned int, Window*>::const_iterator it = windows.begin(); it != windows.end(); ++it)
+	for (auto it = windows.begin(); it != windows.end(); ++it)
 	{
 		std::cout << (int)it->first << " -> " << (std::string)*it->second << "\n";
 	}
