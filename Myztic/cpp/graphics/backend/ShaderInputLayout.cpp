@@ -2,14 +2,14 @@
 #include <Windows.h>
 #include <graphics/backend/ShaderInputLayout.h>
 
-// -9 pointer offset?? really????? | nvm it changed nothing
+using namespace Myztic;
 
-Myztic::InputProperty Myztic::ShaderInputLayout::POSITION = { Position, 3, GL_FLOAT, 0, sizeof(GLfloat) };
-Myztic::InputProperty Myztic::ShaderInputLayout::COLOR = { Color, 4, GL_FLOAT, 0, sizeof(GLfloat) };
-Myztic::InputProperty Myztic::ShaderInputLayout::TEXCOORD = { TextureCoordinate, 2, GL_FLOAT, 0, sizeof(GLfloat) };
-Myztic::InputProperty Myztic::ShaderInputLayout::NORMAL = { Normal, 3, GL_FLOAT, 0, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::POSITION = { Position, 3, GL_FLOAT, 0, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::COLOR = { Color, 4, GL_FLOAT, 0, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::TEXCOORD = { TextureCoordinate, 2, GL_FLOAT, 0, sizeof(GLfloat) };
+InputProperty ShaderInputLayout::NORMAL = { Normal, 3, GL_FLOAT, 0, sizeof(GLfloat) };
 
-Myztic::ShaderInputLayout::ShaderInputLayout(Myztic::LayoutDescription description) {
+ShaderInputLayout::ShaderInputLayout(LayoutDescription description) {
 	GLint previousVAO;
 	CHECK_GL(glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &previousVAO));
 
@@ -24,7 +24,7 @@ Myztic::ShaderInputLayout::ShaderInputLayout(Myztic::LayoutDescription descripti
 	};
 };
 
-Myztic::LayoutDescription Myztic::ShaderInputLayout::createLayoutDescription(std::vector<Myztic::InputProperty>& inputProperties) {
+LayoutDescription ShaderInputLayout::createLayoutDescription(std::vector<InputProperty>& inputProperties) {
 	GLint elementCount = 0;
 
 	for (int i = 0; i < inputProperties.size(); i++) {
@@ -39,7 +39,7 @@ Myztic::LayoutDescription Myztic::ShaderInputLayout::createLayoutDescription(std
 	return desc;
 };
 
-void Myztic::ShaderInputLayout::setVertexLayout()
+void ShaderInputLayout::setVertexLayout()
 {
 	for (int i = 0; i < description.inputProperties.size(); i++) {
 		InputProperty prop = description.inputProperties[i];
@@ -50,13 +50,13 @@ void Myztic::ShaderInputLayout::setVertexLayout()
 	};
 };
 
-void Myztic::ShaderInputLayout::deleteInputLayout() {
+void ShaderInputLayout::deleteInputLayout() {
 	attachedVAO.destroy();
 	ZeroMemory(&description, sizeof(LayoutDescription));
 	propertyCount = 0;
 };
 
-void Myztic::ShaderInputLayout::enableAttrib(int index) {
+void ShaderInputLayout::enableAttrib(int index) {
 	if (index > propertyCount) {
 		throw "Could not enable attrib index greater than the max attrib count";
 	};
@@ -64,13 +64,13 @@ void Myztic::ShaderInputLayout::enableAttrib(int index) {
 	CHECK_GL(glEnableVertexAttribArray(index));
 };
 
-void Myztic::ShaderInputLayout::enableAllAttribs() {
+void ShaderInputLayout::enableAllAttribs() {
 	for (int i = 0; i < propertyCount; i++) {
 		CHECK_GL(glEnableVertexAttribArray(i));
 	}
 };
 
-void Myztic::ShaderInputLayout::disableAttrib(int index) {
+void ShaderInputLayout::disableAttrib(int index) {
 	if (index > propertyCount) {
 		throw "Could not disable attrib index greater than the max attrib count";
 	};
@@ -78,7 +78,7 @@ void Myztic::ShaderInputLayout::disableAttrib(int index) {
 	CHECK_GL(glDisableVertexAttribArray(index));
 };
 
-void Myztic::ShaderInputLayout::disableAllAttribs() {
+void ShaderInputLayout::disableAllAttribs() {
 	for (int i = 0; i < propertyCount; i++) {
 		CHECK_GL(glDisableVertexAttribArray(i));
 	}

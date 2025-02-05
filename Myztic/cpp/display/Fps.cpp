@@ -2,18 +2,18 @@
 
 #include <display/Fps.h>
 
-// Fps
+using namespace Myztic;
 
-Myztic::Fps::Fps(fpsSize max) {
+Fps::Fps(fpsSize max) {
 	frameTime = (1 / (float)max) * 1000;
 	rawFrameTime = 1 / (float)max;
-	_used = max;
+	_used = static_cast<double>(max);
 	this->max = max;
 }
 
-void Myztic::Fps::setMax(fpsSize max) {
+void Fps::setMax(fpsSize max) {
 	this->max = max;
-	_used = max;
+	_used = static_cast<double>(max);
 	frameTime = (1 / (float)max) * 1000;
 	rawFrameTime = 1 / (float)max;
 }

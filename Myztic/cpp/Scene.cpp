@@ -4,25 +4,27 @@
 #include <graphics\Camera.h>
 #include <utilities/IDGenerator.h>
 
-Myztic::Scene::Scene() {
+using namespace Myztic;
+
+Scene::Scene() {
 	id = IDGenerator::instanceOf("scene")->next();
 	tag = "unnamedScene";
 	loadedWin = nullptr;
 }
 
-Myztic::Scene::Scene(const char* name)
+Scene::Scene(const char* name)
 {
 	id = IDGenerator::instanceOf("scene")->next();
 	tag = name;
 	loadedWin = nullptr;
 }
 
-Myztic::Scene::~Scene() {
+Scene::~Scene() {
 	loadedWin = nullptr;
 }
 
-void Myztic::Scene::load(Window* callerWindow) {}
-void Myztic::Scene::unload(Window* callerWindow) {}
-void Myztic::Scene::enter() {}
-void Myztic::Scene::finish(Scene* nextScene) {}
-void Myztic::Scene::update(float dt) {}
+void Scene::load(Window* callerWindow) {}
+void Scene::unload(Window* callerWindow) {}
+void Scene::enter() {}
+void Scene::finish(Scene* nextScene) {}
+void Scene::update(float dt) {}

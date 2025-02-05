@@ -6,29 +6,29 @@
 #include <graphics\Drawable.h>
 #include <graphics/Renderer.h>
 
-//class Application; // Forward this to not loop any weird header inclusions
+using namespace Myztic;
 
-Myztic::Renderer::Renderer(Window* drawTarget) {
+Renderer::Renderer(Window* drawTarget) {
 	targetWin = drawTarget;
 
 	pendingRequests = std::vector<RenderRequestBase>();
 	nextRequests = std::vector<RenderRequestBase>();
 }
 
-Myztic::Renderer::~Renderer() {
+Renderer::~Renderer() {
 	// pendingRequests.clear();
 	// nextRequests.clear();
 	targetWin = nullptr;
 }
 
-void Myztic::Renderer::drawLine(glm::vec2 p1, glm::vec2 p2)
+void Renderer::drawLine(glm::vec2 p1, glm::vec2 p2)
 {
 	DLineRequest<glm::vec2> req(p1, p2);
 
 	pendingRequests.push_back(req.base());
 }
 
-void Myztic::Renderer::drawRay(glm::vec3 p1, glm::vec3 p2)
+void Renderer::drawRay(glm::vec3 p1, glm::vec3 p2)
 {
 	DLineRequest<glm::vec3> req(p1, p2);
 
@@ -37,7 +37,7 @@ void Myztic::Renderer::drawRay(glm::vec3 p1, glm::vec3 p2)
 
 // This is the full renderer logic per Window that is used in Application's render phase
 
-void Myztic::Renderer::startRender() {
+void Renderer::startRender() {
 	if (!targetWin->focused() && !targetWin->renderOutOfFocus) {
 		pendingRequests.clear(); //? Maybe not a smart idea, gotta make sure we have sort of 2 render queues, especially for the double buffering shittamajig
 		return;
@@ -67,7 +67,7 @@ void Myztic::Renderer::startRender() {
 	glDisable(GL_DEPTH_TEST);
 }
 
-void Myztic::Renderer::endRender() {
+void Renderer::endRender() {
 	glBindVertexArray(0);
 	SDL_GL_SwapWindow(targetWin->handle);
 }

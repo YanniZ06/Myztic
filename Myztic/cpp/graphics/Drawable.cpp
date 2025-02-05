@@ -1,17 +1,20 @@
 #include "pch.h"
+
 #include <graphics\Drawable.h>
 #include <glm\gtc\type_ptr.hpp>
 #include <Scene.h>
 #include <display\Window.h>
 #include <graphics\Camera.h>
 
-Myztic::Drawable::Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperties) : linkedScene(linkedScene) {
+using namespace Myztic;
+
+Drawable::Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperties) : linkedScene(linkedScene) {
 	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(inputProperties));
 	vertexData = VertexBuffer(std::move(VertexLayout{}.Append(VertexLayout::Position3D)));
 	this->vbo = VBO::make();
 }
 
-Myztic::Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData) : linkedScene(linkedScene) {
+Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData) : linkedScene(linkedScene) {
 	std::vector<InputProperty> ips = vertData.GetLayout().GetDescription().inputProperties;
 	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(ips));
 	//copy operation, safe to get rid of the original variable.
@@ -19,13 +22,13 @@ Myztic::Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData) : linkedS
 	this->vbo = VBO::make();
 }
 
-Myztic::Drawable::~Drawable() {
+Drawable::~Drawable() {
 	linkedScene = nullptr;
 }
 
-Myztic::Drawable Myztic::Drawable::makeQuad(Scene* linkedScene, Myztic::VertexBuffer& verts, std::vector<Shader> shaders) {
-	std::vector<Myztic::InputProperty> ips = verts.GetLayout().GetDescription().inputProperties;
-	Myztic::Drawable obj = Myztic::Drawable(linkedScene, verts);
+Drawable Drawable::makeQuad(Scene* linkedScene, VertexBuffer& verts, std::vector<Shader> shaders) {
+	std::vector<InputProperty> ips = verts.GetLayout().GetDescription().inputProperties;
+	Drawable obj = Drawable(linkedScene, verts);
 	obj.vert_type = GL_TRIANGLES;
 	obj.vbo.bind();
 	//reconsider this especially for GL_STATIC_DRAW.
@@ -53,7 +56,7 @@ Myztic::Drawable Myztic::Drawable::makeQuad(Scene* linkedScene, Myztic::VertexBu
 }
 
 // prepare draw
-void Myztic::Drawable::prepareDraw() {
+void Drawable::prepareDraw() {
 	shaderProgram.bind();
 	glUniformMatrix4fv(shaderProgram.getUniformLocation("world"), 1, GL_FALSE, glm::value_ptr(transformation));
 	glUniformMatrix4fv(shaderProgram.getUniformLocation("view"), 1, GL_FALSE, (camera == nullptr) ? glm::value_ptr(glm::mat4(1.f)) : glm::value_ptr(camera->intern_ViewMatrix));
@@ -61,7 +64,7 @@ void Myztic::Drawable::prepareDraw() {
 	inputLayout.bindInputLayout();
 }
 
-void Myztic::Drawable::finishDraw() {
+void Drawable::finishDraw() {
 	shaderProgram.unbind();
 	inputLayout.unbind();
 }

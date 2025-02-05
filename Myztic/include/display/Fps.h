@@ -15,27 +15,30 @@ namespace Myztic {
 		//~Fps();
 
 
-		//Gets the max fps cap
+		/// Gets the max fps cap
 		inline fpsSize getMax() {
 			return max;
 		}
-		// Sets the max fps cap
+		/// Sets the max fps cap
 		void setMax(fpsSize max);
 
-		// MS between each frame at max framerate
+		/// MS between each frame at max framerate
 		inline double getFrameTime() {
 			return frameTime;
 		}
+
+		/// Seconds between each frame at max framerate
 		inline float getRawFrameTime() {
 			return rawFrameTime;
 		}
-		// The fps the app actually runs at currently
-		inline fpsSize used() {
+
+		/// The fps the app actually runs at currently
+		inline double used() {
 			return _used; // This value is populated by the Application
 		}
 
 	protected:
-		fpsSize _used;
+		double _used;
 		fpsSize max;
 
 		double frameTime;

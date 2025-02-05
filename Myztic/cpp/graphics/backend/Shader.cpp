@@ -2,7 +2,9 @@
 #include <graphics/backend/Shader.h>
 #include <fstream>
 
-Myztic::Shader::Shader(GLenum shaderType, std::string file) {
+using namespace Myztic;
+
+Shader::Shader(GLenum shaderType, std::string file) {
 	std::ifstream shaderFile(file, std::ios::in | std::ios::binary | std::ios::ate);
 
 	if (shaderFile.is_open()) {
@@ -47,8 +49,8 @@ Myztic::Shader::Shader(GLenum shaderType, std::string file) {
 	throw "Couldn't open the shader file.";
 };
 
-Myztic::Shader Myztic::Shader::fromString(GLenum shaderType, const char* data) {
-	Myztic::Shader ret = Myztic::Shader();
+Shader Shader::fromString(GLenum shaderType, const char* data) {
+	Shader ret = Shader();
 	ret.handle = CHECK_GL(glCreateShader(shaderType));
 	CHECK_GL(glShaderSource(ret.handle, 1, &data, NULL));
 	CHECK_GL(glCompileShader(ret.handle));

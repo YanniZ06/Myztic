@@ -7,7 +7,9 @@ namespace Myztic {
 	enum MouseButton {
 		MB_NONE = 0,
 		MB_LEFT = 1,
+		/// Middle
 		MB_MIDDLE = 2,
+		/// Right button on the mouse
 		MB_RIGHT = 3,
 		/// First side button on the mouse (if available)
 		MB_SIDEX1 = 4,

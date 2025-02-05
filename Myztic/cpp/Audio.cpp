@@ -8,13 +8,15 @@
 #include <audio\backend\ALExt.h>
 #include <Audio.h>
 
-std::vector<const char*> Myztic::Audio::pbdList;
-std::vector<const char*> Myztic::Audio::micList;
-Myztic::SystemEvents Myztic::Audio::systemEvents;
-const char* Myztic::Audio::defaultPbd;
-const char* Myztic::Audio::defaultMic;
+using namespace Myztic;
 
-void Myztic::Audio::initialize()
+std::vector<const char*> Audio::pbdList;
+std::vector<const char*> Audio::micList;
+SystemEvents Audio::systemEvents;
+const char* Audio::defaultPbd;
+const char* Audio::defaultMic;
+
+void Audio::initialize()
 {
 	ALCdevice* tempDevice = alcOpenDevice(nullptr);
 	ALCcontext* tempContext = alcCreateContext(tempDevice, nullptr);
@@ -94,7 +96,7 @@ void Myztic::Audio::initialize()
 	ALExt::initAllEXT(tempDevice);
 
 	// Setup system audio events 
-	Audio::systemEvents = Myztic::SystemEvents(true);
+	Audio::systemEvents = SystemEvents(true);
 	Audio::systemEvents.supported = std::map<const char*, bool>{ 
 		// PlaybackDevice Events
 		{"new_PlaybackDevice", ALExt::alcEventIsSupportedSOFT(ALC_EVENT_TYPE_DEVICE_ADDED_SOFT, ALC_PLAYBACK_DEVICE_SOFT) == 1},
@@ -117,13 +119,13 @@ void Myztic::Audio::initialize()
 
 // Microphone
 
-void Myztic::Audio::refreshDefaultInputDevice()
+void Audio::refreshDefaultInputDevice()
 {
 	Audio::refreshInputDevices();
 	Audio::defaultMic = alcGetString(NULL, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
 }
 
-void Myztic::Audio::refreshInputDevices()
+void Audio::refreshInputDevices()
 {
 	micList.clear();
 	const char* in_deviceListRaw = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
@@ -134,24 +136,24 @@ void Myztic::Audio::refreshInputDevices()
 	}
 }
 
-const char* Myztic::Audio::getDefaultInputDevice()
+const char* Audio::getDefaultInputDevice()
 {
 	return Audio::defaultMic;
 }
 
-std::vector<const char*> Myztic::Audio::getInputDevices() {
+std::vector<const char*> Audio::getInputDevices() {
 	return Audio::micList;
 }
 
 
 // Playback Device
 
-void Myztic::Audio::refreshDefaultPlaybackDevice() {
+void Audio::refreshDefaultPlaybackDevice() {
 	Audio::refreshPlaybackDevices();
 	Audio::defaultPbd = alcGetString(NULL, ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
 }
 
-void Myztic::Audio::refreshPlaybackDevices()
+void Audio::refreshPlaybackDevices()
 {
 	pbdList.clear();
 	const char* deviceListRaw = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
@@ -162,10 +164,10 @@ void Myztic::Audio::refreshPlaybackDevices()
 	}
 }
 
-const char* Myztic::Audio::getDefaultPlaybackDevice() {
-	return Myztic::Audio::defaultPbd;
+const char* Audio::getDefaultPlaybackDevice() {
+	return Audio::defaultPbd;
 }
 
-std::vector<const char*> Myztic::Audio::getPlaybackDevices() {
-	return Myztic::Audio::pbdList;
+std::vector<const char*> Audio::getPlaybackDevices() {
+	return Audio::pbdList;
 }

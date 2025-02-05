@@ -21,13 +21,15 @@
 #include <graphics\TexturedDrawable.h>
 #include <graphics\Camera.h>
 
-class SceneB : Myztic::Scene {
-	virtual void load(Myztic::Window* callerWindow) {
+using namespace Myztic;
+
+class SceneB : Scene {
+	virtual void load(Window* callerWindow) {
 		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
 		std::cout << "ID: " << std::to_string(id) << "\n";
 	}
 
-	virtual void unload(Myztic::Window* callerWindow) {
+	virtual void unload(Window* callerWindow) {
 		std::cout << "Unloaded from Window: " << (std::string)*callerWindow << "\n";
 	}
 
@@ -35,13 +37,13 @@ class SceneB : Myztic::Scene {
 		std::cout << "SceneB entered\n";
 		// Application::log_windows_cmd();
 	}
-	virtual void finish(Myztic::Scene* nextScene) {
+	virtual void finish(Scene* nextScene) {
 		std::cout << "SceneB finished\n";
 	}
 };
 
-class TestScene : Myztic::Scene {
-	Myztic::TexturedDrawable* spr;
+class TestScene : Scene {
+	TexturedDrawable* spr;
 	float elapsed = 0.f;
 
 	void logLoaded() {
@@ -56,13 +58,13 @@ class TestScene : Myztic::Scene {
 		std::cout << "Finished\n";
 	}
 
-	virtual void load(Myztic::Window* callerWindow) {
+	virtual void load(Window* callerWindow) {
 		std::cout << "Loaded to Window: " << callerWindow->name().c_str() << "\n";
 	}
 	virtual void enter() {
-		Myztic::Audio::initialize();
+		Audio::initialize();
 
-		Myztic::Window* myzWin = Myztic::Application::windows[this->loadedWin->id()];
+		Window* myzWin = Application::windows[this->loadedWin->id()];
 		std::cout << myzWin->name() << "\n";
 		myzWin->setName("WINDOW 1");
 
@@ -71,12 +73,12 @@ class TestScene : Myztic::Scene {
 
 
 		logLoaded();
-		Myztic::Application::log_windows_cmd();
+		Application::log_windows_cmd();
 
 		// Segunda Windowa (excellente espanol)
-		Myztic::WindowParams paramsB = { "WINDOW 2", (Scene*)new SceneB(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
-		Myztic::Window* windowB = Myztic::Window::create(paramsB);
-		Myztic::Application::log_windows_cmd();
+		WindowParams paramsB = { "WINDOW 2", (Scene*)new SceneB(),SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
+		Window* windowB = Window::create(paramsB);
+		Application::log_windows_cmd();
 		windowB->setX(windowB->x() + 250);
 
 		myzWin->switchToContext(); //! THIS IS WHAT WAS MISSING BY THE WAY, SIMPLY THIS. GOD.
@@ -131,15 +133,15 @@ class TestScene : Myztic::Scene {
 			{{-0.5,  0.5, -0.5},  {0.0, 1.0}}
 		};
 
-		Myztic::VertexBuffer buf(std::move(Myztic::VertexLayout{}.Append(Myztic::VertexLayout::Position3D).Append(Myztic::VertexLayout::Texture2D)));
+		VertexBuffer buf(std::move(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Texture2D)));
 		for (int i = 0; i < vertices.size(); i++) {
 			buf.EmplaceBack(vertices[i].pos, vertices[i].uv);
 		}
 		
 		std::cout << buf.Size() << "\n";
-		spr = new Myztic::TexturedDrawable(this, buf, "assets/textures/glint.png", false);
+		spr = new TexturedDrawable(this, buf, "assets/textures/glint.png", false);
 		spr->transformation = glm::rotate(glm::mat4(1.f), glm::radians(45.f), glm::vec3(1.f, 1.f, 1.f));
-		mainCamera = new Myztic::Camera(Myztic::ProjectionType::Perspective, this, glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f));
+		mainCamera = new Camera(ProjectionType::Perspective, this, glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f));
 		cameras.push_back(mainCamera);
 		spr->camera = mainCamera;
 		myzWin->renderer.drawables.push_back(spr);
@@ -148,6 +150,7 @@ class TestScene : Myztic::Scene {
 	virtual void update(float dt) {
 		elapsed += dt;
 		
+		std::cout << "FPS: " << Application::fps.used() << "\n";
 	}
 };
 
@@ -184,8 +187,8 @@ int WinMain(HINSTANCE hInstance,
 
 	//? Actual Myztic work
 	TestScene* scene = new TestScene();
-	Myztic::WindowParams p = { "Myztic Engine Test", (Myztic::Scene*)scene, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
-	Myztic::Application::initMyztic(p, 60);
+	WindowParams p = { "Myztic Engine Test", (Scene*)scene, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 680, 480 };
+	Application::initMyztic(p, 60);
 	
 	// tMainTest();
 

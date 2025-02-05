@@ -7,7 +7,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <graphics\TexturedDrawable.h>
 
-Myztic::TexturedDrawable::TexturedDrawable(Scene* linkedScene, VertexBuffer& vbuf, std::string texturePath, bool usesEBO, std::vector<Shader> shaders) : Drawable(linkedScene, vbuf) {
+using namespace Myztic;
+
+TexturedDrawable::TexturedDrawable(Scene* linkedScene, VertexBuffer& vbuf, std::string texturePath, bool usesEBO, std::vector<Shader> shaders) : Drawable(linkedScene, vbuf) {
 	vert_type = GL_TRIANGLES;
 	vbo.bind();
 	//reconsider this especially for GL_STATIC_DRAW.
@@ -35,13 +37,13 @@ Myztic::TexturedDrawable::TexturedDrawable(Scene* linkedScene, VertexBuffer& vbu
 	texture = Texture2D::fromFile(texturePath);
 }
 
-void Myztic::TexturedDrawable::prepareDraw()
+void TexturedDrawable::prepareDraw()
 {
 	Drawable::prepareDraw();
 	texture.bind();
 }
 
-void Myztic::TexturedDrawable::finishDraw()
+void TexturedDrawable::finishDraw()
 {
 	Drawable::finishDraw();
 	texture.unbind();
