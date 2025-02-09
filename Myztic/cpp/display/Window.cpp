@@ -63,39 +63,39 @@ Window::~Window() {
 	// renderer.~Renderer();
 }
 
-bool Window::switchScene(Scene* scene)
+bool Window::switchScene(Scene* inputScene)
 {
-	if (this->scene) this->scene->finish(scene);
-	if (scene->loadedWin != this) return false;
+	if (this->scene) this->scene->finish(inputScene);
+	if (inputScene->loadedWin != this) return false;
 
-	scene->enter();
-	this->scene = scene;
+	inputScene->enter();
+	this->scene = inputScene;
 	return true;
 }
 
-bool Window::loadScene(Scene* scene) {
-	if (scene->loadedWin) return false;
+bool Window::loadScene(Scene* inputScene) {
+	if (inputScene->loadedWin) return false;
 
-	scene->loadedWin = this;
-	scene->load(this);
+	inputScene->loadedWin = this;
+	inputScene->load(this);
 	//std::shared_ptr<Scene> ss = std::shared_ptr<Scene>(scene);
-	loadedScenes[scene->getId()] = scene;
+	loadedScenes[inputScene->getId()] = inputScene;
 	return true;
 }
 
-bool Window::unloadScene(Scene* scene, bool freeMem) {
-	if (scene->loadedWin != this) return false;
-	if (scene == this->scene) { // Make sure we break nothing if there is no current scene 
+bool Window::unloadScene(Scene* inputScene, bool freeMem) {
+	if (inputScene->loadedWin != this) return false;
+	if (inputScene == this->scene) { // Make sure we break nothing if there is no current scene 
 		Scene* placeHolderScene = new Scene();
 		this->scene->finish(placeHolderScene);
 		this->scene = placeHolderScene;
 	}
 
-	scene->unload(this);
-	scene->loadedWin = nullptr;
-	loadedScenes.erase(scene->getId());
+	inputScene->unload(this);
+	inputScene->loadedWin = nullptr;
+	loadedScenes.erase(inputScene->getId());
 
-	if (freeMem) delete scene;
+	if (freeMem) delete inputScene;
 	return true;
 }
 

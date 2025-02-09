@@ -95,6 +95,8 @@ void Application::app_loop() {
 			switch (e.type) {
 			// Handle Window Events
 			case SDL_WINDOWEVENT: {
+				if (!Application::windows.contains(e.window.windowID)) break; //? not sure if that is necessary, will check later
+
 				Window* eWin = Application::windows[e.window.windowID];
 
 				if (eWin == nullptr) {
@@ -262,21 +264,26 @@ void Application::app_loop() {
 			}
 		}
 
-		// Step 2: Start & continue all winloops -> create drawing requests for the next frame and handle physics
-		for (std::map<unsigned int, Window*>::const_iterator it = windows.begin(); it != windows.end(); ++it) {
+		// Step 2: Start & continue all winloops -> (call update on all window-scenes)
+		for (auto it = windows.begin(); it != windows.end(); ++it) {
 			Window* win = it->second;
 			win->thread.signal->release();
-
-			// Start rendering <3 (Handle draw requests (maybe manage to handle the last frames draw requests while this frame recommends a new one so this thread isnt wasted just sleeping?))
-			win->renderer.startRender();
-
-			//presents shit to screen
-			win->renderer.endRender();
 		}
 
 		// Unless we are somehow already ready to continue (edge-case), pause current thread, gets unpaused once the last thread is ready
 		if (readyWinThreads.load() < registeredWinThreads) { 
 			waiter->acquire(); 
+		}
+
+		// Step 3: Draw all window contents
+		for (auto it = windows.begin(); it != windows.end(); ++it) {
+			Window* win = it->second;
+
+			// Start rendering <3 
+			win->renderer.startRender();
+
+			//presents shit to screen
+			win->renderer.endRender();
 		}
 		
 		readyWinThreads.store(0, std::memory_order_relaxed);
@@ -308,7 +315,7 @@ void Application::start_winloop(Window* win) {
 // Todo: Run soely physics and drawing REQUESTS to the drawing (currently main) thread in here | Unlikely -> preloading is done on ANOTHER thread if we do the context preloading thing
 void Application::window_loop(Window* win) {
 	while (!win->shouldClose) {
-		win->scene->update((float)(Timer::stamp() - frameBeginTime)); // Put elapsed time in here, for now it gives you the max framerate elapsed
+		win->scene->update((float)(Timer::stamp() - frameBeginTime));
 
 		readyWinThreads++;
 		if (readyWinThreads.load() == registeredWinThreads) { // Continue main thread if this was the last window thread that finished

@@ -23,6 +23,8 @@ namespace Myztic {
 
 		std::optional<int> x, y, w, h;
 		/// Custom SDL_WindowFlags OR'd together, for example like `SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_BORDERLESS | SDL_WINDOW_MINIMIZED`
+		/// 
+		/// You may not use the following SDL_WindowFlags: SDL_WINDOW_UTILITY, SDL_WINDOW_TOOLTIP, SDL_WINDOW_POPUP_MENU, SDL_WINDOW_VULKAN, SDL_WINDOW_METAL & SDL_WINDOW_OPENGL
 		std::optional<SDL_WindowFlags> flags;
 	};
 
