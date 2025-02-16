@@ -6,20 +6,28 @@ using namespace Myztic;
 
 std::map<EventType, EventHandle> EventDispatcher::eventsList;
 
-template<typename EventCallbackType>
-void EventDispatcher::registerEvent(EventType type, EventCallbackType callbackFunc) {
+template<typename EventInfoStruct>
+void EventDispatcher::registerEvent(EventType type, std::function<void(EventInfoStruct)> callbackFunc, uint32_t id) {
 	EventHandle& evh = eventsList[type];
 	evh.registered = true;
-	evh.callbacks.push_back((void*)&callbackFunc);
+
+	if (evh.callbacks.count(id)) evh.callbacks.erase(id); // Dupe ID; unregister the event
+	evh.callbacks[id] = ((void*)&callbackFunc);
 }
 
-template<typename PhysicalEvent, typename EventCallbackType>
+void EventDispatcher::unregisterEvent(EventType type, uint32_t id) {
+	EventHandle& evh = eventsList[type];
+	if (evh.callbacks.count(id)) evh.callbacks.erase(id);
+}
+
+
+template<typename PhysicalEvent, typename EventInfoStruct>
 void EventDispatcher::dispatchEvent(EventType type, PhysicalEvent inEvent) {
 	EventHandle& evh = eventsList[type];
-	if (!evh.registered) return;
+	if (!evh.registered) return; 
 
-	for (void* callback : evh.callbacks.begin()) {
-		EventCallbackType* cast_callback = static_cast<EventCallbackType*>(callback);
+	for (auto it = evh.callbacks.begin(); it != evh.callbacks.end(); ++it) {
+		std::function<void(EventInfoStruct)>* cast_callback = static_cast<std::function<void(EventInfoStruct)>*>(it->second);
 		(*cast_callback)(inEvent);
 	}
 }
