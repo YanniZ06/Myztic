@@ -234,7 +234,6 @@
     <ClCompile Include="cpp\display\Fps.cpp" />
     <ClCompile Include="cpp\display\Window.cpp" />
     <ClCompile Include="cpp\display\WinThread.cpp" />
-    <ClCompile Include="cpp\events\AudioEvent.cpp" />
     <ClCompile Include="cpp\events\EventDispatcher.cpp" />
     <ClCompile Include="cpp\graphics\backend\ShaderProgram.cpp" />
     <ClCompile Include="cpp\graphics\Camera.cpp" />

@@ -4,6 +4,10 @@
 
 namespace Myztic {
 	class Window; //fwd declare
+
+	/**
+	 * Represents all buttons available on a mouse.
+	 */
 	enum MouseButton {
 		MB_NONE = 0,
 		MB_LEFT = 1,
@@ -17,6 +21,9 @@ namespace Myztic {
 		MB_SIDEX2 = 5
 	};
 
+	/**
+	 * Fired when the mouse has been moved from one position to another.
+	 */
 	struct MouseMoveEvent {
 		/// The window with focus, or nullptr if there is none
 		Window* focusWin;

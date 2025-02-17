@@ -1,11 +1,10 @@
 #pragma once
 
 #include <map>
-#include <events/AudioEvent.h>
 #include <al.h>
-// #include <tuple>
+#include <alc.h>
 
-namespace Myztic { // Might remove later, currently this is a precaution for an additional SystemEvents class showing up at some point
+namespace Myztic {
 	class SystemEvents {
 		friend class Application;
 	public:
@@ -45,23 +44,31 @@ namespace Myztic { // Might remove later, currently this is a precaution for an 
 		 * 
 		 * ### Example Usage
 		 * ```cpp
-		 * void callback(const char* msg, DeviceType type) {
-		 *		std::cout << "[NEW OPENALSOFT DEVICE] " << msg << "\n";
-		 * }
+		 * if(Audio::systemEvents.supported["new_PlaybackDevice"]) 
+		 * {
+		 *		auto callbackFunc = [](DeviceAddedEvent event) {
+		 *			const char* dType = event.isCapture ? "Microphone" : "Playback Device";
+		 *			std::cout << "New " << dType << " was added: " << event.dName << "\n";
+		 *		};
 		 * 
-		 * if(Audio::systemEvents.supported["new_PlaybackDevice"]) {
-		 *		Audio::systemEvents.onDeviceAdded.registerEvent(&callback);
+		 *		EventDispatcher::registerEvent<DeviceAddedEvent>(EVENT_AUDIO_DEVICE_ADDED, std::function<void(DeviceAddedEvent)>(callbackFunc), 0);
 		 * }
 		 * ```
-		 * \sa onDeviceAdded
-		 * \sa onDeviceLost
-		 * \sa onDefaultDeviceChanged
+		 * \sa EventDispatcher::registerEvent
+		 * \sa toggleEventWatch
 		 */
 		std::map<const char*, bool> supported;
 
-		DeviceAddedEvent onDeviceAdded;
-		DefaultDeviceChangedEvent onDefaultDeviceChanged;
-
+		/**
+		 * Toggles listening for the input audio event. 
+		 * Whether the event can actually be listened for is determined by the `supported` map.
+		 * 
+		 * \note The actual callback function needs to be registered via the EventDispatcher.
+		 * 
+		 * \param eventType EventType::EVENT_DEFAULT_AUDIO_DEVICE_CHANGED, EventType::EVENT_AUDIO_DEVICE_ADDED or EventType::EVENT_AUDIO_DEVICE_REMOVED. Any other input will cause undefined behavior.
+		 * \param toggle True if the event should be listened for, otherwise false.
+		 */
+		void toggleEventWatch(int eventType, bool toggle);
 	protected:
 		static int OPENAL_SYSTEM_EVENT_SDLEVENTTYPE;
 		static void ALC_APIENTRY openalEventCallback(ALCenum eventType, ALCenum deviceType, ALCdevice* device, ALCsizei length, const ALCchar* message, void* userParam) AL_API_NOEXCEPT17;

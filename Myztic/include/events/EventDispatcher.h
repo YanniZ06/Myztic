@@ -1,15 +1,14 @@
 #pragma once
 
-#include <events/MouseEvent.h>
-
 #include <functional>
 #include <map>
+#include <alext.h>
 
 namespace Myztic {
 	enum EventType {
+		EVENT_DEFAULT_AUDIO_DEVICE_CHANGED,
 		EVENT_AUDIO_DEVICE_ADDED,
 		EVENT_AUDIO_DEVICE_REMOVED,
-		EVENT_DEFAULT_AUDIO_DEVICE_CHANGED,
 		EVENT_MOUSEMOVE
 	};
 

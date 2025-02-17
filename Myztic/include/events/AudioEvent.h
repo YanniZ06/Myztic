@@ -6,88 +6,50 @@
 #include <alc.h>
 
 namespace Myztic {
-	enum DeviceType {
-		PLAYBACK_DEVICE = 0,
-		MICROPHONE = 1,
-		INVALID = 2,
-	};
-
-	/**
-	 * The base for every audio event, seperated from BaseEvent to better suit its special purpose.
-	 *
-	 * Use registerEvent
-	 */
-	class BaseAudioEvent {
-		friend class Application;
-	public:
-		const char* dName;
-		DeviceType dType;
-
-
-		virtual void registerEvent(void (*callbackFunction)(void*));
-		void registerEmpty();
-		void unregisterEvent();
-
-	protected:
-		BaseAudioEvent();
-
-		void (*callback)(void*); // Should work as protected (?????)
-		ALCenum eID = 0;
-	};
-
 	/**
 	 * Fires when a new audio device has become available.
-	 *
-	 *
-	 * Common member field documentation for registerEvent():
-	 * * `const char * dName` -- name of the device that has become available
-	 * * `DeviceType dType` -- the `DeviceType` associated with this event
-	 *
+	 * 
 	 * \note Only to be used if `Audio::systemEvents.supported["new_PlaybackDevice" or "new_Microphone"]` returns true.
+	 * \note Use Audio::systemEvents.toggleEventWatch to ensure the event is being listened for.
 	 */
-	class DeviceAddedEvent : public BaseAudioEvent {
-	public:
-		/**
-		 * Should not be called, use Audio::systemEvents.onDeviceAdded instead.
-		 */
-		DeviceAddedEvent();
+	struct DeviceAddedEvent {
+		/// The name of the device that has become available
+		const char* dName;
+		/// The device type associated with this event, true if Microphone, otherwise PlaybackDevice
+		bool isCapture;
+
+		DeviceAddedEvent(const char* dN, bool cap) :dName(dN), isCapture(cap) {}
 	};
 
 	/**
 	 * Fires when an audio device is no longer available.
-	 *
-	 *
-	 * Common member field documentation for registerEvent():
-	 * * `const char * dName` -- name of the device that has been lost
-	 * * `DeviceType dType` -- the `DeviceType` associated with this event
-	 *
+	 * 
 	 * \note Only to be used if `Audio::systemEvents.supported["lost_PlaybackDevice" or "lost_Microphone"]` returns true.
+	 * \note Use Audio::systemEvents.toggleEventWatch to ensure the event is being listened for.
 	 */
-	class DeviceLostEvent : public BaseAudioEvent {
-	public:
-		/**
-		 * Should not be called, use Audio::systemEvents.onDeviceLost instead.
-		 */
-		DeviceLostEvent();
+	struct DeviceLostEvent {
+		/// The name of the device that has been lost
+		const char* dName;
+		/// The device type associated with this event, true if Microphone, otherwise PlaybackDevice
+		bool isCapture;
+
+		DeviceLostEvent(const char* dN, bool cap) :dName(dN), isCapture(cap) {}
 	};
 
 	/**
 	 * Fires when the default audio device changes.
-	 *
-	 *
-	 * Common member field documentation for registerEvent():
-	 * * `const char * oldDefaultDevice` -- the default device name prior to the event;
-	 * * `const char * newDefaultDevice` -- name of the new default device
-	 * * `DeviceType dType` -- the `DeviceType` associated with this event
-	 *
+	 * 
 	 * \note Only to be used if `Audio::systemEvents.supported["changed_DefaultPlaybackDevice" or "changed_DefaultMicrophone"]` returns true.
+	 * \note Use Audio::systemEvents.toggleEventWatch to ensure the event is being listened for.
 	 */
-	class DefaultDeviceChangedEvent : public BaseAudioEvent {
-	public:
-		const char* newDefaultDevice;
-		/**
-		 * Should not be called, use Audio::systemEvents.onDefaultDeviceChanged instead.
-		 */
-		DefaultDeviceChangedEvent();
+	struct DefaultDeviceChangedEvent {
+		/// The default device name prior to the event
+		const char* old_DName;
+		/// The name of the new default device
+		const char* new_DName;
+		/// The device type associated with this event, true if Microphone, otherwise PlaybackDevice
+		bool isCapture;
+
+		DefaultDeviceChangedEvent(const char* old_dN, const char* new_dN, bool cap) :old_DName(old_dN), new_DName(new_dN), isCapture(cap) {}
 	};
 }
