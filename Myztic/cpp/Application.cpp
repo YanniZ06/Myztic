@@ -56,8 +56,14 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 
 	Application::fps = Fps(fps);
 
+	std::cout << "Swap Interval (VSYNC) results: \n";
 	SDL_GL_MakeCurrent(window->handle, window->context);
-	SDL_GL_SetSwapInterval(0); // Ask to disable vsync until its been implemented properly
+	if (SDL_GL_SetSwapInterval(0) == -1) // Ask to disable vsync until its been implemented properly
+		std::cout << SDL_GetError() << "\n";
+
+	std::cout << "Used Type: " << SDL_GL_GetSwapInterval() << "\n";
+
+
 
 	int gladResult = gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 	if (gladResult == 0) {
@@ -65,7 +71,7 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 	}
 
 	const GLubyte* version = glGetString(GL_VERSION);
-	std::cout << version << "\n";
+	std::cout << "GL Version: " << version << "\n";
 
 	CHECK_GL(glViewport(0, 0, 680, 480));
 

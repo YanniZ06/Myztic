@@ -31,9 +31,18 @@ namespace Myztic {
             return true;
         }
 
+        // todo: type specified resource manager, as in where an accessor may access a resource that is already used by a different accessor, but is allowed to use it anyways because they 
+        // todo: share the same accessor type and dont cause any conflicts
+        // inline bool queueRequest() {}
+
+        // todo: #2: create a system that keeps track of which threads hold which resource-manager, so that a situation in which two threads which first aquired different managers
+        // todo: lock eachother out like this: (t2->draw ; t1->general; t1->draw [T1 HALTS], t2->general [T2 HALTS];) doesnt occur
+        // todo: INSTEAD, if a thread is halted it should automatically free up all other resource managers it is holding onto, put them in a queue, and once theyre unhalted, hold onto their original resources
+        // todo: ONLY if they are not currently occupied, and if they are, wait until they no longer are (basically be forced to wait at the back of the line)
+
         /**
          * Notifies the resource manager that the last thread has finished using the resource so that the next one in queue can start accessing it.
-         * \warning This function should only be called if `request()` was called before, otherwise it will invalidate requests sent by other threads.
+         * \warning This function should only be called if `request()` was called before, otherwise it will invalidate requests sent by other threads and cause otherwise undefined behavior.
          * \see request
          *
          * \return True if there was a request to finish, false if there were no requests.

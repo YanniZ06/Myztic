@@ -41,6 +41,12 @@ namespace Myztic {
 
         /// Dictates whether the main thread resources are currently available or being read/modified by one of the threads
         static ResourceManager* resourceManager;
+
+        /// Used to allow drawing operations from any custom thread without the danger of invalidating a concurrent rendering process.
+        /// 
+        /// If the main thread is currently drawing, a request will halt until the draw phase is over, and like-wise a draw phase will be prevented until your request was finished.
+        static ResourceManager threadSafeDraw; // todo: once threads and resource managers are more figured out, following this commits' todos and etc
+
         /// Tells the main loop thread to wait on the other window threads
         static std::binary_semaphore* waiter;
 

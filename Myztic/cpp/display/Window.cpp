@@ -38,7 +38,11 @@ Window::Window(WindowParams params) {
 	if (!params.h) _h = 480;
 	else _h = params.h.value();
 
-	handle = SDL_CreateWindow(_name.c_str(), _x, _y, _w, _h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE);
+	int extraFlags;
+	if (!params.flags) extraFlags = SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE;
+	else extraFlags = SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE | params.flags.value();
+
+	handle = SDL_CreateWindow(_name.c_str(), _x, _y, _w, _h, extraFlags);
 	if (!handle) {
 		printf("Failed to create window\n");
 	}
@@ -48,6 +52,12 @@ Window::Window(WindowParams params) {
 
 	_focused = (SDL_GetWindowFlags(handle) & SDL_WINDOW_INPUT_FOCUS) != 0;
 	renderOutOfFocus = true;
+
+	std::cout << "Swap Interval (VSYNC) results: \n";
+	if (SDL_GL_SetSwapInterval(0) == -1) // Ask to disable vsync until its been implemented properly
+		std::cout << SDL_GetError() << "\n";
+
+	std::cout << "Used Type: " << SDL_GL_GetSwapInterval() << "\n";
 
 	renderer = Renderer(this);
 	thread = WinThread(this);
