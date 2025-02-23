@@ -27,7 +27,7 @@ void EventDispatcher::dispatchEvent(EventType type, PhysicalEvent inEvent) {
 	if (!evh.registered) return; 
 
 	for (auto it = evh.callbacks.begin(); it != evh.callbacks.end(); ++it) {
-		std::function<void(PhysicalEvent)>* cast_callback = static_cast<std::function<void(EventInfoStruct)>*>(it->second);
+		std::function<void(PhysicalEvent)>* cast_callback = static_cast<std::function<void(PhysicalEvent)>*>(it->second);
 		(*cast_callback)(inEvent);
 	}
 }
