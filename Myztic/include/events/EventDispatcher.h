@@ -39,8 +39,7 @@ namespace Myztic {
 		// Map that tracks event types and whether their registered + what their callbacks are
 		static std::map<EventType, EventHandle> eventsList;
 
-		// EventInfoStruct is necessary for our static cast to receive
-		template<typename PhysicalEvent, typename EventInfoStruct>
+		template<typename PhysicalEvent>
 		static void dispatchEvent(EventType type, PhysicalEvent inEvent);
 
 	};

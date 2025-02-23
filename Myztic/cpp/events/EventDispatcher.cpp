@@ -21,13 +21,13 @@ void EventDispatcher::unregisterEvent(EventType type, uint32_t id) {
 }
 
 
-template<typename PhysicalEvent, typename EventInfoStruct>
+template<typename PhysicalEvent>
 void EventDispatcher::dispatchEvent(EventType type, PhysicalEvent inEvent) {
 	EventHandle& evh = eventsList[type];
 	if (!evh.registered) return; 
 
 	for (auto it = evh.callbacks.begin(); it != evh.callbacks.end(); ++it) {
-		std::function<void(EventInfoStruct)>* cast_callback = static_cast<std::function<void(EventInfoStruct)>*>(it->second);
+		std::function<void(PhysicalEvent)>* cast_callback = static_cast<std::function<void(EventInfoStruct)>*>(it->second);
 		(*cast_callback)(inEvent);
 	}
 }

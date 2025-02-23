@@ -36,6 +36,7 @@ std::map<int, int> myzToALEvent = std::map<int, int>{
 	{EVENT_AUDIO_DEVICE_ADDED, ALC_EVENT_TYPE_DEVICE_ADDED_SOFT},
 	{EVENT_AUDIO_DEVICE_REMOVED, ALC_EVENT_TYPE_DEVICE_REMOVED_SOFT}
 };
+
 void Myztic::SystemEvents::toggleEventWatch(int eventType, bool toggle) {
 	ALExt::alcEventControlSOFT(1, &myzToALEvent[eventType], toggle ? 1 : 0); // todo: test this
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-// Audio Events are more or less special, as they are not called by the EventTransmitter, but instead directly have their events transmitted when they're called
 #include <stdint.h>
 #include <utility>
 #include <alc.h>
@@ -18,7 +17,7 @@ namespace Myztic {
 		/// The device type associated with this event, true if Microphone, otherwise PlaybackDevice
 		bool isCapture;
 
-		DeviceAddedEvent(const char* dN, bool cap) :dName(dN), isCapture(cap) {}
+		DeviceAddedEvent(const char* dN, bool cap) : dName(dN), isCapture(cap) {}
 	};
 
 	/**
@@ -33,7 +32,7 @@ namespace Myztic {
 		/// The device type associated with this event, true if Microphone, otherwise PlaybackDevice
 		bool isCapture;
 
-		DeviceLostEvent(const char* dN, bool cap) :dName(dN), isCapture(cap) {}
+		DeviceLostEvent(const char* dN, bool cap) : dName(dN), isCapture(cap) {}
 	};
 
 	/**
@@ -50,6 +49,6 @@ namespace Myztic {
 		/// The device type associated with this event, true if Microphone, otherwise PlaybackDevice
 		bool isCapture;
 
-		DefaultDeviceChangedEvent(const char* old_dN, const char* new_dN, bool cap) :old_DName(old_dN), new_DName(new_dN), isCapture(cap) {}
+		DefaultDeviceChangedEvent(const char* old_dN, const char* new_dN, bool cap) : old_DName(old_dN), new_DName(new_dN), isCapture(cap) {}
 	};
 }
