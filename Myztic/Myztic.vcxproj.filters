@@ -93,7 +93,7 @@
     <ClInclude Include="include\Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\utilities\ResourceManager.h">
+    <ClInclude Include="include\utilities\thread\ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\utilities\IDGenerator.h">
@@ -154,6 +154,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\events\MouseEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utilities\thread\InternalResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

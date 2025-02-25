@@ -93,6 +93,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>;$(SolutionDir)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -118,6 +119,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>;$(SolutionDir)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -220,7 +222,8 @@
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="include\Util.h" />
     <ClInclude Include="include\utilities\IDGenerator.h" />
-    <ClInclude Include="include\utilities\ResourceManager.h" />
+    <ClInclude Include="include\utilities\thread\InternalResourceManager.h" />
+    <ClInclude Include="include\utilities\thread\ResourceManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="include\graphics\backend\VBO.hpp" />
     <ClInclude Include="include\graphics\backend\VAO.hpp" />

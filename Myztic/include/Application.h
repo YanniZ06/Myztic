@@ -7,7 +7,7 @@
 //#include <semaphore>
 
 #include <display/Fps.h>
-#include <utilities/ResourceManager.h>
+#include <utilities/thread/ResourceManager.h>
 
 #define MYZTIC_WIN_LIMIT 16 // Real limit should be 256, but we use this instead because nobody should need that many windows. Might be tweaked later
 
