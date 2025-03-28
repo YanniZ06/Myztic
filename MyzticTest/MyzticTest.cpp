@@ -20,6 +20,7 @@
 #include <graphics\Vertex.h>
 #include <graphics\TexturedDrawable.h>
 #include <graphics\Camera.h>
+#include <utilities\thread\ResourceManager.h>
 
 using namespace Myztic;
 
@@ -61,7 +62,33 @@ class TestScene : Scene {
 	virtual void load(Window* callerWindow) {
 		std::cout << "Loaded to Window: " << callerWindow->name().c_str() << "\n";
 	}
+
 	virtual void enter() {
+		ResourceManager x = ResourceManager();
+		ResourceManager y = ResourceManager();
+
+		std::thread thrd = std::thread([&x, &y]() {
+			while (true) {
+
+				if (x.isBusy()) {
+					y.request();
+					std::cout << "this passes!" << "\n";
+					x.request();				
+					std::cout << "requested already busy resourcemanager, this shouldn't run, right?" << "\n";
+					break;
+				}
+
+				Sleep(1000);
+			};
+		});
+		thrd.detach();
+
+		x.request();
+		Sleep(1100);
+		y.request();
+		//here, no code is progressed until we finish request from ANOTHER thread
+		x.finishRequest();
+		y.finishRequest();
 		Audio::initialize();
 
 		Window* myzWin = Application::windows[this->loadedWin->id()];
@@ -150,7 +177,7 @@ class TestScene : Scene {
 	virtual void update(float dt) {
 		elapsed += dt;
 		
-		std::cout << "FPS: " << Application::fps.used() << "\n";
+		//std::cout << "FPS: " << Application::fps.used() << "\n";
 	}
 };
 

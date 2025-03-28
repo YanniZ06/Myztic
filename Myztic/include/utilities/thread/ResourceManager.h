@@ -28,53 +28,7 @@ namespace Myztic {
          *
          * \return True if the request was handled immediately, false if the resource is already in use.
          */
-        inline bool request() {
-            requests++;
-            std::thread::id threadId = std::this_thread::get_id();
-            if (busy.load()) {
-
-                // If there are no other managers to worry about, start holding right away
-                if (!ResourceManager::thread_Managers.contains(threadId) || ResourceManager::thread_Managers[threadId].size() == 0) {
-                    waiter->acquire();
-
-                    mapManager.request();
-                    ResourceManager::thread_Managers[threadId].push_back(this);
-                    mapManager.finishRequest();
-
-                    return false;
-                }
-
-                // Free all other current managers tied to this thread until the caller thread activates again, since theyre available and could also cause deadlocking a different thread along with this one
-                mapManager.request();
-                std::vector<ResourceManager*> haltedManagersList = ResourceManager::thread_Managers[threadId]; // Get a copy of current managers 
-                std::vector<ResourceManager*>& managerList = ResourceManager::thread_Managers[threadId];
-                for (ResourceManager* manager : managerList) {
-                    manager->_finishRequestHold();
-                }
-                managerList.erase(managerList.begin(), managerList.end()); // Empty the active "real" queue so we can properly use it with regular requests later
-                managerList.push_back(this); // By the time the waiter has finished this is already an actively resource-locking manager
-                mapManager.finishRequest();
-
-                //! We start actually waiting here
-                waiter->acquire();
-                // Our thread is active again, attempt requesting
-
-                std::vector<ResourceManager*> toReset = haltedManagersList;
-                toReset.push_back(this); // If we halt again we want to also request this manager again, we just dont want to request it right now because it is already accessible to this thread
-                for (ResourceManager* h_manager : haltedManagersList) {
-                    h_manager->_requestHeld(toReset);
-                }
-                
-                return false;
-            }
-            busy.store(true);
-            // 
-            mapManager.request();
-            ResourceManager::thread_Managers[threadId].push_back(this);
-            mapManager.finishRequest();
-
-            return true;
-        }
+        bool request();
 
         // todo: #2: create a system that keeps track of which threads hold which resource-manager, so that a situation in which two threads which first aquired different managers
         // todo: lock eachother out like this: (t2->draw ; t1->general; t1->draw [T1 HALTS], t2->general [T2 HALTS];) doesnt occur
@@ -86,23 +40,7 @@ namespace Myztic {
          * \warning This function should only be called if `request()` was called before, otherwise it will invalidate requests sent by other threads and cause otherwise undefined behavior.
          * \see request
          */
-        inline void finishRequest() {
-            if (!busy.load()) return; // comment out??
-
-            requests--;
-            if (requests.load() == 0) busy.store(false);
-
-            waiter->release(); // We can already release here, as the rest management will not be able to cause any race conditions of its own 
-
-            std::thread::id threadId = std::this_thread::get_id();
-
-            mapManager.request();
-            std::vector<ResourceManager*>& managerList = ResourceManager::thread_Managers[threadId];
-            managerList.erase(std::find(managerList.begin(), managerList.end(), this)); // Resource Manager is no longer used by this thread, stop keeping track of it
-
-            if (ResourceManager::thread_Managers[threadId].size() == 0) ResourceManager::thread_Managers.erase(threadId); // If there are no other managers in use for the thread, empty map entry
-            mapManager.finishRequest();
-        }
+        void finishRequest();
 
         /**
          * Returns whether the resource manager is currently handling a resource or not.

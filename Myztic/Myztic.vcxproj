@@ -249,6 +249,7 @@
     <ClCompile Include="cpp\Util.cpp" />
     <ClCompile Include="cpp\Audio.cpp" />
     <ClCompile Include="cpp\audio\backend\SystemEvents.cpp" />
+    <ClCompile Include="cpp\utilities\thread\ResourceManager.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
