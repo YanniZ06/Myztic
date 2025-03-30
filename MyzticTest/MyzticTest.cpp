@@ -64,6 +64,32 @@ class TestScene : Scene {
 	}
 
 	virtual void enter() {
+		std::binary_semaphore s1 = std::binary_semaphore(0);
+		std::binary_semaphore s2 = std::binary_semaphore(0);
+
+		Sleep(5);
+
+		std::thread thrd = std::thread([&s1, &s2]() {
+			Sleep(1000);
+			
+			std::cout << "Freeing Lock 1\n";
+			s1.release();
+
+			Sleep(1000);
+
+			std::cout << "Freeing Lock 2\n";
+			s1.release();
+		});
+		thrd.detach();
+
+		s1.acquire(); // Lock this thread?
+		std::cout << "Past Lock 1\n";
+
+		s1.acquire(); // Lock again ??
+		std::cout << "Past Lock 2\n";
+
+
+		/*
 		ResourceManager x = ResourceManager();
 		ResourceManager y = ResourceManager();
 
@@ -89,17 +115,14 @@ class TestScene : Scene {
 		//here, no code is progressed until we finish request from ANOTHER thread
 		x.finishRequest();
 		y.finishRequest();
+		*/
 		Audio::initialize();
 
 		Window* myzWin = Application::windows[this->loadedWin->id()];
 		std::cout << myzWin->name() << "\n";
 		myzWin->setName("WINDOW 1");
 
-		std::cout << "Size of std::thread: " << sizeof(std::thread) << "\n";
-		std::cout << "Size of std::thread* : " << sizeof(std::thread*) << "\n";
-
-
-		logLoaded();
+		// logLoaded();
 		Application::log_windows_cmd();
 
 		// Segunda Windowa (excellente espanol)
