@@ -34,6 +34,7 @@ TexturedDrawable::TexturedDrawable(Scene* linkedScene, VertexBuffer& vbuf, std::
 
 	inputLayout.unbind();
 	vbo.unbind();
+	shaderProgram.unbind();
 	texture = Texture2D::fromFile(texturePath);
 }
 

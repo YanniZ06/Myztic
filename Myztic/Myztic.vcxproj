@@ -215,6 +215,7 @@
     <ClInclude Include="include\graphics\backend\ShaderProgram.h" />
     <ClInclude Include="include\graphics\Drawable.h" />
     <ClInclude Include="include\graphics\PrecompiledShaders.h" />
+    <ClInclude Include="include\graphics\primitives\Line.h" />
     <ClInclude Include="include\graphics\Renderer.h" />
     <ClInclude Include="include\graphics\backend\Texture2D.hpp" />
     <ClInclude Include="include\Audio.h" />
@@ -226,7 +227,6 @@
     <ClInclude Include="include\utilities\IDGenerator.h" />
     <ClInclude Include="include\utilities\thread\InternalResourceManager.h" />
     <ClInclude Include="include\utilities\thread\ResourceManager.h" />
-    <ClInclude Include="pch.h" />
     <ClInclude Include="include\graphics\backend\VBO.hpp" />
     <ClInclude Include="include\graphics\backend\VAO.hpp" />
     <ClInclude Include="include\graphics\backend\ShaderInputLayout.h" />
@@ -244,6 +244,7 @@
     <ClCompile Include="cpp\graphics\Camera.cpp" />
     <ClCompile Include="cpp\graphics\Drawable.cpp" />
     <ClCompile Include="cpp\graphics\PrecompiledShaders.cpp" />
+    <ClCompile Include="cpp\graphics\primitives\Line.cpp" />
     <ClCompile Include="cpp\graphics\Renderer.cpp" />
     <ClCompile Include="cpp\graphics\TexturedDrawable.cpp" />
     <ClCompile Include="cpp\Scene.cpp" />

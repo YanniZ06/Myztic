@@ -9,16 +9,16 @@ namespace Myztic {
 	 * Represents all buttons available on a mouse.
 	 */
 	enum MouseButton {
-		MB_NONE = 0,
-		MB_LEFT = 1,
+		MBE_NONE = 0,
+		MBE_LEFT = 1,
 		/// Middle
-		MB_MIDDLE = 2,
+		MBE_MIDDLE = 2,
 		/// Right button on the mouse
-		MB_RIGHT = 3,
+		MBE_RIGHT = 3,
 		/// First side button on the mouse (if available)
-		MB_SIDEX1 = 4,
+		MBE_SIDEX1 = 4,
 		/// Second side button on the mouse (if available)
-		MB_SIDEX2 = 5
+		MBE_SIDEX2 = 5
 	};
 
 	/**

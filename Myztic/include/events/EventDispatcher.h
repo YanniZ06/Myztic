@@ -36,7 +36,13 @@ namespace Myztic {
 		 * as the argument to the std::function ( `std::function<void(MouseMoveEvent)>` )
 		 * \param id An unsigned integer id to identify this callback by. If the id is already in use by another event of type `type`, the old callback is unregistered and overwritten by this one.
 		 */
-		static void registerEvent(EventType type, std::function<void(EventInfoStruct)> callbackFunc, uint32_t id);
+		static void registerEvent(EventType type, std::function<void(EventInfoStruct)> callbackFunc, uint32_t id) {
+			EventHandle& evh = eventsList[type];
+			evh.registered = true;
+
+			if (evh.callbacks.count(id)) evh.callbacks.erase(id); // Dupe ID; unregister the event
+			evh.callbacks[id] = ((void*)&callbackFunc);
+		};
 
 		static void unregisterEvent(EventType type, uint32_t id);
 	protected:
@@ -44,7 +50,14 @@ namespace Myztic {
 		static std::map<EventType, EventHandle> eventsList;
 
 		template<typename PhysicalEvent>
-		static void dispatchEvent(EventType type, PhysicalEvent inEvent);
+		static void dispatchEvent(EventType type, PhysicalEvent inEvent) {
+			EventHandle& evh = eventsList[type];
+			if (!evh.registered) return;
 
+			for (auto it = evh.callbacks.begin(); it != evh.callbacks.end(); ++it) {
+				std::function<void(PhysicalEvent)>* cast_callback = static_cast<std::function<void(PhysicalEvent)>*>(it->second);
+				(*cast_callback)(inEvent);
+			}
+		};
 	};
 }

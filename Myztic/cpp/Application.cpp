@@ -64,8 +64,6 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 
 	std::cout << "Used Type: " << SDL_GL_GetSwapInterval() << "\n";
 
-
-
 	int gladResult = gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 	if (gladResult == 0) {
 		throw "Failed to initialize GLAD! Most likely outdated OpenGL Version, Required: OpenGL 3.3, ERROR CODE: " + std::to_string(gladResult) + "\n";
@@ -135,6 +133,7 @@ void Application::app_loop() {
 				case SDL_WINDOWEVENT_RESIZED:
 					SDL_GL_MakeCurrent(eWin->handle, eWin->context);
 					CHECK_GL(glViewport(0, 0, e.window.data1, e.window.data2));
+					//update cameras!
 					break;
 				default: break;
 				}
@@ -265,6 +264,7 @@ void Application::start_winloop(Window* win) {
 }
 
 // Todo: Run soely physics and drawing REQUESTS to the drawing (currently main) thread in here | Unlikely -> preloading is done on ANOTHER thread if we do the context preloading thing
+//! what the fuck were we even thinking back then?? these comments make no sense reading them after 1 year, we should probably improve on what we note
 void Application::window_loop(Window* win) {
 	while (!win->shouldClose) {
 		win->scene->update((float)(Timer::stamp() - frameBeginTime));

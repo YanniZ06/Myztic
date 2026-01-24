@@ -150,13 +150,16 @@
     <ClInclude Include="include\graphics\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\graphics\PrecompiledShaders.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\events\MouseEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\utilities\thread\InternalResourceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\PrecompiledShaders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\primitives\Line.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\events\KeyboardEvent.h">
@@ -221,13 +224,16 @@
     <ClCompile Include="cpp\graphics\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\graphics\PrecompiledShaders.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cpp\events\EventDispatcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp\utilities\thread\ResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\graphics\PrecompiledShaders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\graphics\primitives\Line.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

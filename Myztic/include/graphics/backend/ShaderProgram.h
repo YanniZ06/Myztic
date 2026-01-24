@@ -9,9 +9,6 @@ namespace Myztic {
 	class ShaderProgram {
 	public:
 		ShaderProgram();
-		~ShaderProgram() {
-
-		};
 		/**
 		 * Links the shader program to the OpenGL pipeline.
 		 *

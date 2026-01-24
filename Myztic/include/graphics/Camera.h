@@ -169,7 +169,7 @@ namespace Myztic {
 		float yawAngle = -90.f;
 		float pitchAngle = 0.f;
 	private:
-		GLfloat fov = 90.f;
+		GLfloat fov = 70.f;
 		GLfloat near_plane = 0.001f;
 		GLfloat far_plane = 1000.f;
 		Scene* linkedScene;
@@ -181,7 +181,7 @@ namespace Myztic {
 		inline void update_intern_projection() {
 			switch (projection_type) {
 			case Orthographic:
-				//opengl is right handed btw so this is equivalent to orthoRH
+				//opengl is left handed btw so this is equivalent to orthoLH
 				this->intern_ProjecMatrix = glm::ortho(0.0f, static_cast<GLfloat>(linkedScene->loadedWin->w()), static_cast<GLfloat>(linkedScene->loadedWin->h()), 0.0f, near_plane, far_plane);
 				break;
 			case Perspective:

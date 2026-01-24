@@ -9,7 +9,7 @@ namespace Myztic {
 	class Window;
 	class TexturedDrawable : public Drawable {
 	public:
-		TexturedDrawable(Scene* linkedScene, VertexBuffer& vbuf, std::string texturePath, bool usesEBO = false, std::vector<Shader> shaders = { PrecompiledShaders::texture_vs, PrecompiledShaders::texture_fs });
+		TexturedDrawable(Scene* linkedScene, VertexBuffer& vbuf, std::string texturePath, bool usesEBO = false, std::vector<Shader> shaders = {});
 		void prepareDraw();
 		void finishDraw();
 	private:

@@ -75,7 +75,7 @@ namespace Myztic {
 		* \param arrayLength The length of the array of elements to fill the vertex buffer
 		* \param drawType The drawing method the renderer should use, should use GL_STATIC_DRAW if you aren't gonna modify the vertices and use GL_DYNAMIC_DRAW if you will.
 		*/
-		inline void fill(void* data, int arrayLength, GLenum drawType) {
+		inline void fill(void* data, size_t arrayLength, GLenum drawType) {
 			int buf;
 			glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &buf);
 
@@ -83,6 +83,23 @@ namespace Myztic {
 				printf("[[WARNING]]: TRYING TO MODIFY CURRENTLY BOUND VERTEX BUFFER: %i FROM A NOT BOUND BUFFER CLASS: %u\n", buf, vbo);
 
 			CHECK_GL(glBufferData(GL_ARRAY_BUFFER, arrayLength, data, drawType));
+		};
+
+		/**
+		 * Updates the currently bound vertex buffer with the provided data; requires the vertex buffer to have GL_DYNAMIC_DRAW input when it was first written to.
+		 * 
+		 * \param data The new data to replace previous data
+		 * \param offset The offset in the previous data array from which you want to start writing
+		 * \param size Specifies the size in bytes of the data store region being replaced. 
+		 */
+		inline void update(void* data, size_t offset, size_t size) {
+			int buf;
+			glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &buf);
+
+			if (buf != vbo)
+				printf("[[WARNING]]: TRYING TO MODIFY CURRENTLY BOUND VERTEX BUFFER: %i FROM A NOT BOUND BUFFER CLASS: %u\n", buf, vbo);
+
+			CHECK_GL(glBufferSubData(GL_ARRAY_BUFFER, offset, size, data));
 		};
 	private:
 		GLuint vbo;

@@ -53,6 +53,29 @@ void main()
     FragColor = texture(tex, TexCoord);
 })"
 
+#define LINE_VS R"(#version 330 core
+layout(location = 0) in vec2 aPoint;
+
+uniform mat4 world;
+uniform mat4 view;
+uniform mat4 projection;
+
+void main()
+{
+    gl_Position = projection * view * world * vec4(aPoint, -1.0, 1.0);
+}
+
+)"
+
+#define LINE_FS R"(#version 330 core
+out vec4 FragColor;
+void main()
+{
+    FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+}
+
+)"
+
 namespace Myztic {
 class PrecompiledShaders {
 public:
@@ -60,6 +83,9 @@ public:
     static Shader texture_color_fs;
     static Shader texture_vs;
     static Shader texture_fs;
+
+    static Shader line_vs;
+    static Shader line_fs;
 
     static void Compile();
 };

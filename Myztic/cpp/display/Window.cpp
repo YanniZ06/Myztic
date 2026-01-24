@@ -3,7 +3,7 @@
 #include <Application.h>
 #include <Scene.h>
 #include <display/Window.h>
-
+#include <graphics\PrecompiledShaders.h>
 
 // Logging
 #include <windows.h>
@@ -14,6 +14,8 @@ using namespace Myztic;
 Window* Window::create(WindowParams params) {
 	Window* window = new Window(params);
 	Application::windows[window->id()] = window;
+
+	PrecompiledShaders::Compile();
 
 	window->loadScene(params.init_scene);
 	window->switchScene(params.init_scene);
