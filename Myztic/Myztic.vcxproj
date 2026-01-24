@@ -194,6 +194,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\events\Events.h" />
+    <ClInclude Include="include\events\KeyboardEvent.h" />
     <ClInclude Include="include\events\MouseEvent.h" />
     <ClInclude Include="include\graphics\Camera.h" />
     <ClInclude Include="cpp\stb_image.h" />

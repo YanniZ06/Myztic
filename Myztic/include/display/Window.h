@@ -157,6 +157,10 @@ namespace Myztic {
 		/// Loads this scenes contents to this Window, returns false if the scene is already loaded to a Window
 		bool loadScene(Scene* scene);
 
+		inline Scene* getActiveScene() {
+			return scene;
+		}
+
 		/**
 		 * Unloads a scenes contents from this Window. This operation calls scene->unload(this);
 		 * \nIf the scene is currently the Windows' active scene, scene->finish(this); will be called & a dummy scene will be loaded.

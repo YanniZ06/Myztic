@@ -3,6 +3,8 @@
 #include <Windows.h>
 #include <stdio.h>
 #include <io.h>
+#include <events/Events.h>
+
 #include <Application.h>
 #include <SDL.h>
 
@@ -21,6 +23,7 @@
 #include <graphics\TexturedDrawable.h>
 #include <graphics\Camera.h>
 #include <utilities\thread\ResourceManager.h>
+
 
 using namespace Myztic;
 
@@ -47,6 +50,8 @@ class TestScene : Scene {
 	TexturedDrawable* spr;
 	float elapsed = 0.f;
 
+	bool freeCamera = false;
+
 	void logLoaded() {
 		size_t size = 0;
 		Scene** loadedScenes = this->loadedWin->getLoadedScenes(size);
@@ -57,13 +62,85 @@ class TestScene : Scene {
 			std::cout << "Scene Number "<< i <<":" << loadedScenes[i++]->getId() << "\n";
 		}
 		std::cout << "Finished\n";
+
+		auto mouseMoveCallback = [&](MouseMoveEvent event) {
+			Window* win = event.focusWin;
+			if (win) {
+				if (win->getActiveScene() != nullptr && freeCamera) {
+					for (Camera* cam : win->getActiveScene()->cameras) {
+						//to look left and right, we must modify the yaw axis by a certain variable according to the delta x (xrel) value
+						glm::vec3 lookDirection = glm::vec3();
+						glm::vec3 look_at = cam->get_look_at();
+						cam->yawAngle += event.xRel;
+						cam->pitchAngle = glm::clamp(cam->pitchAngle - event.yRel, -89.0f, 89.0f);
+						lookDirection.x = cos(glm::radians(cam->yawAngle)) * cos(glm::radians(cam->pitchAngle));
+						lookDirection.y = sin(glm::radians(cam->pitchAngle));
+						lookDirection.z = sin(glm::radians(cam->yawAngle)) * cos(glm::radians(cam->pitchAngle));
+						cam->set_look(glm::normalize(lookDirection));
+					}
+				}
+			}
+		};
+		   
+		EventDispatcher::registerEvent<MouseMoveEvent>(EVENT_MOUSEMOVE, std::function<void(MouseMoveEvent)>(mouseMoveCallback), 0);
+		
+
+		auto keyboardCallback = [&](KeyboardEvent event) {
+			if (!event.keyDown) return;
+
+			Window* win = event.focusWin;
+
+			switch (event.key) {
+			case SDLK_INSERT:
+				freeCamera = !freeCamera;
+				SDL_CaptureMouse(freeCamera ? SDL_TRUE : SDL_FALSE);
+				SDL_SetRelativeMouseMode(freeCamera ? SDL_TRUE : SDL_FALSE);
+				break;
+				//this is fucking horrible i should find another way to do this
+				// i made it a BIT better for you <3 -yanni (ps you can make a map for the rough calculations later :)
+			case SDLK_w:
+				if (win->getActiveScene() != nullptr && freeCamera) {
+					for (Camera* cam : win->getActiveScene()->cameras) {
+						cam->set_position(cam->get_position() + (cam->get_look_at() * (Application::fps.getRawFrameTime() * 7.f)));
+					}
+				}
+				break;
+			case SDLK_s:
+				if (win->getActiveScene() != nullptr && freeCamera) {
+					for (Camera* cam : win->getActiveScene()->cameras) {
+						cam->set_position(cam->get_position() - (cam->get_look_at() * (Application::fps.getRawFrameTime() * 7.f)));
+					}
+				}
+				break;
+			case SDLK_a:
+				if (win->getActiveScene() != nullptr && freeCamera) {
+					for (Camera* cam : win->getActiveScene()->cameras) {
+						cam->set_position(cam->get_position() - (glm::normalize(glm::cross(cam->get_look_at(), Camera::UP)) * (Application::fps.getRawFrameTime() * 7.f)));
+					}
+				}
+				break;
+			case SDLK_d:
+				if (win->getActiveScene() != nullptr && freeCamera) {
+					for (Camera* cam : win->getActiveScene()->cameras) {
+						cam->set_position(cam->get_position() + (glm::normalize(glm::cross(cam->get_look_at(), Camera::UP)) * (Application::fps.getRawFrameTime() * 7.f)));
+					}
+				}
+				break;
+			default: break;
+			}
+		};
+
+		EventDispatcher::registerEvent<KeyboardEvent>(EVENT_KEYBOARD, std::function<void(KeyboardEvent)>(keyboardCallback), 0);
 	}
 
 	virtual void load(Window* callerWindow) {
 		std::cout << "Loaded to Window: " << callerWindow->name().c_str() << "\n";
 	}
 
+	//void mkThread()
+
 	virtual void enter() {
+		/*
 		std::binary_semaphore s1 = std::binary_semaphore(0);
 		std::binary_semaphore s2 = std::binary_semaphore(0);
 
@@ -77,17 +154,19 @@ class TestScene : Scene {
 
 			Sleep(1000);
 
-			std::cout << "Freeing Lock 2\n";
+			std::cout << "Freeing Lock 1 again\n";
 			s1.release();
 		});
 		thrd.detach();
 
+		std::cout << "Aquiring Lock 1\n";
 		s1.acquire(); // Lock this thread?
 		std::cout << "Past Lock 1\n";
 
+		std::cout << "Aquiring Lock 1 again\n";
 		s1.acquire(); // Lock again ??
-		std::cout << "Past Lock 2\n";
-
+		std::cout << "Past Lock 1 again\n";
+		*/
 
 		/*
 		ResourceManager x = ResourceManager();

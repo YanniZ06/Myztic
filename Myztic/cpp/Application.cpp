@@ -3,7 +3,6 @@
 
 #include <Application.h>
 #include <Audio.h>
-#include <events/EventDispatcher.h>
 #include <display/Window.h>
 #include <graphics/Renderer.h>
 #include <Scene.h>
@@ -18,6 +17,8 @@
 #include <glm\gtc\quaternion.hpp>
 #include <graphics\PrecompiledShaders.h>
 #include <graphics\Camera.h>
+
+#include <events/Events.h>
 
 #include <cmath>
 
@@ -141,88 +142,33 @@ void Application::app_loop() {
 				break;
 			}
 			// Mouse Events
-			/*case SDL_MOUSEMOTION:
+			case SDL_MOUSEMOTION: {
 				Window* eWin = nullptr;
 				if (windows.count(e.motion.windowID)) eWin = windows[e.motion.windowID];
 
+				EventDispatcher::dispatchEvent(EventType::EVENT_MOUSEMOVE, new MouseMoveEvent(eWin, e.motion.x, e.motion.y, e.motion.xrel, e.motion.yrel));
 				break;
-			*/
+			}
+
+			case SDL_KEYDOWN: {
+				Window* eWin = nullptr;
+				if (windows.count(e.key.windowID)) eWin = windows[e.key.windowID];
+
+				EventDispatcher::dispatchEvent(EventType::EVENT_KEYBOARD, new KeyboardEvent(eWin, true, e.key.keysym.scancode, e.key.keysym.sym));
+				break;
+			}
+			case SDL_KEYUP: {
+				Window* eWin = nullptr;
+				if (windows.count(e.key.windowID)) eWin = windows[e.key.windowID];
+
+				EventDispatcher::dispatchEvent(EventType::EVENT_KEYBOARD, new KeyboardEvent(eWin, false, e.key.keysym.scancode, e.key.keysym.sym));
+				break;
+			}
+
 			// Other Event Types
 			case SDL_QUIT:
 				shouldClose = true;
 				break;
-			case SDL_KEYDOWN:
-				switch (e.key.keysym.sym) {
-					case SDLK_INSERT:
-						freeCamera = !freeCamera;
-						SDL_CaptureMouse(freeCamera ? SDL_TRUE : SDL_FALSE);
-						SDL_SetRelativeMouseMode(freeCamera ? SDL_TRUE : SDL_FALSE);
-						break;
-					//this is fucking horrible i should find another way to do this
-					case SDLK_w:
-						if (windows.count(e.key.windowID)) {
-							Window* win = windows[e.key.windowID];
-							if (win->scene != nullptr && freeCamera) {
-								for (Camera* cam : win->scene->cameras) {
-									cam->set_position(cam->cam_position + (cam->look_at * (fps.rawFrameTime * 7.f)));
-								}
-							}
-						}
-						break;
-					case SDLK_s:
-						if (windows.count(e.key.windowID)) {
-							Window* win = windows[e.key.windowID];
-							if (win->scene != nullptr && freeCamera) {
-								for (Camera* cam : win->scene->cameras) {
-									cam->set_position(cam->cam_position - (cam->look_at * (fps.rawFrameTime * 7.f)));
-								}
-							}
-						}
-						break;
-					case SDLK_a:
-						if (windows.count(e.key.windowID)) {
-							Window* win = windows[e.key.windowID];
-							if (win->scene != nullptr && freeCamera) {
-								for (Camera* cam : win->scene->cameras) {
-									 cam->set_position(cam->cam_position - (glm::normalize(glm::cross(cam->look_at, Camera::UP)) * (fps.rawFrameTime * 7.f)));
-								}
-							}
-						}
-						break;
-					case SDLK_d:
-						if (windows.count(e.key.windowID)) {
-							Window* win = windows[e.key.windowID];
-							if (win->scene != nullptr && freeCamera) {
-								for (Camera* cam : win->scene->cameras) {
-									cam->set_position(cam->cam_position + (glm::normalize(glm::cross(cam->look_at, Camera::UP)) * (fps.rawFrameTime * 7.f)));
-								}
-							}
-						}
-						break;
-					default: break;
-				}
-				break;
-			// /*
-			case SDL_MOUSEMOTION:
-				if (windows.count(e.motion.windowID)) {
-					Window* win = windows[e.motion.windowID];
-					if (win->scene != nullptr && freeCamera) {
-						for (Camera* cam : win->scene->cameras) {
-							//to look left and right, we must modify the yaw axis by a certain variable according to the delta x (xrel) value
-							glm::vec3 lookDirection = glm::vec3();
-							glm::vec3 look_at = cam->get_look_at();
-							cam->yawAngle += e.motion.xrel;
-							cam->pitchAngle = glm::clamp(cam->pitchAngle - e.motion.yrel, -89.0f, 89.0f);
-							lookDirection.x = cos(glm::radians(cam->yawAngle)) * cos(glm::radians(cam->pitchAngle));
-							lookDirection.y = sin(glm::radians(cam->pitchAngle));
-							lookDirection.z = sin(glm::radians(cam->yawAngle)) * cos(glm::radians(cam->pitchAngle));
-							cam->set_look(glm::normalize(lookDirection));
-						}
-					}
-				}
-				
-				break;
-			//	*/
 			/*
 			case SDL_USEREVENT:
 				if (e.user.type != Audio::systemEvents.OPENAL_SYSTEM_EVENT_SDLEVENTTYPE) break; // Queued OpenAL system event

@@ -5,11 +5,14 @@
 #include <alext.h>
 
 namespace Myztic {
+	class Application;
+
 	enum EventType {
 		EVENT_DEFAULT_AUDIO_DEVICE_CHANGED,
 		EVENT_AUDIO_DEVICE_ADDED,
 		EVENT_AUDIO_DEVICE_REMOVED,
-		EVENT_MOUSEMOVE
+		EVENT_MOUSEMOVE,
+		EVENT_KEYBOARD
 	};
 
 	struct EventHandle {
@@ -21,6 +24,7 @@ namespace Myztic {
 	};
 
 	class EventDispatcher {
+		friend Application;
 	public:
 		template<typename EventInfoStruct>
 		/**
