@@ -145,7 +145,7 @@ void Application::app_loop() {
 				Window* eWin = nullptr;
 				if (windows.count(e.motion.windowID)) eWin = windows[e.motion.windowID];
 
-				EventDispatcher::dispatchEvent(EventType::EVENT_MOUSEMOVE, new MouseMoveEvent(eWin, e.motion.x, e.motion.y, e.motion.xrel, e.motion.yrel));
+				EventDispatcher::dispatchEvent<MouseMoveEvent>(EventType::EVENT_MOUSEMOVE, MouseMoveEvent(eWin, e.motion.x, e.motion.y, e.motion.xrel, e.motion.yrel));
 				break;
 			}
 
@@ -153,14 +153,14 @@ void Application::app_loop() {
 				Window* eWin = nullptr;
 				if (windows.count(e.key.windowID)) eWin = windows[e.key.windowID];
 
-				EventDispatcher::dispatchEvent(EventType::EVENT_KEYBOARD, new KeyboardEvent(eWin, true, e.key.keysym.scancode, e.key.keysym.sym));
+				EventDispatcher::dispatchEvent<KeyboardEvent>(EventType::EVENT_KEYBOARD, KeyboardEvent(eWin, true, e.key.keysym.scancode, e.key.keysym.sym));
 				break;
 			}
 			case SDL_KEYUP: {
 				Window* eWin = nullptr;
 				if (windows.count(e.key.windowID)) eWin = windows[e.key.windowID];
 
-				EventDispatcher::dispatchEvent(EventType::EVENT_KEYBOARD, new KeyboardEvent(eWin, false, e.key.keysym.scancode, e.key.keysym.sym));
+				EventDispatcher::dispatchEvent<KeyboardEvent>(EventType::EVENT_KEYBOARD, KeyboardEvent(eWin, false, e.key.keysym.scancode, e.key.keysym.sym));
 				break;
 			}
 

@@ -17,8 +17,8 @@ namespace Myztic {
 
 	struct EventHandle {
 		bool registered;
-		std::map<uint32_t, void*> callbacks;
-		EventHandle(bool reg, std::map<uint32_t, void*> clb) : registered(reg), callbacks(clb) {}
+		std::map<uint32_t, std::function<void(void*)>> callbacks;
+		EventHandle(bool reg, std::map<uint32_t, std::function<void(void*)>> clb) : registered(reg), callbacks(clb) {}
 
 		EventHandle() = default;
 	};
@@ -41,7 +41,9 @@ namespace Myztic {
 			evh.registered = true;
 
 			if (evh.callbacks.count(id)) evh.callbacks.erase(id); // Dupe ID; unregister the event
-			evh.callbacks[id] = ((void*)&callbackFunc);
+			evh.callbacks[id] = [callbackFunc](void* data) {
+				callbackFunc(*static_cast<EventInfoStruct*>(data));
+			};
 		};
 
 		static void unregisterEvent(EventType type, uint32_t id);
@@ -54,9 +56,8 @@ namespace Myztic {
 			EventHandle& evh = eventsList[type];
 			if (!evh.registered) return;
 
-			for (auto it = evh.callbacks.begin(); it != evh.callbacks.end(); ++it) {
-				std::function<void(PhysicalEvent)>* cast_callback = static_cast<std::function<void(PhysicalEvent)>*>(it->second);
-				(*cast_callback)(inEvent);
+			for (auto& [id, callback] : evh.callbacks) {
+				callback(&inEvent);
 			}
 		};
 	};
