@@ -51,6 +51,7 @@ void Renderer::startRender() {
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
+	//glEnable(GL_LINE_SMOOTH);
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 	glClearColor(0.7f, 0.2f, 0.6f, 1.0f);
@@ -117,6 +118,7 @@ void Renderer::startRender() {
 	}*/
 	
 	glDisable(GL_BLEND);
+	//glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_DEPTH_TEST);
 }
 

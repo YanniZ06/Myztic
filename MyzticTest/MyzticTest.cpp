@@ -128,10 +128,17 @@ class SceneB : Scene {
 		line_f->camera = mainCamera;
 		myzWin->renderer.drawables.push_back(line_f);
 
+		//line independent of any camera, works by normalized coordinates
+		Line* line_e = Line::createLine(this, glm::vec2(0.5f, 0.0f), glm::vec2(0.5f, 0.5f));
+		myzWin->renderer.drawables.push_back(line_e);
+
 		//this is a line nearer to the camera for inspection
 		Line* line_n = Line::createLine(this, glm::vec2(-3.f, 0.0f), glm::vec2(-3.f, 3.f));
 		line_n->camera = mainCamera;
 		myzWin->renderer.drawables.push_back(line_n);
+
+		line_n->set_endpoint(glm::vec3(.1f, .4f, .1f)); 
+		line_n->set_color(glm::vec4(1.f, 1.f, 0.f, .2f));
 	}
 	virtual void finish(Scene* nextScene) {
 		std::cout << "SceneB finished\n";
@@ -313,7 +320,7 @@ class TestScene : Scene {
 		std::vector<Shader> shaders = { PrecompiledShaders::texture_vs, PrecompiledShaders::texture_fs };
 
 		spr = new TexturedDrawable(this, buf, "assets/textures/glint.png", false, shaders);
-		Line* line = Line::createLine(this, glm::vec2(100, 0.0), glm::vec2(100, 200));
+		Line* line = Line::createLine(this, glm::vec2(100, 0.0), glm::vec2(100, 200), glm::vec4(0.2, 0.5, 0.2, 1.0));
 
 		/*this works, it projects objects onto the camera(controls are inverted for some reason here); do note that when rendering onto an orthographic plane when you want to
 		* exclusively use 2d objects, that 3d plane rules still apply; therefore, rotating would fuck up the view and the image will be distorted (if not invisible)
@@ -329,6 +336,10 @@ class TestScene : Scene {
 		spr->camera = mainCamera;
 		myzWin->renderer.drawables.push_back(spr);
 		myzWin->renderer.drawables.push_back(line);
+
+		Line* ray = Line::createRay(this, glm::vec3(0.0, 0.0, 0.0), glm::vec3(300.0, 300.0, 300.0));
+		ray->camera = mainCamera;
+		myzWin->renderer.drawables.push_back(ray);
 	
 		//the previous is an example of pairing a purely 2d line with a 3d object and casting them onto an orthographic plane; both of them exist in "3d space" because
 		//they're being viewed from above.

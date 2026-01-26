@@ -54,24 +54,30 @@ void main()
 })"
 
 #define LINE_VS R"(#version 330 core
-layout(location = 0) in vec2 aPoint;
+layout(location = 0) in vec3 iPoint;
+layout(location = 1) in vec4 iColor;
 
 uniform mat4 world;
 uniform mat4 view;
 uniform mat4 projection;
 
+out vec4 col;
+
 void main()
 {
-    gl_Position = projection * view * world * vec4(aPoint, -1.0, 1.0);
+    gl_Position = projection * view * world * vec4(iPoint, 1.0);
+    col = iColor;
 }
 
 )"
 
 #define LINE_FS R"(#version 330 core
 out vec4 FragColor;
+
+in vec4 col;
 void main()
 {
-    FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    FragColor = col;
 }
 
 )"
