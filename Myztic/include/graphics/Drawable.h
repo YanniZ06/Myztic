@@ -52,14 +52,14 @@ namespace Myztic {
 		ShaderProgram shaderProgram;
 
 		/// Inlined, toggles EBO usage [currently only toggles on]
-		void useEBO();
+		void useEBO(std::vector<GLuint> indices = {});
 		/**
 		* Instantiates a quad Drawable.
 		* \param linkedScene The scene this Drawable is linked to/Drawn in.
 		* \param verts The VertexBuffer object describing the input layout; for example: a written template: `VertexBuffer(VertexLayout{}.Append(VertexLayout::Position3D));`
 		* \param shaders A vector of Shader objects to be linked with the ShaderProgram, will NOT be deleted after attachment, if not used from PrecompiledShaders, you may delete them, otherwise, NEVER DELETE PRECOMPILED SHADERS.
 		*/
-		static Drawable makeQuad(Scene* linkedScene, VertexBuffer& verts, std::vector<Shader> shaders);
+		//static Drawable makeQuad(Scene* linkedScene, VertexBuffer& verts, std::vector<Shader> shaders);
 
 		// ???
 		/// Should persist in the queued drawables list in the renderer after the frame has been drawn or should be taken off the list.
@@ -80,9 +80,16 @@ namespace Myztic {
 	};
 
 	// todo: logic to untoggle 
-	inline void Drawable::useEBO() {
+	inline void Drawable::useEBO(std::vector<GLuint> indices) {
 		usesEBO = true;
-		vert_indices = std::vector<GLuint>();
+		vert_indices = indices;
 		this->ebo = EBO::make();
+		if (indices.size() > 0) {
+			inputLayout.bindInputLayout();
+			ebo.bind();
+			ebo.fill(indices.data(), sizeof(GLuint) * indices.size(), GL_STATIC_DRAW);
+			inputLayout.unbind();
+			ebo.unbind();
+		}
 	}
 }

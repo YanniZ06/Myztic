@@ -26,7 +26,7 @@ Drawable::~Drawable() {
 	linkedScene = nullptr;
 }
 
-Drawable Drawable::makeQuad(Scene* linkedScene, VertexBuffer& verts, std::vector<Shader> shaders) {
+/*Drawable Drawable::makeQuad(Scene* linkedScene, VertexBuffer& verts, std::vector<Shader> shaders) {
 	std::vector<InputProperty> ips = verts.GetLayout().GetDescription().inputProperties;
 	Drawable obj = Drawable(linkedScene, verts);
 	obj.vert_type = GL_TRIANGLES;
@@ -53,7 +53,7 @@ Drawable Drawable::makeQuad(Scene* linkedScene, VertexBuffer& verts, std::vector
 	obj.vbo.unbind();
 
 	return obj;
-}
+}*/
 
 // prepare draw
 void Drawable::prepareDraw() {

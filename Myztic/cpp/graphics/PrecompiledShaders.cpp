@@ -13,6 +13,9 @@ Shader PrecompiledShaders::texture_fs = Shader();
 Shader PrecompiledShaders::line_vs = Shader();
 Shader PrecompiledShaders::line_fs = Shader();
 
+Shader PrecompiledShaders::color_vs = Shader();
+Shader PrecompiledShaders::color_fs = Shader();
+
 void PrecompiledShaders::Compile() {
 	double start = Timer::stamp();
 	texture_vs = Shader::fromString(GL_VERTEX_SHADER, BASIC_TEXTURE_VS);
@@ -22,5 +25,8 @@ void PrecompiledShaders::Compile() {
 
 	line_vs = Shader::fromString(GL_VERTEX_SHADER, LINE_VS);
 	line_fs = Shader::fromString(GL_FRAGMENT_SHADER, LINE_FS);
+
+	color_vs = Shader::fromString(GL_VERTEX_SHADER, BASIC_COLOR_VS);
+	color_fs = Shader::fromString(GL_FRAGMENT_SHADER, BASIC_COLOR_FS);
 	Timer::debugMeasure(start, "Precompiled shaders");
 };

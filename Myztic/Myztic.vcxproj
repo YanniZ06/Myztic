@@ -216,6 +216,7 @@
     <ClInclude Include="include\graphics\Drawable.h" />
     <ClInclude Include="include\graphics\PrecompiledShaders.h" />
     <ClInclude Include="include\graphics\primitives\Line.h" />
+    <ClInclude Include="include\graphics\primitives\Quad.h" />
     <ClInclude Include="include\graphics\Renderer.h" />
     <ClInclude Include="include\graphics\backend\Texture2D.hpp" />
     <ClInclude Include="include\Audio.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="cpp\graphics\Drawable.cpp" />
     <ClCompile Include="cpp\graphics\PrecompiledShaders.cpp" />
     <ClCompile Include="cpp\graphics\primitives\Line.cpp" />
+    <ClCompile Include="cpp\graphics\primitives\Quad.cpp" />
     <ClCompile Include="cpp\graphics\Renderer.cpp" />
     <ClCompile Include="cpp\graphics\TexturedDrawable.cpp" />
     <ClCompile Include="cpp\Scene.cpp" />

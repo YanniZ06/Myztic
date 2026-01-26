@@ -1,19 +1,19 @@
 #include "pch.h"
 
+#include <graphics/Drawable.h>
 #include <graphics/primitives/Line.h>
 #include <graphics/PrecompiledShaders.h>
 
 using namespace Myztic;
 
 Line* Line::createLine(Scene* linkedScene, glm::vec2 startpoint, glm::vec2 endpoint, glm::vec4 color) {
+	glm::vec3 sp = glm::vec3(startpoint, 0.f);
+	glm::vec3 ep = glm::vec3(endpoint, 0.f);
 	VertexBuffer vbuf(std::move(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Float4Color)));
-	vbuf.EmplaceBack(glm::vec3(startpoint, 0.f), color);
-	vbuf.EmplaceBack(glm::vec3(endpoint, 0.f), color);
+	vbuf.EmplaceBack(sp, color);
+	vbuf.EmplaceBack(ep, color);
 
-	Line* ret = new Line(linkedScene, vbuf);
-	ret->u_start = glm::vec3(startpoint, 0.f);
-	ret->u_end = glm::vec3(endpoint, 0.f);
-	ret->u_color = color;
+	Line* ret = new Line(linkedScene, vbuf, sp, ep, color);
 
 	return ret;
 }
@@ -23,10 +23,7 @@ Line* Myztic::Line::createRay(Scene* linkedScene, glm::vec3 startpoint, glm::vec
 	vbuf.EmplaceBack(startpoint, color);
 	vbuf.EmplaceBack(endpoint, color);
 
-	Line* ret = new Line(linkedScene, vbuf);
-	ret->u_start = startpoint;
-	ret->u_end = endpoint;
-	ret->u_color = color;
+	Line* ret = new Line(linkedScene, vbuf, startpoint, endpoint, color);
 
 	return ret;
 }
@@ -71,7 +68,7 @@ void Line::set_color(glm::vec4 new_color) {
 	this->u_color = new_color;
 }
 
-Line::Line(Scene* linkedScene, VertexBuffer& vbuf) : Drawable(linkedScene, vbuf) {
+Line::Line(Scene* linkedScene, VertexBuffer& vbuf, glm::vec3 startpoint, glm::vec3 endpoint, glm::vec4 color, std::vector<Shader> shaders) : Drawable(linkedScene, vbuf), u_start(startpoint), u_end(endpoint), u_color(color) {
 	vert_type = GL_LINES;
 	vbo.bind();
 
@@ -81,8 +78,8 @@ Line::Line(Scene* linkedScene, VertexBuffer& vbuf) : Drawable(linkedScene, vbuf)
 	inputLayout.setVertexLayout();
 	inputLayout.enableAllAttribs();
 
-	shaderProgram.attach(PrecompiledShaders::line_vs);
-	shaderProgram.attach(PrecompiledShaders::line_fs);
+	for (Shader shader : shaders)
+		shaderProgram.attach(shader);
 	
 	shaderProgram.link();
 
@@ -90,11 +87,3 @@ Line::Line(Scene* linkedScene, VertexBuffer& vbuf) : Drawable(linkedScene, vbuf)
 	vbo.unbind();
 	shaderProgram.unbind();
 };
-
-void Line::prepareDraw() {
-	Drawable::prepareDraw();
-}
-
-void Line::finishDraw() {
-	Drawable::finishDraw();
-}

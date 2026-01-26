@@ -132,8 +132,15 @@ void Application::app_loop() {
 					break;
 				case SDL_WINDOWEVENT_RESIZED:
 					SDL_GL_MakeCurrent(eWin->handle, eWin->context);
+					eWin->setW(e.window.data1);
+					eWin->setH(e.window.data2);
 					CHECK_GL(glViewport(0, 0, e.window.data1, e.window.data2));
 					//update cameras!
+					for (size_t i = 0; i < eWin->scene->cameras.size(); i++) {
+						Camera* cam = eWin->scene->cameras[i];
+						cam->on_screenResize();
+					}
+
 					break;
 				default: break;
 				}
@@ -149,18 +156,12 @@ void Application::app_loop() {
 				break;
 			}
 
-			case SDL_KEYDOWN: {
-				Window* eWin = nullptr;
-				if (windows.count(e.key.windowID)) eWin = windows[e.key.windowID];
-
-				EventDispatcher::dispatchEvent<KeyboardEvent>(EventType::EVENT_KEYBOARD, KeyboardEvent(eWin, true, e.key.keysym.scancode, e.key.keysym.sym));
-				break;
-			}
+			case SDL_KEYDOWN:
 			case SDL_KEYUP: {
 				Window* eWin = nullptr;
 				if (windows.count(e.key.windowID)) eWin = windows[e.key.windowID];
-
-				EventDispatcher::dispatchEvent<KeyboardEvent>(EventType::EVENT_KEYBOARD, KeyboardEvent(eWin, false, e.key.keysym.scancode, e.key.keysym.sym));
+			
+				EventDispatcher::dispatchEvent<KeyboardEvent>(EventType::EVENT_KEYBOARD, KeyboardEvent(eWin, e.key.type == SDL_KEYDOWN, e.key.keysym.scancode, e.key.keysym.sym));
 				break;
 			}
 

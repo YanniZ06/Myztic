@@ -53,6 +53,30 @@ void main()
     FragColor = texture(tex, TexCoord);
 })"
 
+#define BASIC_COLOR_VS R"(#version 330 core
+layout(location = 0) in vec3 iPos;
+layout(location = 1) in vec4 iCol;
+
+uniform mat4 world;
+uniform mat4 view;
+uniform mat4 projection;
+
+out vec4 col;
+void main(){
+    gl_Position = projection * view * world * vec4(iPos, 1.0);
+    col = iCol;
+}
+)"
+#define BASIC_COLOR_FS R"(#version 330 core
+out vec4 FragColor;
+in vec4 col;
+
+void main()
+{
+    FragColor = col;
+}
+)"
+
 #define LINE_VS R"(#version 330 core
 layout(location = 0) in vec3 iPoint;
 layout(location = 1) in vec4 iColor;
@@ -92,6 +116,9 @@ public:
 
     static Shader line_vs;
     static Shader line_fs;
+
+    static Shader color_vs;
+    static Shader color_fs;
 
     static void Compile();
 };

@@ -21,6 +21,7 @@
 #include <semaphore>
 
 #include <graphics\Vertex.h>
+#include <graphics\primitives\Quad.h>
 #include <graphics\primitives\Line.h>
 #include <graphics\TexturedDrawable.h>
 #include <graphics\Camera.h>
@@ -32,6 +33,7 @@ using namespace Myztic;
 class SceneB : Scene {
 	TexturedDrawable* spr;
 	Line* line;
+	Quad* quad;
 	virtual void load(Window* callerWindow) {
 		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
 		std::cout << "ID: " << std::to_string(id) << "\n";
@@ -117,20 +119,12 @@ class SceneB : Scene {
 		//because that made it too wonky (it wouldn't make sense if you saw it; but what was happening was clipping of the line and an independent camera change in rotation
 
 		Camera* orthographicCamera = new Camera(ProjectionType::Orthographic, this, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), -10.f, 10.f);
-		this->line = Line::createLine(this, glm::vec2(200.f, 100.f), glm::vec2(100.f, 200.f));
-		line->camera = orthographicCamera;
-		//cameras.push_back(orthographicCamera);
-		myzWin->renderer.drawables.push_back(line);
-
+		this->cameras.push_back(orthographicCamera);
 		//making another line to exist in 3d space (a ray; however, we haven't given it its 3rd dimension - to be implemented as a separate class or functionality if i can
 		//look to your right in the scene and you'll see a beacon (that's the line, you can go towards it if you want
 		Line* line_f = Line::createLine(this, glm::vec2(200.f, 0.0f), glm::vec2(200.f, 100.f));
 		line_f->camera = mainCamera;
 		myzWin->renderer.drawables.push_back(line_f);
-
-		//line independent of any camera, works by normalized coordinates
-		Line* line_e = Line::createLine(this, glm::vec2(0.5f, 0.0f), glm::vec2(0.5f, 0.5f));
-		myzWin->renderer.drawables.push_back(line_e);
 
 		//this is a line nearer to the camera for inspection
 		Line* line_n = Line::createLine(this, glm::vec2(-3.f, 0.0f), glm::vec2(-3.f, 3.f));
@@ -139,6 +133,13 @@ class SceneB : Scene {
 
 		line_n->set_endpoint(glm::vec3(.1f, .4f, .1f)); 
 		line_n->set_color(glm::vec4(1.f, 1.f, 0.f, .2f));
+
+		Quad* quad = Quad::makeQuad(this, 0.f, 0.f, 20.f, 20.f);
+		//rotate and then translate (translation is x, y, z but since the front face of the quad is pointing DOWNWARDS after you rotate, that means that that's its positive z - when you move the quad on its positive z it goes up and down, y becomes the distance from the perpendicular camera (atleast in this case) and x remains as x i guess.)
+		quad->transformation = glm::translate(glm::rotate(glm::mat4(1.0f), glm::half_pi<float>(), glm::vec3(1, 0, 0)), glm::vec3(-10, 4, 1));
+		quad->camera = mainCamera;
+		myzWin->renderer.drawables.push_back(quad);
+		quad->set_color(glm::vec4(0.2f, 0.6f, 0.8f, 1.f));
 	}
 	virtual void finish(Scene* nextScene) {
 		std::cout << "SceneB finished\n";
@@ -167,17 +168,16 @@ class TestScene : Scene {
 			Window* win = event.focusWin;
 			if (win) {
 				if (win->getActiveScene() != nullptr && freeCamera) {
-					for (Camera* cam : win->getActiveScene()->cameras) {
-						//to look left and right, we must modify the yaw axis by a certain variable according to the delta x (xrel) value
-						glm::vec3 lookDirection = glm::vec3();
-						glm::vec3 look_at = cam->get_look_at();
-						cam->yawAngle += event.xRel;
-						cam->pitchAngle = glm::clamp(cam->pitchAngle - event.yRel, -89.0f, 89.0f);
-						lookDirection.x = cos(glm::radians(cam->yawAngle)) * cos(glm::radians(cam->pitchAngle));
-						lookDirection.y = sin(glm::radians(cam->pitchAngle));
-						lookDirection.z = sin(glm::radians(cam->yawAngle)) * cos(glm::radians(cam->pitchAngle));
-						cam->set_look(glm::normalize(lookDirection));
-					}
+					Camera* mainCam = win->getActiveScene()->mainCamera;
+					//to look left and right, we must modify the yaw axis by a certain variable according to the delta x (xrel) value
+					glm::vec3 lookDirection = glm::vec3();
+					glm::vec3 look_at = mainCam->get_look_at();
+					mainCam->yawAngle += event.xRel;
+					mainCam->pitchAngle = glm::clamp(mainCam->pitchAngle - event.yRel, -89.0f, 89.0f);
+					lookDirection.x = cos(glm::radians(mainCam->yawAngle)) * cos(glm::radians(mainCam->pitchAngle));
+					lookDirection.y = sin(glm::radians(mainCam->pitchAngle));
+					lookDirection.z = sin(glm::radians(mainCam->yawAngle)) * cos(glm::radians(mainCam->pitchAngle));
+					mainCam->set_look(glm::normalize(lookDirection));
 				}
 			}
 		};
@@ -189,7 +189,7 @@ class TestScene : Scene {
 			if (!event.keyDown) return;
 
 			Window* win = event.focusWin;
-
+			Camera* mainCam = win->getActiveScene()->mainCamera;
 			switch (event.key) {
 			case SDLK_INSERT:
 				freeCamera = !freeCamera;
@@ -200,30 +200,22 @@ class TestScene : Scene {
 				// i made it a BIT better for you <3 -yanni (ps you can make a map for the rough calculations later :)
 			case SDLK_w:
 				if (win->getActiveScene() != nullptr && freeCamera) {
-					for (Camera* cam : win->getActiveScene()->cameras) {
-						cam->set_position(cam->get_position() + (cam->get_look_at() * (Application::fps.getRawFrameTime() * 7.f)));
-					}
+					mainCam->set_position(mainCam->get_position() + (mainCam->get_look_at() * (Application::fps.getRawFrameTime() * 7.f)));
 				}
 				break;
 			case SDLK_s:
 				if (win->getActiveScene() != nullptr && freeCamera) {
-					for (Camera* cam : win->getActiveScene()->cameras) {
-						cam->set_position(cam->get_position() - (cam->get_look_at() * (Application::fps.getRawFrameTime() * 7.f)));
-					}
+					mainCam->set_position(mainCam->get_position() - (mainCam->get_look_at() * (Application::fps.getRawFrameTime() * 7.f)));
 				}
 				break;
 			case SDLK_a:
 				if (win->getActiveScene() != nullptr && freeCamera) {
-					for (Camera* cam : win->getActiveScene()->cameras) {
-						cam->set_position(cam->get_position() - (glm::normalize(glm::cross(cam->get_look_at(), Camera::UP)) * (Application::fps.getRawFrameTime() * 7.f)));
-					}
+					mainCam->set_position(mainCam->get_position() - (glm::normalize(glm::cross(mainCam->get_look_at(), Camera::UP)) * (Application::fps.getRawFrameTime() * 7.f)));
 				}
 				break;
 			case SDLK_d:
 				if (win->getActiveScene() != nullptr && freeCamera) {
-					for (Camera* cam : win->getActiveScene()->cameras) {
-						cam->set_position(cam->get_position() + (glm::normalize(glm::cross(cam->get_look_at(), Camera::UP)) * (Application::fps.getRawFrameTime() * 7.f)));
-					}
+					mainCam->set_position(mainCam->get_position() + (glm::normalize(glm::cross(mainCam->get_look_at(), Camera::UP)) * (Application::fps.getRawFrameTime() * 7.f)));
 				}
 				break;
 			default: break;
