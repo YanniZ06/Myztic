@@ -18,9 +18,9 @@ namespace Myztic
 		 * \param y The y position of the top-left vertex
 		 * \param width The width of the quad
 		 * \param height The height of the quad - NOTE: if the quad will be bound to an orthographic plane (2D PLANE), PLEASE have this as a negative value so that x and y may be that of the top left corner of the quad (if you have this as a positive value then x and y concern the bottom left vertex)
-		 * \param z The z position of the top-left vertex (and consequently all the other vertices because I (Ziad, Zoardedz (that sounded narcissitic)) made it that way because it would be stupid design.)
+		 * \param z The z position of the top-left vertex (and consequently all the other vertices because I (Ziad, Zoardedz (that sounded narcissistic)) made it that way because it would be stupid design otherwise.)
 		 * \param color The color the quad should have.
-		 * \return 
+		 * \return Quad*
 		 */
 		static Quad* makeQuad(Scene* linkedScene, float x, float y, float width, float height, float z = 0, glm::vec4 color = glm::vec4(1.f,1.f,1.f,1.f));
 
@@ -95,5 +95,10 @@ namespace Myztic
 		float width;
 		float height;
 		glm::vec4 color;
+
+		//add support for these later, also make a utility class for Vector3's in the Myztic directory.
+		glm::vec3 translation;
+		glm::vec3 rotation;
+		glm::vec3 scale;
 	};
 }

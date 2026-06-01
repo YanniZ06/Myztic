@@ -66,6 +66,34 @@ Window::Window(WindowParams params) {
 	// No code beyond here, the thread has been moved.
 }
 
+bool Window::initialize_imgui() {
+	imgui_context = ImGui::CreateContext();
+	ImGui::SetCurrentContext(imgui_context);
+
+	ImGuiIO& imgui_iosys = ImGui::GetIO(); (void)imgui_iosys;
+	imgui_iosys.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	imgui_iosys.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+	ImGui::StyleColorsDark();
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	imgui_iosys.ConfigDpiScaleFonts = true;
+	imgui_iosys.ConfigDpiScaleViewports = true;
+
+	if (!ImGui_ImplSDL2_InitForOpenGL(this->handle, this->context)) {
+		printf("Failed to initialize ImGui impl for SDL2 initialized for OpenGL, deinitializing all imgui systems.\n");
+		ImGui::DestroyContext();
+	}
+	else
+		imgui_initialized = ImGui_ImplOpenGL3_Init("#version 330 core");
+
+	if (!imgui_initialized)
+		ImGui::DestroyContext();
+	else
+		Application::imgui_contexts.push_back(imgui_context);
+
+	return imgui_initialized;
+}
+
 Window::~Window() {
 	std::cout << "deconstructing window " << std::to_string(SDL_GetWindowID(handle)) << "\n";
 
@@ -137,6 +165,15 @@ void Window::destroy()
 	}
 	std::cout << "destroying window " << std::to_string(SDL_GetWindowID(handle)) << "\n";
 	delete scene;
+
+	if (imgui_initialized) {
+		imgui_initialized = false;
+		Application::imgui_contexts.erase(std::remove(Application::imgui_contexts.begin(), Application::imgui_contexts.end(), imgui_context), Application::imgui_contexts.end());
+		ImGui::SetCurrentContext(this->imgui_context);
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplSDL2_Shutdown();
+		ImGui::DestroyContext();
+	}
 
 	SDL_GL_DeleteContext(context); //todo: THE RENDERER SHOULD DO THIS, NOT THE WINDOW?
 	SDL_DestroyWindow(handle);

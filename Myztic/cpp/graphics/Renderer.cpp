@@ -49,11 +49,27 @@ void Renderer::startRender() {
 		return;
 	}
 
+	if (targetWin->imgui_initialized) {
+		ImGui::SetCurrentContext(targetWin->imgui_context);
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplSDL2_NewFrame();
+		ImGui::NewFrame();
+		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DockingEnable)
+			//ImGuiDockNodeFlags_PassthruCentralNode is NECESSARY
+			ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
+		bool demo = true;
+		ImGui::ShowDemoWindow(&demo);
+		//ImGui::Begin("demo2");
+		//ImGui::Text("Lorem ipsum dolor");
+		//ImGui::End();
+	}
+
+	//ImGui::End();
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	//glEnable(GL_LINE_SMOOTH);
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
+	//CHECK_GL(glViewport(0, 0, ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y));
 	glClearColor(0.7f, 0.2f, 0.6f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -124,6 +140,17 @@ void Renderer::startRender() {
 
 void Renderer::endRender() {
 	glBindVertexArray(0); 
+
+	if (targetWin->imgui_initialized) {
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			SDL_GL_MakeCurrent(targetWin->handle, targetWin->context);
+		}
+	}
+
 	//swap the buffers (double-buffering in action for this window.)
 	SDL_GL_SwapWindow(targetWin->handle);
 }

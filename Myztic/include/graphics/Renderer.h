@@ -4,7 +4,7 @@
 #include <graphics/Drawable.h>
 #include <glm\glm.hpp>
 #include <type_traits>
-#include "SDL.h"
+#include <SDL.h>
 
 // todo: seperate these classes accordingly
 

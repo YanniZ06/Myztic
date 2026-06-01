@@ -78,11 +78,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)glm;$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(SolutionDir)libs\AL\includes;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)glm;$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(SolutionDir)libs\AL\includes;$(SolutionDir)libs\imgui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)glm;$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(SolutionDir)libs\AL\includes;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)glm;$(SolutionDir)include;$(SolutionDir)glad;$(SolutionDir)KHR;$(SolutionDir)libs\AL\includes;$(SolutionDir)libs\imgui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -144,7 +144,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)libs\SDL2\include;%(AdditionalIncludeDirectories);$(SolutionDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\SDL2\include;%(AdditionalIncludeDirectories);$(SolutionDir);$(SolutionDir)libs\imgui\backends;$(SolutionDir)libs\imgui\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -175,7 +175,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)libs\SDL2\include;%(AdditionalIncludeDirectories);$(SolutionDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\SDL2\include;%(AdditionalIncludeDirectories);$(SolutionDir);$(SolutionDir)libs\imgui\backends;$(SolutionDir)libs\imgui\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -194,9 +194,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="C:\Users\Is Laptop\Downloads\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="include\events\Events.h" />
     <ClInclude Include="include\events\KeyboardEvent.h" />
     <ClInclude Include="include\events\MouseEvent.h" />
+    <ClInclude Include="include\graphics\Primitive.h" />
     <ClInclude Include="include\graphics\Camera.h" />
     <ClInclude Include="cpp\stb_image.h" />
     <ClInclude Include="include\audio\backend\ALExt.h" />
@@ -215,6 +217,7 @@
     <ClInclude Include="include\graphics\backend\ShaderProgram.h" />
     <ClInclude Include="include\graphics\Drawable.h" />
     <ClInclude Include="include\graphics\PrecompiledShaders.h" />
+    <ClInclude Include="include\graphics\primitives\Cube.h" />
     <ClInclude Include="include\graphics\primitives\Line.h" />
     <ClInclude Include="include\graphics\primitives\Quad.h" />
     <ClInclude Include="include\graphics\Renderer.h" />
@@ -233,6 +236,14 @@
     <ClInclude Include="include\graphics\backend\ShaderInputLayout.h" />
     <ClInclude Include="include\graphics\backend\Shader.h" />
     <ClInclude Include="include\graphics\Vertex.h" />
+    <ClInclude Include="libs\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="libs\imgui\backends\imgui_impl_sdl2.h" />
+    <ClInclude Include="libs\imgui\imconfig.h" />
+    <ClInclude Include="libs\imgui\imgui.h" />
+    <ClInclude Include="libs\imgui\imgui_internal.h" />
+    <ClInclude Include="libs\imgui\imstb_rectpack.h" />
+    <ClInclude Include="libs\imgui\imstb_textedit.h" />
+    <ClInclude Include="libs\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp\Application.cpp" />
@@ -245,6 +256,7 @@
     <ClCompile Include="cpp\graphics\Camera.cpp" />
     <ClCompile Include="cpp\graphics\Drawable.cpp" />
     <ClCompile Include="cpp\graphics\PrecompiledShaders.cpp" />
+    <ClCompile Include="cpp\graphics\primitives\Cube.cpp" />
     <ClCompile Include="cpp\graphics\primitives\Line.cpp" />
     <ClCompile Include="cpp\graphics\primitives\Quad.cpp" />
     <ClCompile Include="cpp\graphics\Renderer.cpp" />
@@ -255,6 +267,13 @@
     <ClCompile Include="cpp\Audio.cpp" />
     <ClCompile Include="cpp\audio\backend\SystemEvents.cpp" />
     <ClCompile Include="cpp\utilities\thread\ResourceManager.cpp" />
+    <ClCompile Include="cpp\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="cpp\imgui\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="cpp\imgui\imgui.cpp" />
+    <ClCompile Include="cpp\imgui\imgui_demo.cpp" />
+    <ClCompile Include="cpp\imgui\imgui_draw.cpp" />
+    <ClCompile Include="cpp\imgui\imgui_tables.cpp" />
+    <ClCompile Include="cpp\imgui\imgui_widgets.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

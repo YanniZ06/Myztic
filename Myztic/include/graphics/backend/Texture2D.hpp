@@ -2,6 +2,7 @@
 
 #include <ErrorHandler.hpp>
 #include <stb_image.h>
+#include <filesystem>
 
 namespace Myztic {
 	class Texture2D {
@@ -16,6 +17,7 @@ namespace Myztic {
 		* \param fileName Texture file path and name (fileName must include path, file name and extension ex: "assets/images/Sky.png")
 		*/
 		static Texture2D fromFile(std::string fileName) {
+			if (fileName.empty() || !std::filesystem::exists(fileName)) return Texture2D(0);
 			int width, height, numChannels;
 			stbi_set_flip_vertically_on_load(true);
 			unsigned char* fillingData = stbi_load(fileName.c_str(), &width, &height, &numChannels, STBI_rgb_alpha);
@@ -103,6 +105,10 @@ namespace Myztic {
 		inline void fill(int width, int height, unsigned char* data) {
 			CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void*)data));
 			CHECK_GL(glGenerateMipmap(GL_TEXTURE_2D));
+		};
+
+		inline GLuint getHandle() {
+			return handle;
 		};
 	private:
 		GLuint handle;

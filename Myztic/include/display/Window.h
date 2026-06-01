@@ -12,6 +12,10 @@
 #include <display/WinThread.h>
 #include <graphics/Renderer.h>
 
+//IMGUI implementation
+#include <backends/imgui_impl_sdl2.h>
+#include <backends/imgui_impl_opengl3.h>
+
 namespace Myztic {
 	class Scene;
 
@@ -130,11 +134,18 @@ namespace Myztic {
 		SDL_Window* handle;
 		// SDL OpenGl Context associated with this Window
 		SDL_GLContext context;
+
 		// The thread for this window
 		WinThread thread;
 
 		/// The renderer for this Window
 		Renderer renderer;
+
+		//ImGui Context
+		ImGuiContext* imgui_context;
+		bool imgui_initialized = false;
+
+		bool initialize_imgui();
 
 		// Returns the scene currently displayed on this Window
 		// Scene* getActiveScene();

@@ -8,6 +8,8 @@
 
 #include <display/Fps.h>
 #include <utilities/thread/ResourceManager.h>
+//#include <SDL.h>
+#include <imgui.h>
 
 #define MYZTIC_WIN_LIMIT 16 // Real limit should be 256, but we use this instead because nobody should need that many windows. Might be tweaked later
 
@@ -33,6 +35,9 @@ namespace Myztic {
         static uint8_t registeredWinThreads;
 
         static void app_loop();
+
+        //static SDL_Window* imgui_win_holder;
+        //static SDL_GLContext imgui_context_holder;
     public:
         /// Current windows, mapped to their ID
         static std::map<unsigned int, Window*> windows;
@@ -53,6 +58,8 @@ namespace Myztic {
         /// The fps settings for this application
         static Fps fps;
         static bool shouldClose;
+
+        static std::vector<ImGuiContext*> imgui_contexts;
 
         // todo: wip
         /**

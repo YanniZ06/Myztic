@@ -9,43 +9,25 @@
 
 using namespace Myztic;
 
-TexturedDrawable::TexturedDrawable(Scene* linkedScene, VertexBuffer& vbuf, std::string texturePath, bool usesEBO, std::vector<Shader> shaders) : Drawable(linkedScene, vbuf) {
-	vert_type = GL_TRIANGLES;
-	vbo.bind();
-	//reconsider this especially for GL_STATIC_DRAW.
-	vbo.fill((void*)vbuf.GetData(), vbuf.SizeBytes(), GL_STATIC_DRAW);
-
-	inputLayout.setVertexLayout();
-	inputLayout.enableAllAttribs();
-
-	if (usesEBO)
-		useEBO();
-
-	if (usesEBO) {
-		vert_indices = std::vector<GLuint>({ 0, 1, 3, 1, 2, 3 });
-		ebo.bind();
-		ebo.fill(vert_indices.data(), sizeof(GLuint) * vert_indices.size(), GL_STATIC_DRAW);
-	}
-
-	for (Shader s : shaders)
-		shaderProgram.attach(s);
-
-	shaderProgram.link();
-
-	inputLayout.unbind();
-	vbo.unbind();
-	shaderProgram.unbind();
+TexturedDrawable::TexturedDrawable(Scene* linkedScene, VertexBuffer& vbuf, std::string texturePath) : Drawable(linkedScene, vbuf) {
 	texture = Texture2D::fromFile(texturePath);
 }
 
 void TexturedDrawable::prepareDraw()
 {
 	Drawable::prepareDraw();
-	texture.bind();
+	if (texture.getHandle() != 0)
+		texture.bind();
 }
 
 void TexturedDrawable::finishDraw()
 {
 	Drawable::finishDraw();
-	texture.unbind();
+	if (texture.getHandle() != 0)
+		texture.unbind();
+}
+
+void TexturedDrawable::loadTexture(std::string texturePath)
+{
+	texture = Texture2D::fromFile(texturePath);
 }

@@ -37,6 +37,7 @@ bool Application::shouldClose = false;
 std::binary_semaphore* Application::waiter;
 ResourceManager* Application::resourceManager;
 bool freeCamera = false;
+std::vector<ImGuiContext*> Application::imgui_contexts;
 
 void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 	double myzStart = Timer::stamp();
@@ -46,7 +47,7 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 		throw "(MYZTIC_INIT_SDL_ERROR) Error initializing SDL subsystems : " + std::string(SDL_GetError());
 	}
 
-	const std::map<SDL_GLattr, int> GL_ATTRIBS{ {SDL_GL_RED_SIZE, 5}, {SDL_GL_GREEN_SIZE, 5}, {SDL_GL_BLUE_SIZE, 5}, {SDL_GL_DEPTH_SIZE, 16}, {SDL_GL_DOUBLEBUFFER, 1} };
+	const std::map<SDL_GLattr, int> GL_ATTRIBS{ {SDL_GL_RED_SIZE, 5}, {SDL_GL_GREEN_SIZE, 5}, {SDL_GL_BLUE_SIZE, 5}, {SDL_GL_DEPTH_SIZE, 16}, {SDL_GL_DOUBLEBUFFER, 1}, {SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1}};
 
 	for (std::map<SDL_GLattr, int>::const_iterator it = GL_ATTRIBS.begin(); it != GL_ATTRIBS.end(); ++it) {
 		SDL_GL_SetAttribute(it->first, it->second);
@@ -68,6 +69,8 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 	if (gladResult == 0) {
 		throw "Failed to initialize GLAD! Most likely outdated OpenGL Version, Required: OpenGL 3.3, ERROR CODE: " + std::to_string(gladResult) + "\n";
 	}
+
+	window->initialize_imgui();
 
 	const GLubyte* version = glGetString(GL_VERSION);
 	std::cout << "GL Version: " << version << "\n";
@@ -97,6 +100,11 @@ void Application::app_loop() {
 		//! std::cout << "(63) AppLoop Instance \n";
 		// Step 1: Check for and handle all sorts of SDL events, such as inputs or window actions
 		while (SDL_PollEvent(&e)) {
+			for (ImGuiContext* context : imgui_contexts) {
+				ImGui::SetCurrentContext(context);
+				ImGui_ImplSDL2_ProcessEvent(&e);
+			}
+
 			switch (e.type) {
 			// Handle Window Events
 			case SDL_WINDOWEVENT: {
@@ -115,12 +123,16 @@ void Application::app_loop() {
 				case SDL_WINDOWEVENT_CLOSE:
 					eWin->shouldClose = true;
 					registeredWinThreads--;
+
 					eWin->thread.signal->release(); // Should kill the thread because the loop condition is no longer met
 					
 					std::cout << "Wanting to close window: " << eWin->id() << "\n";
 
 					eWin->destroy();
 					delete eWin;
+
+					if (registeredWinThreads <= 0)
+						shouldClose = true;
 
 					log_windows_cmd();
 					break;

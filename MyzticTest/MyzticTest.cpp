@@ -16,6 +16,8 @@
 // Graphics (remove when porting)
 #include <graphics/backend/Shader.h>
 #include <graphics/backend/ShaderInputLayout.h>
+#include <graphics/Drawable.h>
+#include <graphics\TexturedDrawable.h>
 
 #include <thread>
 #include <semaphore>
@@ -23,7 +25,7 @@
 #include <graphics\Vertex.h>
 #include <graphics\primitives\Quad.h>
 #include <graphics\primitives\Line.h>
-#include <graphics\TexturedDrawable.h>
+#include <graphics\primitives\Cube.h>
 #include <graphics\Camera.h>
 #include <utilities\thread\ResourceManager.h>
 
@@ -31,9 +33,10 @@
 using namespace Myztic;
 
 class SceneB : Scene {
-	TexturedDrawable* spr;
+	//TexturedDrawable* spr;
 	Line* line;
 	Quad* quad;
+	Cube* cube;
 	virtual void load(Window* callerWindow) {
 		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
 		std::cout << "ID: " << std::to_string(id) << "\n";
@@ -49,8 +52,9 @@ class SceneB : Scene {
 		myzWin->setName("WINDOW 2");
 
 		myzWin->switchToContext();
+		//myzWin->initializeImGui();
 
-		struct Vertex {
+		/*struct Vertex {
 			glm::vec3 pos;
 			glm::vec2 uv;
 		};
@@ -108,11 +112,11 @@ class SceneB : Scene {
 		std::vector<Shader> shaders = { PrecompiledShaders::texture_vs, PrecompiledShaders::texture_fs };
 
 		spr = new TexturedDrawable(this, buf, "assets/textures/glint.png", false, shaders);
-		spr->transformation = glm::rotate(glm::mat4(1.f), glm::radians(45.f), glm::vec3(1.f, 1.f, 1.f));
-		mainCamera = new Camera(ProjectionType::Perspective, this, glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f));
+		spr->transformation = glm::translate(spr->transformation, glm::vec3(2.f, 2.f, 2.f));*/
+		mainCamera = new Camera(ProjectionType::Perspective, this, glm::vec3(0.f, 0.2f, 3.f), glm::vec3(0.f, 0.f, -1.f));
 		cameras.push_back(mainCamera);
-		spr->camera = mainCamera;
-		myzWin->renderer.drawables.push_back(spr);
+		/*spr->camera = mainCamera;
+		myzWin->renderer.drawables.push_back(spr);*/
 
 		//here, we're independently making 2 cameras; one for the perspective projection and another for the orthographic projection, the former holds the cube by nature
 		//the latter holds the 2D line and casts it onto the screen; allowing it to be manipulated using normal screen coordinates. I didn't add it to the cameras array
@@ -127,19 +131,26 @@ class SceneB : Scene {
 		myzWin->renderer.drawables.push_back(line_f);
 
 		//this is a line nearer to the camera for inspection
-		Line* line_n = Line::createLine(this, glm::vec2(-3.f, 0.0f), glm::vec2(-3.f, 3.f));
+		Line* line_n = Line::createLine(this, glm::vec2(0.f, 0.0f), glm::vec2(-3.f, 3.f));
 		line_n->camera = mainCamera;
 		myzWin->renderer.drawables.push_back(line_n);
 
-		line_n->set_endpoint(glm::vec3(.1f, .4f, .1f)); 
-		line_n->set_color(glm::vec4(1.f, 1.f, 0.f, .2f));
+		line_n->set_endpoint(glm::vec3(0.f, 100.f, 0.f)); 
+		line_n->set_color(glm::vec4(1.f, 0.f, 0.f, 1.f));
 
 		Quad* quad = Quad::makeQuad(this, 0.f, 0.f, 20.f, 20.f);
-		//rotate and then translate (translation is x, y, z but since the front face of the quad is pointing DOWNWARDS after you rotate, that means that that's its positive z - when you move the quad on its positive z it goes up and down, y becomes the distance from the perpendicular camera (atleast in this case) and x remains as x i guess.)
-		quad->transformation = glm::translate(glm::rotate(glm::mat4(1.0f), glm::half_pi<float>(), glm::vec3(1, 0, 0)), glm::vec3(-10, 4, 1));
+		//rotate and then translate (translation is x, y, z but since the front face of the quad is pointing DOWNWARDS after you rotate, that means that that'sf its positive z - when you move the quad on its positive z it goes up and down, y becomes the distance from the perpendicular camera (atleast in this case) and x remains as x i guess.)
+		quad->transformation = glm::translate(glm::rotate(glm::mat4(1.0f), -glm::half_pi<float>(), glm::vec3(1, 0, 0)), glm::vec3(-10, 4, 0));
 		quad->camera = mainCamera;
 		myzWin->renderer.drawables.push_back(quad);
 		quad->set_color(glm::vec4(0.2f, 0.6f, 0.8f, 1.f));
+
+		Cube* cube = Cube::makeCube(this, 0.f, 0.f, 0.f, 2.f, glm::vec4(1.f, .5f, 0.f, 1.0f), {PrecompiledShaders::texture_color_vs, PrecompiledShaders::texture_color_fs});
+		cube->camera = mainCamera;
+		myzWin->renderer.drawables.push_back(cube);
+
+		cube->loadTexture("Yanni.png");
+		
 	}
 	virtual void finish(Scene* nextScene) {
 		std::cout << "SceneB finished\n";
@@ -147,7 +158,7 @@ class SceneB : Scene {
 };
 
 class TestScene : Scene {
-	TexturedDrawable* spr;
+	//TexturedDrawable* spr;
 	Line* line;
 	float elapsed = 0.f;
 
@@ -243,6 +254,7 @@ class TestScene : Scene {
 		Window* windowB = Window::create(paramsB);
 		Application::log_windows_cmd();
 		windowB->setX(windowB->x() + 250);
+		windowB->initialize_imgui();
 
 		myzWin->switchToContext(); //! THIS IS WHAT WAS MISSING BY THE WAY, SIMPLY THIS. GOD.
 
@@ -254,7 +266,7 @@ class TestScene : Scene {
 		
 		// This batch of code should be in renderer actually, manual renderer handling is frowned upon for what we are doing but itll do to TEST
 		//inputlayout is bound in Drawable.
-		struct Vertex {
+		/*struct Vertex {
 			glm::vec3 pos;
 			glm::vec2 uv;
 		};
@@ -311,7 +323,7 @@ class TestScene : Scene {
 		
 		std::vector<Shader> shaders = { PrecompiledShaders::texture_vs, PrecompiledShaders::texture_fs };
 
-		spr = new TexturedDrawable(this, buf, "assets/textures/glint.png", false, shaders);
+		spr = new TexturedDrawable(this, buf, "assets/textures/glint.png", false, shaders);*/
 		Line* line = Line::createLine(this, glm::vec2(100, 0.0), glm::vec2(100, 200), glm::vec4(0.2, 0.5, 0.2, 1.0));
 
 		/*this works, it projects objects onto the camera(controls are inverted for some reason here); do note that when rendering onto an orthographic plane when you want to
@@ -324,9 +336,9 @@ class TestScene : Scene {
 		cameras.push_back(mainCamera);
 
 		line->camera = mainCamera;
-		spr->transformation = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(100.f, 200.f, -1.0f)), glm::vec3(100, 100, 100));
-		spr->camera = mainCamera;
-		myzWin->renderer.drawables.push_back(spr);
+		//spr->transformation = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(100.f, 200.f, -1.0f)), glm::vec3(100, 100, 100));
+		//spr->camera = mainCamera;
+		//myzWin->renderer.drawables.push_back(spr);
 		myzWin->renderer.drawables.push_back(line);
 
 		Line* ray = Line::createRay(this, glm::vec3(0.0, 0.0, 0.0), glm::vec3(300.0, 300.0, 300.0));
