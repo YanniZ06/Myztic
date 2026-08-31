@@ -31,7 +31,7 @@ std::map<unsigned int, Window*> Application::windows;
 std::binary_semaphore* resourceManager;
 std::binary_semaphore* waiter;
 std::atomic<uint8_t> Application::readyWinThreads = 0;
-uint8_t Application::registeredWinThreads = 0;
+std::atomic<uint8_t> Application::registeredWinThreads = 0;
 Fps Application::fps;
 bool Application::shouldClose = false;
 std::binary_semaphore* Application::waiter;
@@ -63,7 +63,7 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 	if (SDL_GL_SetSwapInterval(0) == -1) // Ask to disable vsync until its been implemented properly
 		std::cout << SDL_GetError() << "\n";
 
-	std::cout << "Used Type: " << SDL_GL_GetSwapInterval() << "\n";
+	// std::cout << "Used Type: " << SDL_GL_GetSwapInterval() << "\n";
 
 	int gladResult = gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 	if (gladResult == 0) {
@@ -131,7 +131,7 @@ void Application::app_loop() {
 					eWin->destroy();
 					delete eWin;
 
-					if (registeredWinThreads <= 0)
+					if (registeredWinThreads.load() <= 0)
 						shouldClose = true;
 
 					log_windows_cmd();
@@ -173,7 +173,7 @@ void Application::app_loop() {
 				Window* eWin = nullptr;
 				if (windows.count(e.key.windowID)) eWin = windows[e.key.windowID];
 			
-				EventDispatcher::dispatchEvent<KeyboardEvent>(EventType::EVENT_KEYBOARD, KeyboardEvent(eWin, e.key.type == SDL_KEYDOWN, e.key.keysym.scancode, e.key.keysym.sym));
+				EventDispatcher::dispatchEvent<KeyboardEvent>(EventType::EVENT_KEYBOARD, KeyboardEvent(eWin, e.key.type == SDL_KEYDOWN, e.key.keysym.scancode, e.key.keysym.sym, e));
 				break;
 			}
 
@@ -235,7 +235,7 @@ void Application::app_loop() {
 		}
 
 		// Unless we are somehow already ready to continue (edge-case), pause current thread, gets unpaused once the last thread is ready
-		if (readyWinThreads.load() < registeredWinThreads) { 
+		if (readyWinThreads.load() < registeredWinThreads.load()) { 
 			waiter->acquire(); 
 		}
 
@@ -283,7 +283,7 @@ void Application::window_loop(Window* win) {
 		win->scene->update((float)(Timer::stamp() - frameBeginTime));
 
 		readyWinThreads++;
-		if (readyWinThreads.load() == registeredWinThreads) { // Continue main thread if this was the last window thread that finished
+		if (readyWinThreads.load() == registeredWinThreads.load()) { // Continue main thread if this was the last window thread that finished
 			waiter->release();
 		}
 		win->thread.signal->acquire(); // Block execution until this window thread is released by main thread

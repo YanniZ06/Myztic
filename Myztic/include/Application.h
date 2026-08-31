@@ -32,7 +32,7 @@ namespace Myztic {
         /// Amount of WinThreads that are done with their update loop
         static std::atomic<uint8_t> readyWinThreads;
         /// Different to the windows map size, this is only updated when a window has been fed into the loop 
-        static uint8_t registeredWinThreads;
+        static std::atomic<uint8_t> registeredWinThreads;
 
         static void app_loop();
 

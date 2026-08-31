@@ -200,6 +200,8 @@ class TestScene : Scene {
 			if (!event.keyDown) return;
 
 			Window* win = event.focusWin;
+			if (win == nullptr) return; // IMGUI Window / Non Focused but still registered press, Ignore for now
+
 			Camera* mainCam = win->getActiveScene()->mainCamera;
 			switch (event.key) {
 			case SDLK_INSERT:
@@ -241,6 +243,106 @@ class TestScene : Scene {
 	}
 
 	virtual void enter() {
+		/*
+		std::binary_semaphore s1 = std::binary_semaphore(0);
+		std::binary_semaphore s2 = std::binary_semaphore(0);
+
+		Sleep(5);
+
+		std::thread thrd = std::thread([&s1, &s2]() {
+			Sleep(1000);
+
+			std::cout << "Freeing Lock 1\n";
+			s1.release();
+
+			Sleep(1000);
+
+			std::cout << "Freeing Lock 1 again\n";
+			s1.release();
+			});
+		thrd.detach();
+
+		std::cout << "Aquiring Lock 1\n";
+		s1.acquire(); // Lock this thread?
+		std::cout << "Past Lock 1\n";
+
+		std::cout << "Aquiring Lock 1 again\n";
+		s1.acquire(); // Lock again ??
+		std::cout << "Past Lock 1 again\n";
+		*/
+
+		// /*
+		ResourceManager x = ResourceManager();
+		ResourceManager y = ResourceManager();
+
+		std::thread thrd = std::thread([&x, &y]() {
+			std::cout << "requested x on thread 2..." << "\n";
+			x.request();
+			std::cout << "x on thread 2!" << "\n";
+
+
+			Sleep(1500);
+			x.finishRequest();
+			std::cout << "finished x on thread 2!" << "\n";
+
+			Sleep(500);
+
+			std::cout << "requested y on thread 2..." << "\n";
+			y.request();
+			std::cout << "y on thread 2!" << "\n";
+
+			y.finishRequest();
+			std::cout << "finished y on thread 2!" << "\n";
+
+			/*
+			while (true) {
+
+				if (x.isBusy()) {
+					y.request();
+					std::cout << "this passes!" << "\n";
+					x.request();
+					std::cout << "requested already busy resourcemanager, this shouldn't run, right?" << "\n";
+					break;
+				}
+
+				Sleep(1000);
+			};
+			*/
+		});
+		thrd.detach();
+
+		std::thread thrd2 = std::thread([&x, &y]() {
+			Sleep(50);
+			std::cout << "requested x on thread 3..." << "\n";
+			x.request();
+			std::cout << "x on thread 3!" << "\n";
+
+			Sleep(50);
+			x.finishRequest();
+			std::cout << "finished x on thread 3!" << "\n";
+		});
+
+		thrd2.detach();
+		Sleep(100);
+		std::cout << "requested x on thread 1..." << "\n";
+		x.request();
+		std::cout << "x on thread 1!" << "\n";
+
+		std::cout << "requested y on thread 1..." << "\n";
+		y.request();
+		std::cout << "y on thread 1!" << "\n";
+
+		Sleep(600);
+
+		//here, no code is progressed until we finish request from ANOTHER thread
+		x.finishRequest();
+		std::cout << "finished x on thread 1!" << "\n";
+
+		y.finishRequest();
+		std::cout << "finished y on thread 1!" << "\n";
+
+		// */
+
 		Audio::initialize();
 
 		Window* myzWin = Application::windows[this->loadedWin->id()];
