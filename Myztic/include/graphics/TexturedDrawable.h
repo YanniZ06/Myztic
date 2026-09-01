@@ -10,8 +10,8 @@ namespace Myztic {
 	class TexturedDrawable : public Drawable {
 	public:
 		TexturedDrawable(Scene* linkedScene, VertexBuffer& vbuf, std::string texturePath = "");
-		void prepareDraw();
-		void finishDraw();
+		void prepareDraw() override;
+		void finishDraw() override;
 
 		//overrides current texture! (must provide an assets system later on that indexes each asset separately so that it may be reused/recycled instead of being bound to every object separately.
 		void loadTexture(std::string texturePath);

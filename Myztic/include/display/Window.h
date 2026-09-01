@@ -12,9 +12,8 @@
 #include <display/WinThread.h>
 #include <graphics/Renderer.h>
 
-//IMGUI implementation
-#include <backends/imgui_impl_sdl2.h>
-#include <backends/imgui_impl_opengl3.h>
+//IMGUI
+#include <display\ImGuiHelper.h>
 
 namespace Myztic {
 	class Scene;
@@ -141,8 +140,8 @@ namespace Myztic {
 		/// The renderer for this Window
 		Renderer renderer;
 
-		//ImGui Context
-		ImGuiContext* imgui_context;
+		//ImGui Init
+		std::unique_ptr<ImGuiHelper> gui;
 		bool imgui_initialized = false;
 
 		bool initialize_imgui();

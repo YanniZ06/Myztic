@@ -59,8 +59,6 @@ namespace Myztic {
         static Fps fps;
         static bool shouldClose;
 
-        static std::vector<ImGuiContext*> imgui_contexts;
-
         // todo: wip
         /**
          * Sets the VSync option for this Application.

@@ -50,13 +50,7 @@ void Renderer::startRender() {
 	}
 
 	if (targetWin->imgui_initialized) {
-		ImGui::SetCurrentContext(targetWin->imgui_context);
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplSDL2_NewFrame();
-		ImGui::NewFrame();
-		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DockingEnable)
-			//ImGuiDockNodeFlags_PassthruCentralNode is NECESSARY
-			ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
+		targetWin->gui->InitializeFrame();
 		bool demo = true;
 		ImGui::ShowDemoWindow(&demo);
 		//ImGui::Begin("demo2");
@@ -142,11 +136,8 @@ void Renderer::endRender() {
 	glBindVertexArray(0); 
 
 	if (targetWin->imgui_initialized) {
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		targetWin->gui->Present();
 		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
 			SDL_GL_MakeCurrent(targetWin->handle, targetWin->context);
 		}
 	}

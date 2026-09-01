@@ -75,8 +75,8 @@ namespace Myztic {
 		/// Inlined, retrieves the VAO from the inputLayout
 		// VAO* getVAO();
 		// THIS IS A TEMPORARY SOLUTION, WILL ADAPT OUR DRAWING PRINCIPLE SOON 
-		void prepareDraw();
-		void finishDraw();
+		virtual void prepareDraw();
+		virtual void finishDraw();
 	};
 
 	// todo: logic to untoggle 

@@ -69,6 +69,10 @@ namespace Myztic {
 		 */
 		void cacheUniform(std::string uniformName);
 
+		inline void uniform1i(std::string uniformName, GLint value) {
+			glUniform1i(getUniformLocation(uniformName), value);
+		}
+
 		GLuint handle;
 		std::map<std::string, int> uniforms;
 	};

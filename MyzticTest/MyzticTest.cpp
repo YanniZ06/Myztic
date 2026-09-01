@@ -28,7 +28,40 @@
 #include <graphics\primitives\Cube.h>
 #include <graphics\Camera.h>
 #include <utilities\thread\ResourceManager.h>
+#include <graphics\Mesh.h>
+#include <graphics\Model.h>
 
+#define TEXTUR R"(
+#version 330 core
+layout(location = 0) in vec3 aPos;
+layout(location = 1) in vec2 aTexCoord;
+
+uniform mat4 world;
+uniform mat4 view;
+uniform mat4 projection;
+
+out vec2 TexCoord;
+void main()
+{
+    gl_Position = projection * view * world * vec4(aPos, 1.0);
+    TexCoord = aTexCoord;
+}
+)"
+
+#define FRAGS R"(
+#version 330 core
+out vec4 FragColor;
+in vec2 TexCoord;
+uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse2;
+uniform sampler2D texture_diffuse3;
+uniform sampler2D texture_specular1;
+uniform sampler2D texture_specular2;
+void main()
+{
+    FragColor = (texture(texture_diffuse1, TexCoord) * texture(texture_diffuse2, TexCoord) * texture(texture_diffuse3, TexCoord)) + (texture(texture_specular1, TexCoord) * texture(texture_specular2, TexCoord));
+}
+)"
 
 using namespace Myztic;
 
@@ -37,6 +70,7 @@ class SceneB : Scene {
 	Line* line;
 	Quad* quad;
 	Cube* cube;
+	Model* model;
 	virtual void load(Window* callerWindow) {
 		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
 		std::cout << "ID: " << std::to_string(id) << "\n";
@@ -122,7 +156,7 @@ class SceneB : Scene {
 		//the latter holds the 2D line and casts it onto the screen; allowing it to be manipulated using normal screen coordinates. I didn't add it to the cameras array
 		//because that made it too wonky (it wouldn't make sense if you saw it; but what was happening was clipping of the line and an independent camera change in rotation
 
-		Camera* orthographicCamera = new Camera(ProjectionType::Orthographic, this, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), -10.f, 10.f);
+		/**  Camera* orthographicCamera = new Camera(ProjectionType::Orthographic, this, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), -10.f, 10.f);
 		this->cameras.push_back(orthographicCamera);
 		//making another line to exist in 3d space (a ray; however, we haven't given it its 3rd dimension - to be implemented as a separate class or functionality if i can
 		//look to your right in the scene and you'll see a beacon (that's the line, you can go towards it if you want
@@ -149,7 +183,16 @@ class SceneB : Scene {
 		cube->camera = mainCamera;
 		myzWin->renderer.drawables.push_back(cube);
 
-		cube->loadTexture("Yanni.png");
+		cube->loadTexture("Yanni.png");*/
+
+		auto vs = Shader::fromString(GL_VERTEX_SHADER, TEXTUR);
+
+		auto fs = Shader::fromString(GL_FRAGMENT_SHADER, FRAGS);
+
+		std::vector<Shader> shaders = { vs, fs };
+
+		model = new Model("backpack.obj", this, mainCamera, shaders);
+		model->pushToRenderer();
 		
 	}
 	virtual void finish(Scene* nextScene) {
@@ -446,7 +489,7 @@ class TestScene : Scene {
 		Line* ray = Line::createRay(this, glm::vec3(0.0, 0.0, 0.0), glm::vec3(300.0, 300.0, 300.0));
 		ray->camera = mainCamera;
 		myzWin->renderer.drawables.push_back(ray);
-	
+
 		//the previous is an example of pairing a purely 2d line with a 3d object and casting them onto an orthographic plane; both of them exist in "3d space" because
 		//they're being viewed from above.
 		//you can exclude the camera from being affected by transformations or view changes by not adding it to the cameras array

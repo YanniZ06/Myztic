@@ -37,7 +37,6 @@ bool Application::shouldClose = false;
 std::binary_semaphore* Application::waiter;
 ResourceManager* Application::resourceManager;
 bool freeCamera = false;
-std::vector<ImGuiContext*> Application::imgui_contexts;
 
 void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 	double myzStart = Timer::stamp();
@@ -100,10 +99,11 @@ void Application::app_loop() {
 		//! std::cout << "(63) AppLoop Instance \n";
 		// Step 1: Check for and handle all sorts of SDL events, such as inputs or window actions
 		while (SDL_PollEvent(&e)) {
-			for (ImGuiContext* context : imgui_contexts) {
-				ImGui::SetCurrentContext(context);
-				ImGui_ImplSDL2_ProcessEvent(&e);
-			}
+			//for (ImGuiContext* context : imgui_contexts) {
+			//	ImGui::SetCurrentContext(context);
+			//	ImGui_ImplSDL2_ProcessEvent(&e);
+		//	}
+			ImGuiHelper::ProcessAll(&e);
 
 			switch (e.type) {
 			// Handle Window Events
@@ -117,6 +117,8 @@ void Application::app_loop() {
 					Application::windows.erase(e.window.windowID);
 					break;
 				}
+
+				//eWin->gui->ProcessEvent(&e);
 
 				//todo: dispatch window events once an event system has been made (HAHAHAHAHAHAHAHAHAHAHHAHAH guess what)
 				switch (e.window.event) {

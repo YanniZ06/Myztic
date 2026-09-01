@@ -12,6 +12,7 @@ Drawable::Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperti
 	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(inputProperties));
 	vertexData = VertexBuffer(std::move(VertexLayout{}.Append(VertexLayout::Position3D)));
 	this->vbo = VBO::make();
+	this->linkedScene = linkedScene;
 }
 
 Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData) : linkedScene(linkedScene) {
@@ -20,6 +21,7 @@ Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData) : linkedScene(lin
 	//copy operation, safe to get rid of the original variable.
 	vertexData = vertData;
 	this->vbo = VBO::make();
+	this->linkedScene = linkedScene;
 }
 
 Drawable::~Drawable() {

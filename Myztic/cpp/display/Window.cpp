@@ -67,7 +67,7 @@ Window::Window(WindowParams params) {
 }
 
 bool Window::initialize_imgui() {
-	imgui_context = ImGui::CreateContext();
+	/*imgui_context = ImGui::CreateContext();
 	ImGui::SetCurrentContext(imgui_context);
 
 	ImGuiIO& imgui_iosys = ImGui::GetIO(); (void)imgui_iosys;
@@ -91,7 +91,10 @@ bool Window::initialize_imgui() {
 	else
 		Application::imgui_contexts.push_back(imgui_context);
 
-	return imgui_initialized;
+	return imgui_initialized;*/
+
+	this->gui = std::make_unique<ImGuiHelper>(this->handle, this->context, ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable, this->imgui_initialized);
+	return this->gui->isInitialized;
 }
 
 Window::~Window() {
@@ -168,11 +171,8 @@ void Window::destroy()
 
 	if (imgui_initialized) {
 		imgui_initialized = false;
-		Application::imgui_contexts.erase(std::remove(Application::imgui_contexts.begin(), Application::imgui_contexts.end(), imgui_context), Application::imgui_contexts.end());
-		ImGui::SetCurrentContext(this->imgui_context);
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplSDL2_Shutdown();
-		ImGui::DestroyContext();
+		//Application::imgui_contexts.erase(std::remove(Application::imgui_contexts.begin(), Application::imgui_contexts.end(), imgui_context), Application::imgui_contexts.end());
+		gui->~ImGuiHelper();
 	}
 
 	SDL_GL_DeleteContext(context); //todo: THE RENDERER SHOULD DO THIS, NOT THE WINDOW?

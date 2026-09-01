@@ -32,6 +32,7 @@ namespace Myztic {
 			}
 			else printf("Could not load texture of filename: %s", fileName.c_str());
 			stbi_image_free(fillingData);
+			fillingData = nullptr;
 
 			return ret;
 		};

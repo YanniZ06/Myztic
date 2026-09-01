@@ -19,6 +19,7 @@ Cube* Cube::makeCube(Scene* linkedScene, float x, float y, float z, float size, 
 	vbuf.EmplaceBack(glm::vec3(x + 1, y + 1, z - 1), color);
 	vbuf.EmplaceBack(glm::vec3(x+1, y, z-1), color);
 	Cube* ret = new Cube(linkedScene, vbuf, size, color, shaders);
+	ret->vertexData = vbuf;
 	ret->useEBO({
 		0, 1, 2, 0, 2, 3, 
 		4, 5, 6, 4, 6, 7, 
