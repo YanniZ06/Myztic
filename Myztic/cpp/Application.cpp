@@ -20,6 +20,8 @@
 
 #include <events/Events.h>
 
+#include <utilities\Logger.h>
+
 #include <cmath>
 
 #define SDL_MAIN_HANDLED
@@ -84,6 +86,9 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 	waiter = new std::binary_semaphore(0);
 	resourceManager = new ResourceManager();
 	Timer::debugMeasure(myzStart, "Myztic Initialization");
+
+	Logger::logWarning("hello testing", '2');
+	Logger::logWarning("hello testing", '2');
 
 	app_loop();
 }

@@ -31,45 +31,9 @@
 #include <graphics\Mesh.h>
 #include <graphics\Model.h>
 
-#define TEXTUR R"(
-#version 330 core
-layout(location = 0) in vec3 aPos;
-layout(location = 1) in vec2 aTexCoord;
-
-uniform mat4 world;
-uniform mat4 view;
-uniform mat4 projection;
-
-out vec2 TexCoord;
-void main()
-{
-    gl_Position = projection * view * world * vec4(aPos, 1.0);
-    TexCoord = aTexCoord;
-}
-)"
-
-#define FRAGS R"(
-#version 330 core
-out vec4 FragColor;
-in vec2 TexCoord;
-uniform sampler2D texture_diffuse1;
-uniform sampler2D texture_diffuse2;
-uniform sampler2D texture_diffuse3;
-uniform sampler2D texture_specular1;
-uniform sampler2D texture_specular2;
-void main()
-{
-    FragColor = (texture(texture_diffuse1, TexCoord) * texture(texture_diffuse2, TexCoord) * texture(texture_diffuse3, TexCoord)) + (texture(texture_specular1, TexCoord) * texture(texture_specular2, TexCoord));
-}
-)"
-
 using namespace Myztic;
 
 class SceneB : Scene {
-	//TexturedDrawable* spr;
-	Line* line;
-	Quad* quad;
-	Cube* cube;
 	Model* model;
 	virtual void load(Window* callerWindow) {
 		std::cout << "Loaded to Window: " << (std::string)*callerWindow << "\n";
@@ -86,108 +50,13 @@ class SceneB : Scene {
 		myzWin->setName("WINDOW 2");
 
 		myzWin->switchToContext();
-		//myzWin->initializeImGui();
-
-		/*struct Vertex {
-			glm::vec3 pos;
-			glm::vec2 uv;
-		};
-		std::vector<Vertex> vertices = {
-			{{-0.5, -0.5, -0.5},  {0.0, 0.0}},
-			{{0.5, -0.5, -0.5},  {1.0, 0.0}},
-			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
-			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
-			{{-0.5,  0.5, -0.5},  {0.0, 1.0}},
-			{{-0.5, -0.5, -0.5},  {0.0, 0.0}},
-
-			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
-			{{0.5, -0.5,  0.5},  {1.0, 0.0}},
-			{{0.5,  0.5,  0.5},  {1.0, 1.0}},
-			{{0.5,  0.5,  0.5},  {1.0, 1.0}},
-			{{-0.5,  0.5,  0.5},  {0.0, 1.0}},
-			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
-
-			{{-0.5,  0.5,  0.5},  {1.0, 0.0}},
-			{{-0.5,  0.5, -0.5},  {1.0, 1.0}},
-			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
-			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
-			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
-			{{-0.5,  0.5,  0.5},  {1.0, 0.0}},
-
-			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
-			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
-			{{0.5, -0.5, -0.5},  {0.0, 1.0}},
-			{{0.5, -0.5, -0.5},  {0.0, 1.0}},
-			{{0.5, -0.5,  0.5},  {0.0, 0.0}},
-			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
-
-			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
-			{{0.5, -0.5, -0.5},  {1.0, 1.0}},
-			{{0.5, -0.5,  0.5},  {1.0, 0.0}},
-			{{0.5, -0.5,  0.5},  {1.0, 0.0}},
-			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
-			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
-
-			{{-0.5,  0.5, -0.5},  {0.0, 1.0}},
-			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
-			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
-			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
-			{{-0.5,  0.5,  0.5},  {0.0, 0.0}},
-			{{-0.5,  0.5, -0.5},  {0.0, 1.0}}
-		};
-
-		VertexBuffer buf(std::move(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Texture2D)));
-		for (int i = 0; i < vertices.size(); i++) {
-			buf.EmplaceBack(vertices[i].pos, vertices[i].uv);
-		}
-
-		std::cout << buf.Size() << "\n";
-
-		std::vector<Shader> shaders = { PrecompiledShaders::texture_vs, PrecompiledShaders::texture_fs };
-
-		spr = new TexturedDrawable(this, buf, "assets/textures/glint.png", false, shaders);
-		spr->transformation = glm::translate(spr->transformation, glm::vec3(2.f, 2.f, 2.f));*/
+		
 		mainCamera = new Camera(ProjectionType::Perspective, this, glm::vec3(0.f, 0.2f, 3.f), glm::vec3(0.f, 0.f, -1.f));
 		cameras.push_back(mainCamera);
-		/*spr->camera = mainCamera;
-		myzWin->renderer.drawables.push_back(spr);*/
 
-		//here, we're independently making 2 cameras; one for the perspective projection and another for the orthographic projection, the former holds the cube by nature
-		//the latter holds the 2D line and casts it onto the screen; allowing it to be manipulated using normal screen coordinates. I didn't add it to the cameras array
-		//because that made it too wonky (it wouldn't make sense if you saw it; but what was happening was clipping of the line and an independent camera change in rotation
+		auto vs = Shader(GL_VERTEX_SHADER, "vs.glsl");
 
-		/**  Camera* orthographicCamera = new Camera(ProjectionType::Orthographic, this, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), -10.f, 10.f);
-		this->cameras.push_back(orthographicCamera);
-		//making another line to exist in 3d space (a ray; however, we haven't given it its 3rd dimension - to be implemented as a separate class or functionality if i can
-		//look to your right in the scene and you'll see a beacon (that's the line, you can go towards it if you want
-		Line* line_f = Line::createLine(this, glm::vec2(200.f, 0.0f), glm::vec2(200.f, 100.f));
-		line_f->camera = mainCamera;
-		myzWin->renderer.drawables.push_back(line_f);
-
-		//this is a line nearer to the camera for inspection
-		Line* line_n = Line::createLine(this, glm::vec2(0.f, 0.0f), glm::vec2(-3.f, 3.f));
-		line_n->camera = mainCamera;
-		myzWin->renderer.drawables.push_back(line_n);
-
-		line_n->set_endpoint(glm::vec3(0.f, 100.f, 0.f)); 
-		line_n->set_color(glm::vec4(1.f, 0.f, 0.f, 1.f));
-
-		Quad* quad = Quad::makeQuad(this, 0.f, 0.f, 20.f, 20.f);
-		//rotate and then translate (translation is x, y, z but since the front face of the quad is pointing DOWNWARDS after you rotate, that means that that'sf its positive z - when you move the quad on its positive z it goes up and down, y becomes the distance from the perpendicular camera (atleast in this case) and x remains as x i guess.)
-		quad->transformation = glm::translate(glm::rotate(glm::mat4(1.0f), -glm::half_pi<float>(), glm::vec3(1, 0, 0)), glm::vec3(-10, 4, 0));
-		quad->camera = mainCamera;
-		myzWin->renderer.drawables.push_back(quad);
-		quad->set_color(glm::vec4(0.2f, 0.6f, 0.8f, 1.f));
-
-		Cube* cube = Cube::makeCube(this, 0.f, 0.f, 0.f, 2.f, glm::vec4(1.f, .5f, 0.f, 1.0f), {PrecompiledShaders::texture_color_vs, PrecompiledShaders::texture_color_fs});
-		cube->camera = mainCamera;
-		myzWin->renderer.drawables.push_back(cube);
-
-		cube->loadTexture("Yanni.png");*/
-
-		auto vs = Shader::fromString(GL_VERTEX_SHADER, TEXTUR);
-
-		auto fs = Shader::fromString(GL_FRAGMENT_SHADER, FRAGS);
+		auto fs = Shader(GL_FRAGMENT_SHADER, "fs.glsl");
 
 		std::vector<Shader> shaders = { vs, fs };
 
@@ -286,35 +155,6 @@ class TestScene : Scene {
 	}
 
 	virtual void enter() {
-		/*
-		std::binary_semaphore s1 = std::binary_semaphore(0);
-		std::binary_semaphore s2 = std::binary_semaphore(0);
-
-		Sleep(5);
-
-		std::thread thrd = std::thread([&s1, &s2]() {
-			Sleep(1000);
-
-			std::cout << "Freeing Lock 1\n";
-			s1.release();
-
-			Sleep(1000);
-
-			std::cout << "Freeing Lock 1 again\n";
-			s1.release();
-			});
-		thrd.detach();
-
-		std::cout << "Aquiring Lock 1\n";
-		s1.acquire(); // Lock this thread?
-		std::cout << "Past Lock 1\n";
-
-		std::cout << "Aquiring Lock 1 again\n";
-		s1.acquire(); // Lock again ??
-		std::cout << "Past Lock 1 again\n";
-		*/
-
-		// /*
 		ResourceManager x = ResourceManager();
 		ResourceManager y = ResourceManager();
 
@@ -337,20 +177,6 @@ class TestScene : Scene {
 			y.finishRequest();
 			std::cout << "finished y on thread 2!" << "\n";
 
-			/*
-			while (true) {
-
-				if (x.isBusy()) {
-					y.request();
-					std::cout << "this passes!" << "\n";
-					x.request();
-					std::cout << "requested already busy resourcemanager, this shouldn't run, right?" << "\n";
-					break;
-				}
-
-				Sleep(1000);
-			};
-			*/
 		});
 		thrd.detach();
 
@@ -409,66 +235,6 @@ class TestScene : Scene {
 		logLoaded();
 		Application::log_windows_cmd();
 		
-		// This batch of code should be in renderer actually, manual renderer handling is frowned upon for what we are doing but itll do to TEST
-		//inputlayout is bound in Drawable.
-		/*struct Vertex {
-			glm::vec3 pos;
-			glm::vec2 uv;
-		};
-		std::vector<Vertex> vertices = {
-			{{-0.5, -0.5, -0.5},  {0.0, 0.0}},
-			{{0.5, -0.5, -0.5},  {1.0, 0.0}},
-			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
-			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
-			{{-0.5,  0.5, -0.5},  {0.0, 1.0}},
-			{{-0.5, -0.5, -0.5},  {0.0, 0.0}},
-
-			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
-			{{0.5, -0.5,  0.5},  {1.0, 0.0}},
-			{{0.5,  0.5,  0.5},  {1.0, 1.0}},
-			{{0.5,  0.5,  0.5},  {1.0, 1.0}},
-			{{-0.5,  0.5,  0.5},  {0.0, 1.0}},
-			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
-
-			{{-0.5,  0.5,  0.5},  {1.0, 0.0}},
-			{{-0.5,  0.5, -0.5},  {1.0, 1.0}},
-			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
-			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
-			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
-			{{-0.5,  0.5,  0.5},  {1.0, 0.0}},
-
-			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
-			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
-			{{0.5, -0.5, -0.5},  {0.0, 1.0}},
-			{{0.5, -0.5, -0.5},  {0.0, 1.0}},
-			{{0.5, -0.5,  0.5},  {0.0, 0.0}},
-			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
-
-			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
-			{{0.5, -0.5, -0.5},  {1.0, 1.0}},
-			{{0.5, -0.5,  0.5},  {1.0, 0.0}},
-			{{0.5, -0.5,  0.5},  {1.0, 0.0}},
-			{{-0.5, -0.5,  0.5},  {0.0, 0.0}},
-			{{-0.5, -0.5, -0.5},  {0.0, 1.0}},
-
-			{{-0.5,  0.5, -0.5},  {0.0, 1.0}},
-			{{0.5,  0.5, -0.5},  {1.0, 1.0}},
-			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
-			{{0.5,  0.5,  0.5},  {1.0, 0.0}},
-			{{-0.5,  0.5,  0.5},  {0.0, 0.0}},
-			{{-0.5,  0.5, -0.5},  {0.0, 1.0}}
-		};
-
-		VertexBuffer buf(std::move(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Texture2D)));
-		for (int i = 0; i < vertices.size(); i++) {
-			buf.EmplaceBack(vertices[i].pos, vertices[i].uv);
-		}
-		
-		std::cout << buf.Size() << "\n";
-		
-		std::vector<Shader> shaders = { PrecompiledShaders::texture_vs, PrecompiledShaders::texture_fs };
-
-		spr = new TexturedDrawable(this, buf, "assets/textures/glint.png", false, shaders);*/
 		Line* line = Line::createLine(this, glm::vec2(100, 0.0), glm::vec2(100, 200), glm::vec4(0.2, 0.5, 0.2, 1.0));
 
 		/*this works, it projects objects onto the camera(controls are inverted for some reason here); do note that when rendering onto an orthographic plane when you want to
@@ -481,9 +247,6 @@ class TestScene : Scene {
 		cameras.push_back(mainCamera);
 
 		line->camera = mainCamera;
-		//spr->transformation = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(100.f, 200.f, -1.0f)), glm::vec3(100, 100, 100));
-		//spr->camera = mainCamera;
-		//myzWin->renderer.drawables.push_back(spr);
 		myzWin->renderer.drawables.push_back(line);
 
 		Line* ray = Line::createRay(this, glm::vec3(0.0, 0.0, 0.0), glm::vec3(300.0, 300.0, 300.0));
