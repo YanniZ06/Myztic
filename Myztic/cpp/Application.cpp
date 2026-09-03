@@ -87,9 +87,6 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 	resourceManager = new ResourceManager();
 	Timer::debugMeasure(myzStart, "Myztic Initialization");
 
-	Logger::logWarning("hello testing", '2');
-	Logger::logWarning("hello testing", '2');
-
 	app_loop();
 }
 

@@ -30,6 +30,7 @@
 #include <utilities\thread\ResourceManager.h>
 #include <graphics\Mesh.h>
 #include <graphics\Model.h>
+#include <filesys/FileSystem.h>
 
 using namespace Myztic;
 
@@ -63,6 +64,7 @@ class SceneB : Scene {
 		model = new Model("backpack.obj", this, mainCamera, shaders);
 		model->pushToRenderer();
 		
+		//printf(FileSystem::readDirectory("./assets")[0].c_str());
 	}
 	virtual void finish(Scene* nextScene) {
 		std::cout << "SceneB finished\n";
