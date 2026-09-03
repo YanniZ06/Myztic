@@ -22,7 +22,7 @@ namespace Myztic {
 	public:
 		std::vector<Texture> textures;
 
-		Mesh(Myztic::Scene* linkedScene, VertexBuffer& vbuf, std::vector<GLuint> indices, std::vector<Texture>& textures, Camera* camera, std::vector<Shader>& shaders);
+		Mesh(Myztic::Scene* linkedScene, VertexBuffer& vbuf, std::vector<GLuint> indices, std::vector<Texture>& textures, Camera* camera, std::vector<Shader>& shaders, uint32_t id);
 		void prepareDraw() override;
 		void finishDraw() override;
 	};

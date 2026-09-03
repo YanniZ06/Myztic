@@ -7,6 +7,7 @@
 #include <graphics/backend/ShaderProgram.h>
 #include <graphics/backend/EBO.hpp>
 #include <glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <glad.h>
 #include <graphics\Vertex.h>
 //#include <graphics/Renderer.h>
@@ -24,9 +25,10 @@ namespace Myztic {
 	class Drawable {
 		friend class Application;
 		friend class Renderer;
+		friend class Model;
 	public:
-		Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperties);
-		Drawable(Scene* linkedScene, VertexBuffer& vertData);
+		Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperties, uint32_t id = 1000);
+		Drawable(Scene* linkedScene, VertexBuffer& vertData, uint32_t id = 1000);
 		~Drawable();
 
 		//? raw pixel data, this isnt thought out much yet, will do with ziad
@@ -68,6 +70,20 @@ namespace Myztic {
 		Camera* camera = nullptr;
 		//The transformation matrix for the object.
 		glm::mat4 transformation = glm::mat4(1.f);
+		virtual void set_position(glm::vec3& pos) {
+			position = pos;
+			this->transformation = glm::translate(transformation, position);
+		}
+		glm::vec3& get_position() {
+			return position;
+		}
+		virtual void set_size(glm::vec3& sized) {
+			size = sized;
+			this->transformation = glm::scale(transformation, size);
+		}
+		glm::vec3& get_size() {
+			return size;
+		}
 	protected:
 		/// The scene that is being drawn to
 		Scene* linkedScene;
@@ -77,6 +93,12 @@ namespace Myztic {
 		// THIS IS A TEMPORARY SOLUTION, WILL ADAPT OUR DRAWING PRINCIPLE SOON 
 		virtual void prepareDraw();
 		virtual void finishDraw();
+
+		uint32_t id = 1000;
+
+	private:
+		glm::vec3 position = glm::vec3(0.f, 0.f, 0.f);
+		glm::vec3 size = glm::vec3(1.f, 1.f, 1.f);
 	};
 
 	// todo: logic to untoggle 

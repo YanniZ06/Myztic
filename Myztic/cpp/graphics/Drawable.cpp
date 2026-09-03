@@ -5,23 +5,47 @@
 #include <Scene.h>
 #include <display\Window.h>
 #include <graphics\Camera.h>
+#include <events\EventDispatcher.h>
+#include <events\DrawableEvents.h>
 
 using namespace Myztic;
 
-Drawable::Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperties) : linkedScene(linkedScene) {
+Drawable::Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperties, uint32_t id) : linkedScene(linkedScene), id(id) {
 	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(inputProperties));
 	vertexData = VertexBuffer(std::move(VertexLayout{}.Append(VertexLayout::Position3D)));
 	this->vbo = VBO::make();
 	this->linkedScene = linkedScene;
+
+	EventDispatcher::registerEvent<PositionChangeEvent>(EVENT_POSITION_CHANGE, std::function<void(PositionChangeEvent)>([&](PositionChangeEvent pce) {
+		if (pce.renderingScene == this->linkedScene) {
+			set_position(pce.newPosition);
+		}
+	}), id, true);
+	EventDispatcher::registerEvent<ScaleChangeEvent>(EVENT_SCALE_CHANGE, std::function<void(ScaleChangeEvent)>([&](ScaleChangeEvent sce) {
+		if (sce.renderingScene == this->linkedScene) {
+			set_size(sce.newScale);
+		}
+	}), id, true);
 }
 
-Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData) : linkedScene(linkedScene) {
+Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData, uint32_t id) : linkedScene(linkedScene), id(id) {
 	std::vector<InputProperty> ips = vertData.GetLayout().GetDescription().inputProperties;
 	this->inputLayout = ShaderInputLayout(ShaderInputLayout::createLayoutDescription(ips));
 	//copy operation, safe to get rid of the original variable.
 	vertexData = vertData;
 	this->vbo = VBO::make();
 	this->linkedScene = linkedScene;
+
+	EventDispatcher::registerEvent<PositionChangeEvent>(EVENT_POSITION_CHANGE, std::function<void(PositionChangeEvent)>([&](PositionChangeEvent pce) {
+		if (pce.renderingScene == this->linkedScene) {
+			set_position(pce.newPosition);
+		}
+	}), id, true);
+	EventDispatcher::registerEvent<ScaleChangeEvent>(EVENT_SCALE_CHANGE, std::function<void(ScaleChangeEvent)>([&](ScaleChangeEvent sce) {
+		if (sce.renderingScene == this->linkedScene) {
+			set_size(sce.newScale);
+		}
+	}), id, true);
 }
 
 Drawable::~Drawable() {
@@ -60,6 +84,7 @@ Drawable::~Drawable() {
 // prepare draw
 void Drawable::prepareDraw() {
 	shaderProgram.bind();
+
 	glUniformMatrix4fv(shaderProgram.getUniformLocation("world"), 1, GL_FALSE, glm::value_ptr(transformation));
 	glUniformMatrix4fv(shaderProgram.getUniformLocation("view"), 1, GL_FALSE, (camera == nullptr) ? glm::value_ptr(glm::mat4(1.f)) : glm::value_ptr(camera->intern_ViewMatrix));
 	glUniformMatrix4fv(shaderProgram.getUniformLocation("projection"), 1, GL_FALSE, (camera == nullptr) ? glm::value_ptr(glm::mat4(1.f)) : glm::value_ptr(camera->intern_ProjecMatrix));

@@ -195,6 +195,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="C:\Users\Is Laptop\Downloads\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="include\events\DrawableEvents.h" />
     <ClInclude Include="include\filesys\File.h" />
     <ClInclude Include="include\filesys\FileSystem.h" />
     <ClInclude Include="include\graphics\Model.h" />
