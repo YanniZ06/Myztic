@@ -276,6 +276,7 @@
     <ClCompile Include="cpp\Util.cpp" />
     <ClCompile Include="cpp\Audio.cpp" />
     <ClCompile Include="cpp\audio\backend\SystemEvents.cpp" />
+    <ClCompile Include="cpp\utilities\Logger.cpp" />
     <ClCompile Include="cpp\utilities\thread\ResourceManager.cpp" />
     <ClCompile Include="cpp\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="cpp\imgui\imgui_impl_sdl2.cpp" />
@@ -285,6 +286,7 @@
     <ClCompile Include="cpp\imgui\imgui_tables.cpp" />
     <ClCompile Include="cpp\imgui\imgui_widgets.cpp" />
     <ClCompile Include="cpp\graphics\Model.cpp" />
+    <ClCompile Include="cpp\utilities\thread\Updated.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -7,10 +7,10 @@
 using namespace Myztic;
 
 ResourceManager::ResourceManager() {
-	if (!hasStaticInstance.load()) {
-		threadMapWaiter = new std::binary_semaphore(1);
-		hasStaticInstance.store(true);
-	}
+    if (!hasStaticInstance.load()) {
+        threadMapWaiter = new std::binary_semaphore(1);
+        hasStaticInstance.store(true);
+    }
 }
 
 
@@ -33,13 +33,15 @@ bool ResourceManager::request(bool keepOwnedResources) {
         }
         else {
             // Free all other current managers tied to this thread until the caller thread activates again, since theyre available and could also cause deadlocking a different thread along with this one
-            std::vector<ResourceManager*>& managerList = ResourceManager::threadResources[current_threadId];
+            std::vector<ResourceManager*>& managerList = ResourceManager::threadResources[caller_threadId];
 
-            for (ResourceManager* manager : managerList) {
-                // if (manager->active) {
-                manager->waiter.release();
-                manager->active = false;
-                // }
+            if (!keepOwnedResources) {
+                for (ResourceManager* manager : managerList) {
+                    // if (manager->active) {
+                    manager->waiter.release();
+                    manager->active = false;
+                    // }
+                }
             }
             managerList.push_back(this);
             ResourceManager::threadMapWaiter->release();
@@ -48,7 +50,7 @@ bool ResourceManager::request(bool keepOwnedResources) {
             active = true;
 
             // Retry indefinetly (todo: add stop after x seconds)
-            while (true) {
+            while (!keepOwnedResources) {
                 ResourceManager* failedManager = nullptr;
 
                 ResourceManager::threadMapWaiter->acquire();

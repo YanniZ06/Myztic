@@ -20,12 +20,12 @@ Drawable::Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperti
 		if (pce.renderingScene == this->linkedScene) {
 			set_position(pce.newPosition);
 		}
-	}), id, true);
+	}), id);
 	EventDispatcher::registerEvent<ScaleChangeEvent>(EVENT_SCALE_CHANGE, std::function<void(ScaleChangeEvent)>([&](ScaleChangeEvent sce) {
 		if (sce.renderingScene == this->linkedScene) {
 			set_size(sce.newScale);
 		}
-	}), id, true);
+	}), id);
 }
 
 Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData, uint32_t id) : linkedScene(linkedScene), id(id) {
@@ -40,12 +40,12 @@ Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData, uint32_t id) : li
 		if (pce.renderingScene == this->linkedScene) {
 			set_position(pce.newPosition);
 		}
-	}), id, true);
+	}), id);
 	EventDispatcher::registerEvent<ScaleChangeEvent>(EVENT_SCALE_CHANGE, std::function<void(ScaleChangeEvent)>([&](ScaleChangeEvent sce) {
 		if (sce.renderingScene == this->linkedScene) {
 			set_size(sce.newScale);
 		}
-	}), id, true);
+	}), id);
 }
 
 Drawable::~Drawable() {

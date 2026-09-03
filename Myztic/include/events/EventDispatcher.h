@@ -40,11 +40,11 @@ namespace Myztic {
 		 * as the argument to the std::function ( `std::function<void(MouseMoveEvent)>` )
 		 * \param id An unsigned integer id to identify this callback by. If the id is already in use by another event of type `type`, the old callback is unregistered and overwritten by this one.
 		 */
-		static void registerEvent(EventType type, std::function<void(EventInfoStruct)> callbackFunc, uint32_t id, bool dupe = false) {
+		static void registerEvent(EventType type, std::function<void(EventInfoStruct)> callbackFunc, uint32_t id/*, bool dupe = false*/) {
 			EventHandle& evh = eventsList[type];
 			evh.registered = true;
 
-			if (evh.callbacks.count(id) && !dupe) evh.callbacks.erase(id); // Dupe ID; unregister the event
+			// if (evh.callbacks.count(id) && !dupe) evh.callbacks.erase(id); // Dupe ID; unregister the event
 			evh.callbacks[id].push_back([callbackFunc](void* data) {
 				callbackFunc(*static_cast<EventInfoStruct*>(data));
 			});
