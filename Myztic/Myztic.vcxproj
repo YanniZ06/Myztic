@@ -235,7 +235,6 @@
     <ClInclude Include="include\Util.h" />
     <ClInclude Include="include\utilities\IDGenerator.h" />
     <ClInclude Include="include\utilities\Logger.h" />
-    <ClInclude Include="include\utilities\thread\InternalResourceManager.h" />
     <ClInclude Include="include\utilities\thread\ResourceManager.h" />
     <ClInclude Include="include\graphics\backend\VBO.hpp" />
     <ClInclude Include="include\graphics\backend\VAO.hpp" />

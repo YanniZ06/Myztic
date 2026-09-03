@@ -150,9 +150,6 @@
     <ClInclude Include="include\events\MouseEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\utilities\thread\InternalResourceManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\graphics\PrecompiledShaders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
