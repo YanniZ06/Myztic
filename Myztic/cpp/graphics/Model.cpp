@@ -7,7 +7,9 @@
 
 using namespace Myztic;
 
-Model::Model(const char* modelPath, Scene* linkedScene, Camera* mainCamera, std::vector<Shader>& shaders) {
+uint32_t Model::modelIDIncrement = 0;
+
+Model::Model(const char* modelPath, Scene* linkedScene, Camera* mainCamera, std::vector<Shader>& shaders) : linkedScene(linkedScene), modelCamera(mainCamera) {
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
@@ -16,8 +18,7 @@ Model::Model(const char* modelPath, Scene* linkedScene, Camera* mainCamera, std:
 		return;
 	}
 
-	this->modelCamera = mainCamera;
-	this->linkedScene = linkedScene;
+	this->modelID = modelIDIncrement++;
 
 	//starts the recursion process
 	processNode(scene->mRootNode, scene, shaders);
@@ -98,7 +99,7 @@ Mesh* Model::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Shader>
 	for (::Vertex vertex : vertices)
 		vbuf.EmplaceBack(vertex.Position, vertex.TexCoords);
 
-	return new Mesh(linkedScene, vbuf, indices, textures, this->modelCamera, shaders);
+	return new Mesh(linkedScene, vbuf, indices, textures, this->modelCamera, shaders, this->modelID);
 }
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {

@@ -62,8 +62,11 @@ class SceneB : Scene {
 		std::vector<Shader> shaders = { vs, fs };
 
 		model = new Model("backpack.obj", this, mainCamera, shaders);
+		glm::vec3 pos = glm::vec3(0, 10, 0);
+		model->set_position(pos);
 		model->pushToRenderer();
-		
+		pos = glm::vec3(50, 0, 0);
+		model->set_position(pos);
 		//printf(FileSystem::readDirectory("./assets")[0].c_str());
 	}
 	virtual void finish(Scene* nextScene) {
@@ -103,6 +106,10 @@ class TestScene : Scene {
 					lookDirection.y = sin(glm::radians(mainCam->pitchAngle));
 					lookDirection.z = sin(glm::radians(mainCam->yawAngle)) * cos(glm::radians(mainCam->pitchAngle));
 					mainCam->set_look(glm::normalize(lookDirection));
+				}
+
+				if (win->getActiveScene() != nullptr && !freeCamera) {
+					
 				}
 			}
 		};

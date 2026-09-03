@@ -6,7 +6,7 @@
 
 using namespace Myztic;
 
-Mesh::Mesh(Scene* linkedScene, VertexBuffer& vbuf, std::vector<GLuint> indices, std::vector<Texture>& textures, Camera* camera, std::vector<Shader>& shaders) : Drawable(linkedScene, vbuf)
+Mesh::Mesh(Scene* linkedScene, VertexBuffer& vbuf, std::vector<GLuint> indices, std::vector<Texture>& textures, Camera* camera, std::vector<Shader>& shaders, uint32_t id) : Drawable(linkedScene, vbuf, id)
 {
 	this->textures = textures;
 	this->vert_indices = indices;

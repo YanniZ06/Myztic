@@ -7,7 +7,7 @@ namespace Myztic {
 		static std::string absolutePath(std::string relative);
 		static bool createDirectory(std::string path);
 		static bool deleteDirectory(std::string directory);
-		static bool deleteFile(std::string path);th);
+		static bool deleteFile(std::string path);
 		static bool pathExists(std::string path);
 		static std::string fullPath(std::string relativePath);
 		static bool isDirectory(std::string path);
