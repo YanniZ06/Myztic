@@ -40,7 +40,8 @@ namespace Myztic {
     private:
         std::binary_semaphore waiter{ 1 };
 
-        std::thread::id current_threadId;
+        // Warning, only valid when active = true, the old owner_threadId is never set to a null value!!
+        std::thread::id owner_threadId;
 
         bool active = false; // Only used internally for checking threadResources
 
