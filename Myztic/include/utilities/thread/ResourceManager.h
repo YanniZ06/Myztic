@@ -49,9 +49,7 @@ namespace Myztic {
         static std::map<std::thread::id, std::vector<ResourceManager*>> threadResources;
         static std::atomic_bool hasStaticInstance;
 
-        bool retryOccupy() {
-            return active = waiter.try_acquire();
-        }
+        bool retryOccupy(std::thread::id caller_threadId);
 
         /*
         void finishRequest_Temp() {
