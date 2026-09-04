@@ -18,7 +18,7 @@ bool ResourceManager::request(bool keepOwnedResources) {
     std::thread::id caller_threadId = std::this_thread::get_id();
 
     ResourceManager::threadMapWaiter->acquire();
-    if (active && current_threadId == caller_threadId) {
+    if (active && owner_threadId == caller_threadId) {
         ResourceManager::threadMapWaiter->release();
 
         Logger::logWarning("Attempted to request same resource twice on the same thread!", 1);
@@ -26,10 +26,12 @@ bool ResourceManager::request(bool keepOwnedResources) {
     }
     else {
         if (waiter.try_acquire()) {
-            current_threadId = caller_threadId;
-            ResourceManager::threadResources[current_threadId].push_back(this); // If the resource was free it is no longer marked as such
+            owner_threadId = caller_threadId;
+            ResourceManager::threadResources[owner_threadId].push_back(this); // If the resource was free it is no longer marked as such
             ResourceManager::threadMapWaiter->release();
-            return active = true;
+            
+            active = true;
+            return true;
         }
         else {
             // Free all other current managers tied to this thread until the caller thread activates again, since theyre available and could also cause deadlocking a different thread along with this one
@@ -48,6 +50,7 @@ bool ResourceManager::request(bool keepOwnedResources) {
 
             waiter.acquire(); // Make sure we actually acquire anyways so the thread is locked (or unlocked if by now the resource is already free again)
             active = true;
+            owner_threadId = caller_threadId;
 
             // Retry indefinetly (todo: add stop after x seconds)
             while (!keepOwnedResources) {
@@ -87,13 +90,23 @@ bool ResourceManager::request(bool keepOwnedResources) {
     // return true;
 }
 
+bool ResourceManager::retryOccupy(std::thread::id caller_threadId) {
+        if (waiter.try_acquire()) {
+            owner_threadId = caller_threadId;
+            active = true;
+            return true;
+        }
+        
+        return false;
+}
+
 void ResourceManager::finishRequest(bool forceRelease) {
     if (forceRelease) {
         waiter.release();
         active = false;
     }
 
-    std::vector<ResourceManager*>& managers = ResourceManager::threadResources[current_threadId];
+    std::vector<ResourceManager*>& managers = ResourceManager::threadResources[owner_threadId];
     if (managers.size() > 0) {
         try {
             managers.erase(find(managers.begin(), managers.end(), this));
