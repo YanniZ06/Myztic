@@ -26,6 +26,11 @@ Drawable::Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperti
 			set_size(sce.newScale);
 		}
 	}), id);
+	EventDispatcher::registerEvent<RotationChangeEvent>(EVENT_ROTATION_CHANGE, std::function<void(RotationChangeEvent)>([&](RotationChangeEvent rce) {
+		if (rce.renderingScene == this->linkedScene) {
+			set_rotation(rce.newRotation);
+		}
+	}), id);
 }
 
 Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData, uint32_t id) : linkedScene(linkedScene), id(id) {
@@ -44,6 +49,11 @@ Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData, uint32_t id) : li
 	EventDispatcher::registerEvent<ScaleChangeEvent>(EVENT_SCALE_CHANGE, std::function<void(ScaleChangeEvent)>([&](ScaleChangeEvent sce) {
 		if (sce.renderingScene == this->linkedScene) {
 			set_size(sce.newScale);
+		}
+	}), id);
+	EventDispatcher::registerEvent<RotationChangeEvent>(EVENT_ROTATION_CHANGE, std::function<void(RotationChangeEvent)>([&](RotationChangeEvent rce) {
+		if (rce.renderingScene == this->linkedScene) {
+			set_rotation(rce.newRotation);
 		}
 	}), id);
 }

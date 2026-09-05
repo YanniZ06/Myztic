@@ -62,11 +62,16 @@ class SceneB : Scene {
 		std::vector<Shader> shaders = { vs, fs };
 
 		model = new Model("backpack.obj", this, mainCamera, shaders);
-		glm::vec3 pos = glm::vec3(0, 10, 0);
-		model->set_position(pos);
 		model->pushToRenderer();
-		pos = glm::vec3(50, 0, 0);
-		model->set_position(pos);
+
+		/*
+			to implement raycasting:
+			make a line/ray equation from the camera/mouse forward
+			let planes that are part of the boundingbox be able to form an equation based on th existing 3d coordinates, this happens by subtracting some of the points, getting the normal
+			to the plane and such
+		*/
+		//model->set_rotation(glm::vec3(glm::half_pi<float>(), 0.f, 0.f));
+
 		//printf(FileSystem::readDirectory("./assets")[0].c_str());
 	}
 	virtual void finish(Scene* nextScene) {
@@ -201,7 +206,7 @@ class TestScene : Scene {
 		});
 
 		thrd2.detach();
-		Sleep(100);
+		Sleep(200);
 		std::cout << "requested x on thread 1..." << "\n";
 		x.request();
 		std::cout << "x on thread 1!" << "\n";
@@ -218,8 +223,6 @@ class TestScene : Scene {
 
 		y.finishRequest();
 		std::cout << "finished y on thread 1!" << "\n";
-
-		// */
 
 		Audio::initialize();
 

@@ -13,20 +13,26 @@ namespace Myztic{
 
 		void pushToRenderer();
 
-		void set_position(glm::vec3& pos) {
+		void set_position(glm::vec3 pos) {
 			position = pos;
-			printf("set position\n");
 			EventDispatcher::dispatchBasedOnID<PositionChangeEvent>(EventType::EVENT_POSITION_CHANGE, PositionChangeEvent(linkedScene, pos), modelID);
 		}
 		glm::vec3& get_position() {
 			return position;
 		}
-		void set_size(glm::vec3& sized) {
+		void set_size(glm::vec3 sized) {
 			size = sized;
 			EventDispatcher::dispatchBasedOnID<ScaleChangeEvent>(EventType::EVENT_SCALE_CHANGE, ScaleChangeEvent(linkedScene, sized), modelID);
 		}
 		glm::vec3& get_size() {
 			return size;
+		}
+		void set_rotation(glm::vec3 rot) {
+			rotation = rot;
+			EventDispatcher::dispatchBasedOnID<RotationChangeEvent>(EventType::EVENT_ROTATION_CHANGE, RotationChangeEvent(linkedScene, rot), modelID);
+		}
+		glm::vec3& get_rotation() {
+			return rotation;
 		}
 	private:
 		std::vector<Mesh*> meshes;
@@ -35,11 +41,15 @@ namespace Myztic{
 
 		glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
 		glm::vec3 size = glm::vec3(1.f, 1.f, 1.f);
+		glm::vec3 rotation = glm::vec3(0.f, 0.f, 0.f);
 
 		std::vector<Texture> loadedTex;
 
 		uint32_t modelID = 0;
 		static uint32_t modelIDIncrement;
+
+		glm::vec3 minVtx = glm::vec3(INFINITY, INFINITY, INFINITY);
+		glm::vec3 maxVtx = glm::vec3(-INFINITY, -INFINITY, -INFINITY);
 
 		Camera* modelCamera;
 

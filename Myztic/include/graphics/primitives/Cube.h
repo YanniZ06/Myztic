@@ -20,6 +20,7 @@ namespace Myztic {
 		 */
 		static Cube* makeCube(Scene* linkedScene, float x, float y, float z, float size = 1.0f, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f), std::vector<Shader> shaders = { PrecompiledShaders::color_vs, PrecompiledShaders::color_fs });
 
+		static Cube* makeCube(Scene* linkedScene, glm::vec3 diagonalPoint1, glm::vec3 diagonalPoint2, float size = 1.0f, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f), std::vector<Shader> shaders = { PrecompiledShaders::color_vs, PrecompiledShaders::color_fs });
 		/**
 		 * Instantiates a cube instance.
 		 * 

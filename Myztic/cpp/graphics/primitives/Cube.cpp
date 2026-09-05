@@ -34,6 +34,33 @@ Cube* Cube::makeCube(Scene* linkedScene, float x, float y, float z, float size, 
 	return ret;
 }
 
+Cube* Myztic::Cube::makeCube(Scene* linkedScene, glm::vec3 diagonalPoint1, glm::vec3 diagonalPoint2, float size, glm::vec4 color, std::vector<Shader> shaders)
+{
+	VertexBuffer vbuf = VertexBuffer(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Float4Color));
+	vbuf.EmplaceBack(diagonalPoint1, color); //0
+	vbuf.EmplaceBack(glm::vec3(diagonalPoint1.x, diagonalPoint1.y, diagonalPoint2.z), color); //1
+	vbuf.EmplaceBack(glm::vec3(diagonalPoint1.x, diagonalPoint2.y, diagonalPoint1.z), color); //2
+	vbuf.EmplaceBack(glm::vec3(diagonalPoint1.x, diagonalPoint2.y, diagonalPoint2.z), color); //3
+	vbuf.EmplaceBack(glm::vec3(diagonalPoint2.x, diagonalPoint1.y, diagonalPoint1.z), color); //4
+	vbuf.EmplaceBack(glm::vec3(diagonalPoint2.x, diagonalPoint1.y, diagonalPoint2.z), color); //5
+	vbuf.EmplaceBack(glm::vec3(diagonalPoint2.x, diagonalPoint2.y, diagonalPoint1.z), color); //6
+	vbuf.EmplaceBack(diagonalPoint2, color); //7
+	Cube* ret = new Cube(linkedScene, vbuf, size, color, shaders);
+	ret->vertexData = vbuf;
+	ret->useEBO({
+		0, 1, 3, 0, 3, 2,
+		4, 6, 7, 4, 7, 5,
+		0, 4, 5, 0, 5, 1,
+		2, 3, 7, 2, 7, 6, 
+		0, 2, 6, 0, 6, 4, 
+		1, 5, 7, 1, 7, 3
+	});
+
+	ret->set_size(glm::vec3(size, size, size));
+
+	return ret;
+}
+
 Cube::Cube(Scene* linkedScene, VertexBuffer& vbuf, float size, glm::vec4 color, std::vector<Shader> shaders) : TexturedDrawable(linkedScene, vbuf), size(size), color(color)
 {
 	this->vert_type = GL_TRIANGLES;

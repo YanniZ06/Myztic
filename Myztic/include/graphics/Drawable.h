@@ -7,6 +7,9 @@
 #include <graphics/backend/ShaderProgram.h>
 #include <graphics/backend/EBO.hpp>
 #include <glm.hpp>
+#define GLM_ENABLE_EXPERIMENTAL 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glad.h>
 #include <graphics\Vertex.h>
@@ -70,19 +73,33 @@ namespace Myztic {
 		Camera* camera = nullptr;
 		//The transformation matrix for the object.
 		glm::mat4 transformation = glm::mat4(1.f);
-		virtual void set_position(glm::vec3& pos) {
+		virtual void set_position(glm::vec3 pos) {
+			if (pos == position) return;
 			position = pos;
-			this->transformation = glm::translate(transformation, position);
+			this->translationMatrix = glm::translate(glm::mat4(1.f), position);
+			transformation = translationMatrix * rotationMatrix * scalingMatrix;
 		}
 		glm::vec3& get_position() {
 			return position;
 		}
-		virtual void set_size(glm::vec3& sized) {
+		virtual void set_size(glm::vec3 sized) {
+			if (size == sized) return;
 			size = sized;
-			this->transformation = glm::scale(transformation, size);
+			this->scalingMatrix = glm::scale(glm::mat4(1.f), size);
+			transformation = translationMatrix * rotationMatrix * scalingMatrix;
 		}
 		glm::vec3& get_size() {
 			return size;
+		}
+		virtual void set_rotation(glm::vec3 rot) {
+			if (rot == eulerRotation) return;
+			eulerRotation = rot;
+			this->quaternion = glm::quat(eulerRotation);
+			rotationMatrix = glm::toMat4(quaternion);
+			transformation = translationMatrix * rotationMatrix * scalingMatrix;
+		}
+		glm::vec3& get_rotation() {
+			return eulerRotation;
 		}
 	protected:
 		/// The scene that is being drawn to
@@ -99,6 +116,12 @@ namespace Myztic {
 	private:
 		glm::vec3 position = glm::vec3(0.f, 0.f, 0.f);
 		glm::vec3 size = glm::vec3(1.f, 1.f, 1.f);
+		glm::vec3 eulerRotation = glm::vec3(0.f, 0.f, 0.f);
+
+		glm::mat4 translationMatrix = glm::mat4(1.f);
+		glm::mat4 rotationMatrix = glm::mat4(1.f);
+		glm::mat4 scalingMatrix = glm::mat4(1.f);
+		glm::quat quaternion;
 	};
 
 	// todo: logic to untoggle 

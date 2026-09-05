@@ -20,4 +20,11 @@ namespace Myztic {
 
 		ScaleChangeEvent(Scene* scene, glm::vec3 newScale) : renderingScene(scene), newScale(newScale) {}
 	};
+
+	struct RotationChangeEvent {
+		Scene* renderingScene;
+		glm::vec3 newRotation;
+		
+		RotationChangeEvent(Scene* scene, glm::vec3 newRotation) : renderingScene(scene), newRotation(newRotation) {};
+	};
 }

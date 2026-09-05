@@ -58,9 +58,10 @@ bool ResourceManager::request(bool keepOwnedResources) {
 
                 ResourceManager::threadMapWaiter->acquire();
                 for (ResourceManager* manager : managerList) {
-                    if (manager->active) continue; // Skip the manager we just gained access to since there is always one
+                    if (manager->active) 
+                        continue; // Skip the manager we just gained access to since there is always one
 
-                    if (!manager->retryOccupy()) {
+                    if (!manager->retryOccupy(caller_threadId)) {
                         failedManager = manager;
                         break;
                     }
@@ -79,6 +80,7 @@ bool ResourceManager::request(bool keepOwnedResources) {
                     failedManager->active = true;
                 }
                 else {
+                    ResourceManager::threadMapWaiter->release();
                     break;
                 }
             }

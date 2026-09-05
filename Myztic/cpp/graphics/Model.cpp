@@ -4,17 +4,20 @@
 #include <graphics\Mesh.h>
 #include <graphics\Model.h>
 #include <graphics/backend/Texture2D.hpp>
+#include <graphics\TexturedDrawable.h>
+#include <graphics\primitives\Cube.h>
 
 using namespace Myztic;
-
+Cube* cub;
 uint32_t Model::modelIDIncrement = 0;
 
 Model::Model(const char* modelPath, Scene* linkedScene, Camera* mainCamera, std::vector<Shader>& shaders) : linkedScene(linkedScene), modelCamera(mainCamera) {
-	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+	Assimp::Importer imp;
+	const aiScene* scene = imp.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-		printf("ASSIMP ERROR, COULD NOT LOAD MODEL FROM PATH: %s", modelPath);
+		const char* errStr = imp.GetErrorString();
+		printf("ASSIMP ERROR, COULD NOT LOAD MODEL FROM PATH: %s BECAUSE: %s", modelPath, errStr);
 		return;
 	}
 
@@ -22,12 +25,15 @@ Model::Model(const char* modelPath, Scene* linkedScene, Camera* mainCamera, std:
 
 	//starts the recursion process
 	processNode(scene->mRootNode, scene, shaders);
+	cub = Cube::makeCube(linkedScene, minVtx, maxVtx, 1.f, glm::vec4(1.f, 1.f, 1.f, 0.2f), {PrecompiledShaders::color_vs, PrecompiledShaders::color_fs});
+	cub->camera = mainCamera;
 }
 
 void Model::pushToRenderer() {
 	for (Mesh* mesh : meshes) {
 		this->linkedScene->loadedWin->renderer.drawables.push_back(mesh);
 	}
+	linkedScene->loadedWin->renderer.drawables.push_back(cub);
 }
 
 void Model::processNode(aiNode* node, const aiScene* scene, std::vector<Shader>& shaders) {
@@ -67,6 +73,14 @@ Mesh* Model::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Shader>
 			vertex.TexCoords = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
 		else
 			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+
+		minVtx.x = std::min<float>(minVtx.x, vertex.Position.x);
+		minVtx.y = std::min<float>(minVtx.y, vertex.Position.y);
+		minVtx.z = std::min<float>(minVtx.z, vertex.Position.z);
+
+		maxVtx.x = std::max<float>(maxVtx.x, vertex.Position.x);
+		maxVtx.y = std::max<float>(maxVtx.y, vertex.Position.y);
+		maxVtx.z = std::max<float>(maxVtx.z, vertex.Position.z);
 
 		vertices.push_back(vertex);
 	}

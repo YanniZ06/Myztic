@@ -61,8 +61,8 @@ void Renderer::startRender() {
 	//ImGui::End();
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glEnable(GL_LINE_SMOOTH);
-	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	//CHECK_GL(glViewport(0, 0, ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y));
 	glClearColor(0.7f, 0.2f, 0.6f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -127,7 +127,7 @@ void Renderer::startRender() {
 		pendingRequests.pop_back();
 	}*/
 	
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
 	//glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_DEPTH_TEST);
 }
