@@ -141,7 +141,7 @@
     <ClInclude Include="include\events\AudioEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\events\EventDispatcher.h">
+    <ClInclude Include="include\events\EventSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\graphics\Camera.h">
@@ -219,6 +219,9 @@
     <ClInclude Include="include\events\DrawableEvents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\events\UserEventSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -275,7 +278,7 @@
     <ClCompile Include="cpp\graphics\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\events\EventDispatcher.cpp">
+    <ClCompile Include="cpp\events\EventSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp\utilities\thread\ResourceManager.cpp">

@@ -54,9 +54,18 @@ namespace Myztic {
 		 * \note If multiple callbacks with the same id exist, all of them are removed.
 		 */
 		static void unregisterEvent(EventType type, uint32_t id);
+
+		/**
+		 * Interfaces access to the UserEventSystem, allowing you to manage custom events.
+		 * 
+		 * \return A pointer to the UserEventSystem.
+		 */
+		static UserEventSystem* user();
 	protected:
 		// Map that tracks event types and whether their registered + what their callbacks are
 		static void initialize();
+		static UserEventSystem _user;
+
 
 		static std::map<EventType, EventHandle> eventsList;
 

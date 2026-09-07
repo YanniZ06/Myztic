@@ -196,6 +196,7 @@
   <ItemGroup>
     <ClInclude Include="C:\Users\Is Laptop\Downloads\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="include\events\DrawableEvents.h" />
+    <ClInclude Include="include\events\UserEventSystem.h" />
     <ClInclude Include="include\filesys\File.h" />
     <ClInclude Include="include\filesys\FileSystem.h" />
     <ClInclude Include="include\graphics\Model.h" />
@@ -218,7 +219,7 @@
     <ClInclude Include="include\display\Window.h" />
     <ClInclude Include="include\display\Fps.h" />
     <ClInclude Include="include\events\AudioEvent.h" />
-    <ClInclude Include="include\events\EventDispatcher.h" />
+    <ClInclude Include="include\events\EventSystem.h" />
     <ClInclude Include="include\graphics\backend\EBO.hpp" />
     <ClInclude Include="include\graphics\backend\ShaderProgram.h" />
     <ClInclude Include="include\graphics\Drawable.h" />
@@ -258,7 +259,7 @@
     <ClCompile Include="cpp\display\ImGuiHelper.cpp" />
     <ClCompile Include="cpp\display\Window.cpp" />
     <ClCompile Include="cpp\display\WinThread.cpp" />
-    <ClCompile Include="cpp\events\EventDispatcher.cpp" />
+    <ClCompile Include="cpp\events\EventSystem.cpp" />
     <ClCompile Include="cpp\filesys\File.cpp" />
     <ClCompile Include="cpp\filesys\FileSystem.cpp" />
     <ClCompile Include="cpp\graphics\backend\ShaderProgram.cpp" />
