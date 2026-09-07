@@ -3,7 +3,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <vector>
-#include <events/EventDispatcher.h>
+#include <events/EventSystem.h>
 #include <events\DrawableEvents.h>
 
 namespace Myztic{
@@ -15,21 +15,21 @@ namespace Myztic{
 
 		void set_position(glm::vec3 pos) {
 			position = pos;
-			EventDispatcher::dispatchBasedOnID<PositionChangeEvent>(EventType::EVENT_POSITION_CHANGE, PositionChangeEvent(linkedScene, pos), modelID);
+			EventSystem::dispatchBasedOnID<PositionChangeEvent>(EventType::EVENT_POSITION_CHANGE, PositionChangeEvent(linkedScene, pos), modelID);
 		}
 		glm::vec3& get_position() {
 			return position;
 		}
 		void set_size(glm::vec3 sized) {
 			size = sized;
-			EventDispatcher::dispatchBasedOnID<ScaleChangeEvent>(EventType::EVENT_SCALE_CHANGE, ScaleChangeEvent(linkedScene, sized), modelID);
+			EventSystem::dispatchBasedOnID<ScaleChangeEvent>(EventType::EVENT_SCALE_CHANGE, ScaleChangeEvent(linkedScene, sized), modelID);
 		}
 		glm::vec3& get_size() {
 			return size;
 		}
 		void set_rotation(glm::vec3 rot) {
 			rotation = rot;
-			EventDispatcher::dispatchBasedOnID<RotationChangeEvent>(EventType::EVENT_ROTATION_CHANGE, RotationChangeEvent(linkedScene, rot), modelID);
+			EventSystem::dispatchBasedOnID<RotationChangeEvent>(EventType::EVENT_ROTATION_CHANGE, RotationChangeEvent(linkedScene, rot), modelID);
 		}
 		glm::vec3& get_rotation() {
 			return rotation;

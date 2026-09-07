@@ -54,6 +54,8 @@ void Application::initMyztic(WindowParams& initWindowParams, fpsSize fps) {
 		SDL_GL_SetAttribute(it->first, it->second);
 	}
 
+	EventSystem::initialize();
+
 	Window* window = new Window(initWindowParams);
 	Application::windows[window->id()] = window;
 
@@ -168,7 +170,7 @@ void Application::app_loop() {
 				Window* eWin = nullptr;
 				if (windows.count(e.motion.windowID)) eWin = windows[e.motion.windowID];
 
-				EventDispatcher::dispatchEvent<MouseMoveEvent>(EventType::EVENT_MOUSEMOVE, MouseMoveEvent(eWin, e.motion.x, e.motion.y, e.motion.xrel, e.motion.yrel));
+				EventSystem::dispatchEvent<MouseMoveEvent>(EventType::EVENT_MOUSEMOVE, MouseMoveEvent(eWin, e.motion.x, e.motion.y, e.motion.xrel, e.motion.yrel));
 				break;
 			}
 
@@ -177,7 +179,7 @@ void Application::app_loop() {
 				Window* eWin = nullptr;
 				if (windows.count(e.key.windowID)) eWin = windows[e.key.windowID];
 			
-				EventDispatcher::dispatchEvent<KeyboardEvent>(EventType::EVENT_KEYBOARD, KeyboardEvent(eWin, e.key.type == SDL_KEYDOWN, e.key.keysym.scancode, e.key.keysym.sym, e));
+				EventSystem::dispatchEvent<KeyboardEvent>(EventType::EVENT_KEYBOARD, KeyboardEvent(eWin, e.key.type == SDL_KEYDOWN, e.key.keysym.scancode, e.key.keysym.sym, e));
 				break;
 			}
 

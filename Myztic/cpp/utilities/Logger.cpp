@@ -15,6 +15,7 @@ void Logger::logWarning(std::string toOutput, unsigned char warnLevel, const std
 	char buf[256];
 	::ctime_s(buf, 256, &current_time);
 	buf[strcspn(buf, "\n")] = 0;
+
 	ssstream << location.file_name() << '('
 		<< location.line() << ':'
 		<< location.column() << ") `"

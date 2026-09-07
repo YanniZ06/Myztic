@@ -5,7 +5,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <audio/backend/ALExt.h>
-#include <events/EventDispatcher.h>
+#include <events/EventSystem.h>
 
 using namespace Myztic;
 

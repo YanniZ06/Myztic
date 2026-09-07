@@ -5,7 +5,7 @@
 #include <Scene.h>
 #include <display\Window.h>
 #include <graphics\Camera.h>
-#include <events\EventDispatcher.h>
+#include <events/EventSystem.h>
 #include <events\DrawableEvents.h>
 
 using namespace Myztic;
@@ -16,17 +16,17 @@ Drawable::Drawable(Scene* linkedScene, std::vector<InputProperty>& inputProperti
 	this->vbo = VBO::make();
 	this->linkedScene = linkedScene;
 
-	EventDispatcher::registerEvent<PositionChangeEvent>(EVENT_POSITION_CHANGE, std::function<void(PositionChangeEvent)>([&](PositionChangeEvent pce) {
+	EventSystem::registerEvent<PositionChangeEvent>(EVENT_POSITION_CHANGE, std::function<void(PositionChangeEvent)>([&](PositionChangeEvent pce) {
 		if (pce.renderingScene == this->linkedScene) {
 			set_position(pce.newPosition);
 		}
 	}), id);
-	EventDispatcher::registerEvent<ScaleChangeEvent>(EVENT_SCALE_CHANGE, std::function<void(ScaleChangeEvent)>([&](ScaleChangeEvent sce) {
+	EventSystem::registerEvent<ScaleChangeEvent>(EVENT_SCALE_CHANGE, std::function<void(ScaleChangeEvent)>([&](ScaleChangeEvent sce) {
 		if (sce.renderingScene == this->linkedScene) {
 			set_size(sce.newScale);
 		}
 	}), id);
-	EventDispatcher::registerEvent<RotationChangeEvent>(EVENT_ROTATION_CHANGE, std::function<void(RotationChangeEvent)>([&](RotationChangeEvent rce) {
+	EventSystem::registerEvent<RotationChangeEvent>(EVENT_ROTATION_CHANGE, std::function<void(RotationChangeEvent)>([&](RotationChangeEvent rce) {
 		if (rce.renderingScene == this->linkedScene) {
 			set_rotation(rce.newRotation);
 		}
@@ -41,17 +41,17 @@ Drawable::Drawable(Scene* linkedScene, VertexBuffer& vertData, uint32_t id) : li
 	this->vbo = VBO::make();
 	this->linkedScene = linkedScene;
 
-	EventDispatcher::registerEvent<PositionChangeEvent>(EVENT_POSITION_CHANGE, std::function<void(PositionChangeEvent)>([&](PositionChangeEvent pce) {
+	EventSystem::registerEvent<PositionChangeEvent>(EVENT_POSITION_CHANGE, std::function<void(PositionChangeEvent)>([&](PositionChangeEvent pce) {
 		if (pce.renderingScene == this->linkedScene) {
 			set_position(pce.newPosition);
 		}
 	}), id);
-	EventDispatcher::registerEvent<ScaleChangeEvent>(EVENT_SCALE_CHANGE, std::function<void(ScaleChangeEvent)>([&](ScaleChangeEvent sce) {
+	EventSystem::registerEvent<ScaleChangeEvent>(EVENT_SCALE_CHANGE, std::function<void(ScaleChangeEvent)>([&](ScaleChangeEvent sce) {
 		if (sce.renderingScene == this->linkedScene) {
 			set_size(sce.newScale);
 		}
 	}), id);
-	EventDispatcher::registerEvent<RotationChangeEvent>(EVENT_ROTATION_CHANGE, std::function<void(RotationChangeEvent)>([&](RotationChangeEvent rce) {
+	EventSystem::registerEvent<RotationChangeEvent>(EVENT_ROTATION_CHANGE, std::function<void(RotationChangeEvent)>([&](RotationChangeEvent rce) {
 		if (rce.renderingScene == this->linkedScene) {
 			set_rotation(rce.newRotation);
 		}
