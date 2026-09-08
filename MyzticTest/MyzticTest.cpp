@@ -119,7 +119,7 @@ class TestScene : Scene {
 			}
 		};
 		   
-		EventDispatcher::registerEvent<MouseMoveEvent>(EVENT_MOUSEMOVE, std::function<void(MouseMoveEvent)>(mouseMoveCallback), 0);
+		EventSystem::registerEvent<MouseMoveEvent>(EVENT_MOUSEMOVE, std::function<void(MouseMoveEvent)>(mouseMoveCallback), 0);
 		
 
 		auto keyboardCallback = [&](KeyboardEvent event) {
@@ -161,7 +161,7 @@ class TestScene : Scene {
 			}
 		};
 
-		EventDispatcher::registerEvent<KeyboardEvent>(EVENT_KEYBOARD, std::function<void(KeyboardEvent)>(keyboardCallback), 0);
+		EventSystem::registerEvent<KeyboardEvent>(EVENT_KEYBOARD, std::function<void(KeyboardEvent)>(keyboardCallback), 0);
 	}
 
 	virtual void load(Window* callerWindow) {
